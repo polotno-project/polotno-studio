@@ -1,26 +1,37 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import Toolbar from 'polotno/toolbar/toolbar';
+import ZoomButtons from 'polotno/toolbar/zoom-buttons';
+import SidePanel from 'polotno/side-panel/side-panel';
+import Workspace from 'polotno/canvas/workspace';
 
-function App() {
+const App = ({ store }) => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div
+      style={{
+        display: 'flex',
+        height: '100%',
+        width: '100%',
+      }}
+    >
+      <div style={{ width: '300px', height: '100%', display: 'flex' }}>
+        <SidePanel store={store} />
+      </div>
+      <div
+        style={{
+          display: 'flex',
+          height: '100%',
+          margin: 'auto',
+          flex: 1,
+          flexDirection: 'column',
+          position: 'relative',
+        }}
+      >
+        <Toolbar store={store} />
+        <Workspace store={store} />
+        <ZoomButtons store={store} />
+      </div>
     </div>
   );
-}
+};
 
 export default App;
