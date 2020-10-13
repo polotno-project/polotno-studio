@@ -13,7 +13,7 @@ const App = ({ store }) => {
         width: '100%',
       }}
     >
-      <div style={{ width: '300px', height: '100%', display: 'flex' }}>
+      <div style={{ width: '400px', height: '100%', display: 'flex' }}>
         <SidePanel store={store} />
       </div>
       <div
