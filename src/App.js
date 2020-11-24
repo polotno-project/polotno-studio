@@ -15,6 +15,7 @@ const App = ({ store }) => {
           display: 'flex',
           height: 'calc(100% - 50px)',
           width: '100%',
+          backgroundColor: '#30404d',
         }}
       >
         <div style={{ width: '400px', height: '100%', display: 'flex' }}>
