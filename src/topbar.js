@@ -33,18 +33,22 @@ export default observer(({ store }) => {
   return (
     <Navbar>
       <Navbar.Group align={Alignment.LEFT}>
-        <Button minimal>
+        <label htmlFor="load-project">
+          <Button
+            icon="folder-open"
+            minimal
+            onClick={() => {
+              document.querySelector('#load-project').click();
+            }}
+          >
+            Open
+          </Button>
           <input
             type="file"
-            // style={{ display: 'none' }}
+            id="load-project"
             ref={inputRef}
-            // accept="text/json"
-            onInput={() => {
-              console.log(2);
-            }}
-            style={{ width: '180px' }}
+            style={{ width: '180px', display: 'none' }}
             onChange={(e) => {
-              console.log(1);
               var input = e.target;
 
               var reader = new FileReader();
@@ -56,7 +60,7 @@ export default observer(({ store }) => {
               reader.readAsText(input.files[0]);
             }}
           />
-        </Button>
+        </label>
         <Button
           icon="floppy-disk"
           minimal
