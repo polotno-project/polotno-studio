@@ -73,9 +73,19 @@ export default observer(({ store }) => {
           Save
         </Button>
       </Navbar.Group>
-      {/* <Navbar.Group align={Alignment.CENTER}>
-        
-      </Navbar.Group> */}
+      <Navbar.Group
+        align={Alignment.LEFT}
+        style={{
+          paddingLeft: '30px',
+          fontSize: '10px',
+          maxWidth: 'calc(100% - 300px)',
+        }}
+      >
+        <span>
+          Hey, because of high-load from the reddit some search functions are
+          not working correctly. I hope to recover soon.
+        </span>
+      </Navbar.Group>
       <Navbar.Group align={Alignment.RIGHT}>
         {/* <AnchorButton
           // icon="undo"
