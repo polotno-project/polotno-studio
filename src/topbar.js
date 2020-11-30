@@ -79,7 +79,7 @@ export default observer(({ store }) => {
         style={{
           paddingLeft: '30px',
           fontSize: '10px',
-          maxWidth: 'calc(100% - 300px)',
+          maxWidth: 'calc(100% - 350px)',
         }}
       >
         <span>

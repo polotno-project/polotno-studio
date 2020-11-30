@@ -16,6 +16,12 @@ ReactDOM.render(
   document.getElementById('root')
 );
 
+if (window.innerWidth < 650) {
+  alert(
+    'Hey, looks like you opened the app from the mobile. Polotno Studio is not optimized yet for mobile. But thanks for your interest! We will have mobile support soon. For now, please use it on the desktop.'
+  );
+}
+
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
