@@ -12,6 +12,7 @@ import {
   Menu,
   MenuItem,
 } from '@blueprintjs/core';
+import { FaGithub, FaDiscord } from 'react-icons/fa';
 
 import { downloadFile } from 'polotno/utils/download';
 
@@ -99,9 +100,19 @@ export default observer(({ store }) => {
           minimal
           href="https://github.com/lavrton/polotno-studio"
           target="_blank"
+          icon={<FaGithub />}
         >
           Github
         </AnchorButton>
+        <AnchorButton
+          minimal
+          href="https://discord.gg/7eagv9PG"
+          target="_blank"
+          icon={<FaDiscord />}
+        >
+          Discord
+        </AnchorButton>
+
         <Divider />
         {/* <NavbarHeading>Polotno Studio</NavbarHeading> */}
       </Navbar.Group>

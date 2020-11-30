@@ -9,6 +9,7 @@
     "polotno": "^0.3.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-icons": "^4.1.0",
     "react-scripts": "3.4.3"
   },
   "scripts": {
