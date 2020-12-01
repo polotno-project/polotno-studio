@@ -34,6 +34,22 @@ export default observer(({ store }) => {
   return (
     <Navbar>
       <Navbar.Group align={Alignment.LEFT}>
+        <Button
+          icon="new-object"
+          minimal
+          onClick={() => {
+            const ids = store.activePage?.children.map((child) => child.id);
+            // console.log(ids);
+            const hasObjects = ids.length;
+            if (hasObjects) {
+              if (window.confirm('Remove all content for a new design?')) {
+                store.deleteElements(ids);
+              }
+            }
+          }}
+        >
+          New
+        </Button>
         <label htmlFor="load-project">
           <Button
             icon="folder-open"

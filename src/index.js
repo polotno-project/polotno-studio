@@ -7,7 +7,19 @@ import { createStore } from 'polotno/model/store';
 
 const store = createStore();
 window.store = store;
-store.addPage();
+
+if (localStorage.getItem('polotno-state')) {
+  const json = JSON.parse(localStorage.getItem('polotno-state'));
+  store.loadJSON(json);
+} else {
+  store.addPage();
+}
+
+store.on('change', () => {
+  const json = store.toJSON();
+  delete json.history;
+  delete localStorage.setItem('polotno-state', JSON.stringify(json));
+});
 
 ReactDOM.render(
   <React.StrictMode>
