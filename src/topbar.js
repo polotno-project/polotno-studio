@@ -90,7 +90,7 @@ export default observer(({ store }) => {
           Save
         </Button>
       </Navbar.Group>
-      <Navbar.Group
+      {/* <Navbar.Group
         align={Alignment.LEFT}
         style={{
           paddingLeft: '30px',
@@ -102,7 +102,7 @@ export default observer(({ store }) => {
           Hey, because of high-load from the reddit some search functions are
           not working correctly. I hope to recover soon.
         </span>
-      </Navbar.Group>
+      </Navbar.Group> */}
       <Navbar.Group align={Alignment.RIGHT}>
         {/* <AnchorButton
           // icon="undo"
@@ -122,7 +122,7 @@ export default observer(({ store }) => {
         </AnchorButton>
         <AnchorButton
           minimal
-          href="https://discord.gg/7eagv9PG"
+          href="https://discord.gg/W2VeKgsr9J"
           target="_blank"
           icon={<FaDiscord />}
         >
