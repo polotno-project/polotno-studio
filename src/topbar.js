@@ -12,7 +12,7 @@ import {
   Menu,
   MenuItem,
 } from '@blueprintjs/core';
-import { FaGithub, FaDiscord } from 'react-icons/fa';
+import { FaGithub, FaDiscord } from 'react-icons/fa/index.esm';
 
 import { downloadFile } from 'polotno/utils/download';
 
