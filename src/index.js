@@ -5,6 +5,17 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { createStore } from 'polotno/model/store';
 
+if (window.innerWidth < 650) {
+  var mvp = document.getElementById('__viewport');
+  mvp.setAttribute(
+    'content',
+    'width=device-width, height=device-height, initial-scale=0.5'
+  );
+  alert(
+    'Hey, looks like you opened the app from the mobile. Polotno Studio is not optimized for mobile yet. But thanks for your interest! We will have mobile support soon. For now, please use it on the desktop.'
+  );
+}
+
 const store = createStore();
 window.store = store;
 
@@ -27,17 +38,6 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById('root')
 );
-
-if (window.innerWidth < 650) {
-  var mvp = document.getElementById('__viewport');
-  mvp.setAttribute(
-    'content',
-    'width=device-width, height=device-height, initial-scale=0.5'
-  );
-  alert(
-    'Hey, looks like you opened the app from the mobile. Polotno Studio is not optimized for mobile yet. But thanks for your interest! We will have mobile support soon. For now, please use it on the desktop.'
-  );
-}
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
