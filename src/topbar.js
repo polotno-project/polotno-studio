@@ -4,15 +4,15 @@ import {
   Button,
   Navbar,
   Alignment,
-  NavbarHeading,
   AnchorButton,
   Divider,
-  Position,
-  Popover,
-  Menu,
-  MenuItem,
+  Dialog,
+  Classes,
+  Tooltip,
+  Intent,
 } from '@blueprintjs/core';
-import { FaGithub, FaDiscord } from 'react-icons/fa/index.esm';
+import { FaGithub } from '@react-icons/all-files/fa/FaGithub';
+import { FaDiscord } from '@react-icons/all-files/fa/FaDiscord';
 
 import { downloadFile } from 'polotno/utils/download';
 
@@ -30,6 +30,8 @@ export default observer(({ store }) => {
   // const canMoveDown = index > 0;
 
   const inputRef = React.useRef();
+
+  const [faqOpened, toggleFaq] = React.useState(false);
 
   return (
     <Navbar>
@@ -90,28 +92,7 @@ export default observer(({ store }) => {
           Save
         </Button>
       </Navbar.Group>
-      {/* <Navbar.Group
-        align={Alignment.LEFT}
-        style={{
-          paddingLeft: '30px',
-          fontSize: '10px',
-          maxWidth: 'calc(100% - 350px)',
-        }}
-      >
-        <span>
-          Hey, because of high-load from the reddit some search functions are
-          not working correctly. I hope to recover soon.
-        </span>
-      </Navbar.Group> */}
       <Navbar.Group align={Alignment.RIGHT}>
-        {/* <AnchorButton
-          // icon="undo"
-          minimal
-          href="https://github.com/lavrton/polotno-studio"
-          target="_blank"
-        >
-          About
-        </AnchorButton> */}
         <AnchorButton
           minimal
           href="https://github.com/lavrton/polotno-studio"
@@ -126,115 +107,101 @@ export default observer(({ store }) => {
           target="_blank"
           icon={<FaDiscord />}
         >
-          Discord
+          Join Chat
         </AnchorButton>
+        <Button icon="info-sign" minimal onClick={() => toggleFaq(true)}>
+          About
+        </Button>
 
         <Divider />
         {/* <NavbarHeading>Polotno Studio</NavbarHeading> */}
       </Navbar.Group>
-
-      {/* {oneSelected && (
-        <Navbar.Group align={Alignment.LEFT} style={{ marginRight: '15px' }}>
-          <Popover
-            content={
-              <Menu>
-                <MenuItem
-                  icon="chevron-up"
-                  text="Up"
-                  disabled={!canMoveUp}
-                  onClick={() => {
-                    firstSelected.moveUp();
-                  }}
-                />
-                <MenuItem
-                  icon="chevron-down"
-                  text="Down"
-                  disabled={!canMoveDown}
-                  onClick={() => {
-                    firstSelected.moveDown();
-                  }}
-                />
-                <MenuItem
-                  icon="alignment-top"
-                  text="Align top"
-                  onClick={() => {
-                    firstSelected.set({
-                      y: 0,
-                    });
-                  }}
-                />
-                <MenuItem
-                  icon="alignment-left"
-                  text="Align left"
-                  onClick={() => {
-                    firstSelected.set({
-                      x: 0,
-                    });
-                  }}
-                />
-                <MenuItem
-                  icon="alignment-right"
-                  text="Align rigth"
-                  onClick={() => {
-                    firstSelected.set({
-                      x: store.width - firstSelected.width,
-                    });
-                  }}
-                />
-              </Menu>
-            }
-            position={Position.BOTTOM}
-          >
-            <Button icon="move" minimal />
-          </Popover>
-        </Navbar.Group>
-      )}
-
-      {isTextSelected && <TextToolbar store={store} />}
-      {isImageSelected && <ImageToolbar store={store} />}
-      {isSvgSelected && <SvgToolbar store={store} />}
-      <Navbar.Group align={Alignment.RIGHT}>
-        <Button
-          icon="trash"
-          minimal
-          onClick={() => {
-            store.deleteElements(store.selectedElementsIds);
-          }}
-          disabled={store.selectedElementsIds.length === 0}
-          style={{ marginLeft: 'auto' }}
-        />
-        <Divider style={{ height: '100%', margin: '0 15px' }} />
-        <Popover
-          content={
-            <Menu>
-              <MenuItem
-                icon="media"
-                text="Save as Image"
-                onClick={() => {
-                  store.saveAsImage();
-                }}
-              />
-              <MenuItem
-                icon="document"
-                text="Save as PDF"
-                onClick={() => {
-                  store.saveAsPDF();
-                }}
-              />
-              <MenuItem
-                icon="document"
-                text="Save as High Quality PDF"
-                onClick={() => {
-                  store.saveAsPDF({ pixelRatio: 3 });
-                }}
-              />
-            </Menu>
-          }
-          position={Position.BOTTOM}
-        >
-          <Button icon="export" text="Export" minimal />
-        </Popover>
-      </Navbar.Group> */}
+      <Dialog
+        icon="info-sign"
+        onClose={() => toggleFaq(false)}
+        title="About Polotno Studio"
+        isOpen={faqOpened}
+        style={{
+          width: '80%',
+          maxWidth: '700px',
+        }}
+      >
+        <div className={Classes.DIALOG_BODY}>
+          <h2>What is Polotno Studio?</h2>
+          <p>
+            <strong>Polotno Studio</strong> - is a web application to create
+            graphical designs. You can mix image, text and illustrations to make
+            social media posts, youtube previews, podcast covers, business cards
+            and presentations.
+          </p>
+          <h2>Is it Open Source?</h2>
+          <p>
+            Partially. The source code is available in{' '}
+            <a href="https://github.com/lavrton/polotno-studio" target="_blank">
+              GitHub repository
+            </a>
+            . The repository doesn't have full source.{' '}
+            <strong>Polotno Studio</strong> is powered by{' '}
+            <a href="https://polotno.dev/" target="_blank">
+              Polonto SDK project
+            </a>
+            . All core "canvas editor" functionality are implemented by{' '}
+            <strong>polotno</strong> npm package (which is not open source at
+            the time of writing this text).
+          </p>
+          <p>
+            Polotno Studio is build on top of Polotno SDK to provide a
+            desktop-app-like experience.
+          </p>
+          <h2>Who is making Polotno Studio?</h2>
+          <p>
+            My name is Anton Lavrenov{' '}
+            <a href="https://twitter.com/lavrton" target="_blank">
+              @lavrton
+            </a>
+            . I am founder of Polotno project. As the maintainer of{' '}
+            <a href="https://konvajs.org/" target="_blank">
+              Konva 2d canvas framework
+            </a>
+            , I created several similar apps for different companies around the
+            world. So I decided to compile all my knowledge and experience into
+            reusable Polotno project.
+          </p>
+          <h2>
+            Why Polotno Studio has no signups and no ads? How are you going to
+            support the project financially?
+          </h2>
+          <p>
+            Instead of monetizing the end-user application{' '}
+            <strong>Polotno Studio</strong> I decided to make money around
+            developers tools with{' '}
+            <a href="https://polotno.dev/" target="_blank">
+              Polonto SDK
+            </a>
+            .
+          </p>
+          <p>
+            <strong>Polotno Studio</strong> is a sandbox application and
+            polished demonstration of{' '}
+            <a href="https://polotno.dev/" target="_blank">
+              Polonto SDK
+            </a>{' '}
+            usage.
+          </p>
+          <p>
+            With{' '}
+            <a href="https://polotno.dev/" target="_blank">
+              Polonto SDK
+            </a>{' '}
+            you can build very different application with very different UI.
+          </p>
+        </div>
+        <div className={Classes.DIALOG_FOOTER}>
+          <div className={Classes.DIALOG_FOOTER_ACTIONS}>
+            <Button onClick={() => toggleFaq(false)}>Close</Button>
+          </div>
+        </div>
+      </Dialog>
     </Navbar>
   );
 });
