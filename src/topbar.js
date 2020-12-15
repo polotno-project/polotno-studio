@@ -8,11 +8,10 @@ import {
   Divider,
   Dialog,
   Classes,
-  Tooltip,
-  Intent,
 } from '@blueprintjs/core';
 import { FaGithub } from '@react-icons/all-files/fa/FaGithub';
 import { FaDiscord } from '@react-icons/all-files/fa/FaDiscord';
+import { FaHackerNews } from '@react-icons/all-files/fa/FaHackerNews';
 
 import { downloadFile } from 'polotno/utils/download';
 
@@ -93,6 +92,17 @@ export default observer(({ store }) => {
         </Button>
       </Navbar.Group>
       <Navbar.Group align={Alignment.RIGHT}>
+        <AnchorButton
+          minimal
+          href="https://news.ycombinator.com/item?id=25429685"
+          target="_blank"
+          style={{
+            color: 'rgb(255, 102, 0)',
+          }}
+          icon={<FaHackerNews />}
+        >
+          Discuss on HN
+        </AnchorButton>
         <AnchorButton
           minimal
           href="https://github.com/lavrton/polotno-studio"
