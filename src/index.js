@@ -27,9 +27,15 @@ if (localStorage.getItem('polotno-state')) {
 }
 
 store.on('change', () => {
-  const json = store.toJSON();
-  delete json.history;
-  delete localStorage.setItem('polotno-state', JSON.stringify(json));
+  try {
+    const json = store.toJSON();
+    delete json.history;
+    delete localStorage.setItem('polotno-state', JSON.stringify(json));
+  } catch (e) {
+    setTimeout(() => {
+      throw e;
+    });
+  }
 });
 
 ReactDOM.render(
