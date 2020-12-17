@@ -94,17 +94,6 @@ export default observer(({ store }) => {
       <Navbar.Group align={Alignment.RIGHT}>
         <AnchorButton
           minimal
-          href="https://news.ycombinator.com/item?id=25429685"
-          target="_blank"
-          style={{
-            color: 'rgb(255, 102, 0)',
-          }}
-          icon={<FaHackerNews />}
-        >
-          Discuss on HN
-        </AnchorButton>
-        <AnchorButton
-          minimal
           href="https://github.com/lavrton/polotno-studio"
           target="_blank"
           icon={<FaGithub />}
