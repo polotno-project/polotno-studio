@@ -9,9 +9,9 @@ import {
   Dialog,
   Classes,
 } from '@blueprintjs/core';
-import { FaGithub } from '@react-icons/all-files/fa/FaGithub';
-import { FaDiscord } from '@react-icons/all-files/fa/FaDiscord';
-import { FaHackerNews } from '@react-icons/all-files/fa/FaHackerNews';
+import FaGithub from '@meronex/icons/fa/FaGithub';
+import FaDiscord from '@meronex/icons/fa/FaDiscord';
+import DownloadButton from 'polotno/toolbar/download-button';
 
 import { downloadFile } from 'polotno/utils/download';
 
@@ -113,6 +113,7 @@ export default observer(({ store }) => {
         </Button>
 
         <Divider />
+        <DownloadButton store={store} />
         {/* <NavbarHeading>Polotno Studio</NavbarHeading> */}
       </Navbar.Group>
       <Dialog
