@@ -19,7 +19,7 @@ if (window.innerWidth < 650) {
 const store = createStore();
 window.store = store;
 
-if (localStorage.getItem('polotno-state')) {
+if (window.localStorage && window.localStorage.getItem('polotno-state')) {
   const json = JSON.parse(localStorage.getItem('polotno-state'));
   store.loadJSON(json);
 } else {

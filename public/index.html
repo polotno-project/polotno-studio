@@ -71,7 +71,9 @@
         payload: {
           environment: 'production',
         },
+        enabled: window.location.href.indexOf('studio.polotno.dev') >= 0,
       };
+
       // Rollbar Snippet
       !(function (r) {
         function e(n) {
