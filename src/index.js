@@ -1,5 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import localforage from 'localforage';
+
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
@@ -19,23 +21,19 @@ if (window.innerWidth < 650) {
 const store = createStore();
 window.store = store;
 
-if (window.localStorage && window.localStorage.getItem('polotno-state')) {
-  const json = JSON.parse(localStorage.getItem('polotno-state'));
-  store.loadJSON(json);
-} else {
-  store.addPage();
-}
+localforage.getItem('polotno-state', function (err, json) {
+  if (json) {
+    store.loadJSON(json);
+  } else {
+    store.addPage();
+  }
+});
 
 store.on('change', () => {
   try {
     const json = store.toJSON();
-    delete json.history;
-    delete localStorage.setItem('polotno-state', JSON.stringify(json));
-  } catch (e) {
-    setTimeout(() => {
-      throw e;
-    });
-  }
+    localforage.setItem('polotno-state', json);
+  } catch (e) {}
 });
 
 ReactDOM.render(
