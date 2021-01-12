@@ -39,14 +39,18 @@ export default observer(({ store }) => {
           icon="new-object"
           minimal
           onClick={() => {
-            const ids = store.activePage?.children.map((child) => child.id);
-            // console.log(ids);
+            const ids = store.pages
+              .map((page) => page.children.map((child) => child.id))
+              .flat();
             const hasObjects = ids?.length;
             if (hasObjects) {
-              if (window.confirm('Remove all content for a new design?')) {
-                store.deleteElements(ids);
+              if (!window.confirm('Remove all content for a new design?')) {
+                return;
               }
             }
+            const pagesIds = store.pages.map((p) => p.id);
+            store.deletePages(pagesIds);
+            store.addPage();
           }}
         >
           New
