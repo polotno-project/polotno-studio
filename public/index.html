@@ -72,6 +72,9 @@
           environment: 'production',
         },
         enabled: window.location.href.indexOf('studio.polotno.dev') >= 0,
+        transform: function (payload) {
+          payload.state = window.store.toJSON();
+        },
       };
 
       // Rollbar Snippet
