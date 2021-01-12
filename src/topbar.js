@@ -41,7 +41,7 @@ export default observer(({ store }) => {
           onClick={() => {
             const ids = store.activePage?.children.map((child) => child.id);
             // console.log(ids);
-            const hasObjects = ids.length;
+            const hasObjects = ids?.length;
             if (hasObjects) {
               if (window.confirm('Remove all content for a new design?')) {
                 store.deleteElements(ids);
