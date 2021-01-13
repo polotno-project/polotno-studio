@@ -18,7 +18,7 @@ if (window.innerWidth < 650) {
   );
 }
 
-const store = createStore();
+const store = createStore({ key: 'nFA5H9elEytDyPyvKL7T' });
 window.store = store;
 
 localforage.getItem('polotno-state', function (err, json) {
