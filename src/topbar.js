@@ -96,6 +96,16 @@ export default observer(({ store }) => {
         </Button>
       </Navbar.Group>
       <Navbar.Group align={Alignment.RIGHT}>
+        {/* <a
+          href="https://www.producthunt.com/posts/polotno-studio?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-polotno-studio"
+          target="_blank"
+        >
+          <img
+            src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=281373&theme=dark"
+            alt="Polotno Studio - Canva-like design editor, without signups or ads. | Product Hunt"
+            style={{ height: '30px', marginBottom: '-4px' }}
+          />
+        </a> */}
         <AnchorButton
           minimal
           href="https://github.com/lavrton/polotno-studio"
