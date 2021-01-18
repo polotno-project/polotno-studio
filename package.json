@@ -9,7 +9,7 @@
     "@testing-library/user-event": "^12.6.0",
     "electron-is-dev": "^1.2.0",
     "localforage": "^1.9.0",
-    "polotno": "^0.6.5",
+    "polotno": "^0.7.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-icons": "^4.1.0",
