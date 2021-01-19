@@ -7,6 +7,26 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { createStore } from 'polotno/model/store';
 
+import { setGoogleFonts } from 'polotno/config';
+
+let GOOGLE_FONTS = [
+  'Roboto',
+  'Amatic SC',
+  'Balsamiq Sans',
+  'Caveat',
+  'Jura',
+  'Kelly Slab',
+  'Marck Script',
+  'Lobster',
+  'Press Start 2P',
+  'Ruslan Display',
+  'Rubik Mono One',
+  'Seymour One',
+  'Underdog',
+];
+
+setGoogleFonts(GOOGLE_FONTS);
+
 if (window.innerWidth < 650) {
   var mvp = document.getElementById('__viewport');
   mvp.setAttribute(
