@@ -68,13 +68,14 @@ export default observer(({ store }) => {
           <input
             type="file"
             id="load-project"
+            accept=".json,.polotno"
             ref={inputRef}
             style={{ width: '180px', display: 'none' }}
             onChange={(e) => {
               var input = e.target;
 
               var reader = new FileReader();
-              reader.onload = function () {
+              reader.onloadend = function () {
                 var text = reader.result;
                 const json = JSON.parse(text);
                 store.loadJSON(json);
