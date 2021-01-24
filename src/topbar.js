@@ -16,18 +16,6 @@ import DownloadButton from 'polotno/toolbar/download-button';
 import { downloadFile } from 'polotno/utils/download';
 
 export default observer(({ store }) => {
-  // const oneSelected = store.selectedElements.length === 1;
-  // const firstSelected = store.selectedElements[0];
-  // const isTextSelected = oneSelected && firstSelected.type === 'text';
-  // const isImageSelected = oneSelected && firstSelected.type === 'image';
-  // const isSvgSelected = oneSelected && firstSelected.type === 'svg';
-  // const noSelection = store.selectedElements.length === 0;
-
-  // const index = store.activePage?.children.indexOf(firstSelected) || 0;
-  // const canMoveUp =
-  //   store.activePage && index < store.activePage.children.length - 1;
-  // const canMoveDown = index > 0;
-
   const inputRef = React.useRef();
 
   const [faqOpened, toggleFaq] = React.useState(false);
@@ -111,7 +99,7 @@ export default observer(({ store }) => {
           minimal
           href="https://github.com/lavrton/polotno-studio"
           target="_blank"
-          icon={<FaGithub />}
+          icon={<FaGithub className="bp3-icon" style={{ fontSize: '20px' }} />}
         >
           Github
         </AnchorButton>
@@ -119,7 +107,7 @@ export default observer(({ store }) => {
           minimal
           href="https://discord.gg/W2VeKgsr9J"
           target="_blank"
-          icon={<FaDiscord />}
+          icon={<FaDiscord className="bp3-icon" style={{ fontSize: '20px' }} />}
         >
           Join Chat
         </AnchorButton>
