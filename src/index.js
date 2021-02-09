@@ -44,7 +44,8 @@ window.store = store;
 localforage.getItem('polotno-state', function (err, json) {
   if (json) {
     store.loadJSON(json);
-  } else {
+  }
+  if (!store.pages.length) {
     store.addPage();
   }
 });

@@ -62,11 +62,26 @@ export default observer(({ store }) => {
             onChange={(e) => {
               var input = e.target;
 
+              if (!input.files.length) {
+                return;
+              }
+
               var reader = new FileReader();
               reader.onloadend = function () {
                 var text = reader.result;
-                const json = JSON.parse(text);
-                store.loadJSON(json);
+                let json;
+                try {
+                  json = JSON.parse(text);
+                } catch (e) {
+                  alert('Can not load the project.');
+                }
+
+                if (json) {
+                  store.loadJSON(json);
+                }
+              };
+              reader.onerror = function () {
+                alert('Can not load the project.');
               };
               reader.readAsText(input.files[0]);
             }}
