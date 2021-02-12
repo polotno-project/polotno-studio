@@ -92,7 +92,9 @@ export default observer(({ store }) => {
           minimal
           onClick={() => {
             const json = store.toJSON();
-            const url = 'data:text/json,' + JSON.stringify(json);
+            const url =
+              'data:text/json;base64,' + window.btoa(JSON.stringify(json));
+            console.log(url);
             downloadFile(url, 'polotno.json');
           }}
         >
