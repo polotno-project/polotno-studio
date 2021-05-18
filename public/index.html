@@ -69,7 +69,7 @@
     <title>Polotno Studio - Make graphical designs</title>
     <script>
       var _rollbarConfig = {
-        accessToken: '779ff5ee78c544aa9927816e65108cc8',
+        accessToken: '0c67b213ce794b8dbfd9f21cf4e0666a',
         captureUncaught: true,
         captureUnhandledRejections: true,
         payload: {
@@ -205,22 +205,23 @@
             (s.crossOrigin = ''),
               (s.src = t.rollbarJsUrl),
               o || (s.async = !0),
-              (s.onload = s.onreadystatechange = n(function () {
-                if (
-                  !(
-                    i ||
-                    (this.readyState &&
-                      'loaded' !== this.readyState &&
-                      'complete' !== this.readyState)
-                  )
-                ) {
-                  s.onload = s.onreadystatechange = null;
-                  try {
-                    c.removeChild(s);
-                  } catch (r) {}
-                  (i = !0), l();
-                }
-              })),
+              (s.onload = s.onreadystatechange =
+                n(function () {
+                  if (
+                    !(
+                      i ||
+                      (this.readyState &&
+                        'loaded' !== this.readyState &&
+                        'complete' !== this.readyState)
+                    )
+                  ) {
+                    s.onload = s.onreadystatechange = null;
+                    try {
+                      c.removeChild(s);
+                    } catch (r) {}
+                    (i = !0), l();
+                  }
+                })),
               c.insertBefore(s, d);
           }),
             (t.prototype.wrap = function (r, e, o) {
@@ -266,9 +267,10 @@
               }
             });
           for (
-            var u = 'log,debug,info,warn,warning,error,critical,global,configure,handleUncaughtException,handleUnhandledRejection,captureEvent,captureDomContentLoaded,captureLoad'.split(
-                ','
-              ),
+            var u =
+                'log,debug,info,warn,warning,error,critical,global,configure,handleUncaughtException,handleUnhandledRejection,captureEvent,captureDomContentLoaded,captureLoad'.split(
+                  ','
+                ),
               f = 0;
             f < u.length;
             ++f
@@ -339,9 +341,10 @@
             if (r) {
               var n,
                 t,
-                a = 'EventTarget,Window,Node,ApplicationCache,AudioTrackList,ChannelMergerNode,CryptoOperation,EventSource,FileReader,HTMLUnknownElement,IDBDatabase,IDBRequest,IDBTransaction,KeyOperation,MediaController,MessagePort,ModalWindow,Notification,SVGElementInstance,Screen,TextTrack,TextTrackCue,TextTrackList,WebSocket,WebSocketWorker,Worker,XMLHttpRequest,XMLHttpRequestEventTarget,XMLHttpRequestUpload'.split(
-                  ','
-                );
+                a =
+                  'EventTarget,Window,Node,ApplicationCache,AudioTrackList,ChannelMergerNode,CryptoOperation,EventSource,FileReader,HTMLUnknownElement,IDBDatabase,IDBRequest,IDBTransaction,KeyOperation,MediaController,MessagePort,ModalWindow,Notification,SVGElementInstance,Screen,TextTrack,TextTrackCue,TextTrackList,WebSocket,WebSocketWorker,Worker,XMLHttpRequest,XMLHttpRequestEventTarget,XMLHttpRequestUpload'.split(
+                    ','
+                  );
               for (n = 0; n < a.length; ++n)
                 (t = a[n]), r[t] && r[t].prototype && l(e, r[t].prototype, o);
             }
@@ -393,9 +396,10 @@
                     if (this.impl[r]) return this.impl[r].apply(this.impl, e);
                   };
                 },
-                o = 'log,debug,info,warn,warning,error,critical,global,configure,handleUncaughtException,handleUnhandledRejection,_createItem,wrap,loadFull,shimId,captureEvent,captureDomContentLoaded,captureLoad'.split(
-                  ','
-                ),
+                o =
+                  'log,debug,info,warn,warning,error,critical,global,configure,handleUncaughtException,handleUnhandledRejection,_createItem,wrap,loadFull,shimId,captureEvent,captureDomContentLoaded,captureLoad'.split(
+                    ','
+                  ),
                 n = 0;
               n < o.length;
               n++
