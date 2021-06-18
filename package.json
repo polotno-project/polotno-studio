@@ -45,7 +45,7 @@
   },
   "homepage": ".",
   "scripts": {
-    "postinstall": "electron-builder install-app-deps",
+    "ppostinstall": "electron-builder install-app-deps",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
