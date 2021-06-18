@@ -1,39 +1,35 @@
 {
   "name": "polotno-studio",
-  "version": "0.1.0",
+  "version": "0.1.1",
+  "author": "Anton Lavrenov",
+  "description": "Free design editor",
   "private": true,
   "dependencies": {
     "@meronex/icons": "^4.0.0",
-    "@testing-library/jest-dom": "^5.11.8",
-    "@testing-library/react": "^11.2.3",
-    "@testing-library/user-event": "^12.6.0",
-    "electron-is-dev": "^1.2.0",
+    "electron-is-dev": "^2.0.0",
     "localforage": "^1.9.0",
-    "polotno": "^0.23.0",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
-    "react-icons": "^4.1.0",
-    "react-scripts": "4.0.1"
+    "polotno": "^0.24.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-icons": "^4.2.0",
+    "react-scripts": "4.0.3"
   },
   "main": "public/electron.js",
+  "hardenedRuntime": true,
+  "gatekeeperAssess": false,
   "build": {
     "appId": "dev.polotno.studio",
     "productName": "Polotno Studio",
     "copyright": "Copyright © 2021 Anton Lavrenov",
     "mac": {
-      "identity": "lavrton@gmail.com (E94W3RRET5)",
       "category": "public.app-category.utilities",
-      "hardenedRuntime": true,
+      "icon": "build/icon@2x.png",
       "entitlements": "build/entitlements.mac.plist",
       "entitlementsInherit": "build/entitlements.mac.plist",
-      "gatekeeperAssess": false,
+      "provisioningProfile": "studio.provisionprofile",
       "target": [
         "mas"
       ]
-    },
-    "mas": {
-      "entitlements": "build/entitlements.mac.plist",
-      "entitlementsInherit": "build/entitlements.mac.plist"
     },
     "files": [
       "build/**/*",
@@ -51,8 +47,7 @@
     "test": "react-scripts test",
     "electron-dev": "concurrently \"BROWSER=none npm start\" \"electron .\"",
     "preelectron-build": "npm run build",
-    "electron-build": "electron-builder",
-    "afterSign": "scripts/notarize.js"
+    "electron-build": "electron-builder"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -71,7 +66,7 @@
   },
   "devDependencies": {
     "concurrently": "^5.3.0",
-    "electron": "^11.1.1",
-    "electron-builder": "^22.9.1"
+    "electron": "^13.1.2",
+    "electron-builder": "^22.11.7"
   }
 }

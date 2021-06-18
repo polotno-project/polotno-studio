@@ -5,10 +5,33 @@ import SidePanel from 'polotno/side-panel/side-panel';
 import Workspace from 'polotno/canvas/workspace';
 
 import Topbar from './topbar';
+import { loadJSONFile } from './file';
 
 const App = ({ store }) => {
   return (
-    <React.Fragment>
+    <div
+      style={{ width: '100vw', height: '100vh' }}
+      onDrop={(ev) => {
+        // Prevent default behavior (Prevent file from being opened)
+        ev.preventDefault();
+
+        if (ev.dataTransfer.items) {
+          // Use DataTransferItemList interface to access the file(s)
+          for (let i = 0; i < ev.dataTransfer.items.length; i++) {
+            // If dropped items aren't files, reject them
+            if (ev.dataTransfer.items[i].kind === 'file') {
+              const file = ev.dataTransfer.items[i].getAsFile();
+              loadJSONFile(file, store);
+            }
+          }
+        } else {
+          // Use DataTransfer interface to access the file(s)
+          for (let i = 0; i < ev.dataTransfer.files.length; i++) {
+            loadJSONFile(ev.dataTransfer.files[i], store);
+          }
+        }
+      }}
+    >
       <Topbar store={store} />
       <div
         style={{
@@ -36,7 +59,7 @@ const App = ({ store }) => {
           <ZoomButtons store={store} />
         </div>
       </div>
-    </React.Fragment>
+    </div>
   );
 };
 
