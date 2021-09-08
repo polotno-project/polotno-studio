@@ -5,14 +5,15 @@
   "description": "Free design editor",
   "private": true,
   "electronDeps": {
-    "electron": "^13.1.2",
+    "electron": "^14.0.0",
     "electron-builder": "^22.11.7",
-    "electron-is-dev": "^2.0.0"
+    "electron-is-dev": "^2.0.0",
+    "concurrently": "^6.2.1"
   },
   "dependencies": {
     "@meronex/icons": "^4.0.0",
-    "localforage": "^1.9.0",
-    "polotno": "^0.31.5",
+    "localforage": "^1.10.0",
+    "polotno": "^0.31.6",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-icons": "^4.2.0",
@@ -67,8 +68,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "concurrently": "^5.3.0"
   }
 }
