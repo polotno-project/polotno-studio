@@ -1,10 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import localforage from 'localforage';
+import { createStore } from 'polotno/model/store';
+import { unstable_setRemoveBackgroundEnabled } from 'polotno/config';
 
 import './index.css';
 import App from './App';
-import { createStore } from 'polotno/model/store';
+
+unstable_setRemoveBackgroundEnabled(true);
 
 const store = createStore({ key: 'nFA5H9elEytDyPyvKL7T' });
 window.store = store;

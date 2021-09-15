@@ -5,8 +5,13 @@ import { ZoomButtons } from 'polotno/toolbar/zoom-buttons';
 import { SidePanel } from 'polotno/side-panel';
 import { Workspace } from 'polotno/canvas/workspace';
 
+// import { VectorSection } from './svg-sidepanel';
+
 import Topbar from './topbar';
 import { loadJSONFile } from './file';
+
+// const SECTIONS = [...DEFAULT_SECTIONS];
+// SECTIONS.splice(SECTIONS.length - 3, 0, VectorSection);
 
 const useHeight = () => {
   const [height, setHeight] = React.useState(window.innerHeight);
