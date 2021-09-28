@@ -5,13 +5,10 @@ import { ZoomButtons } from 'polotno/toolbar/zoom-buttons';
 import { SidePanel } from 'polotno/side-panel';
 import { Workspace } from 'polotno/canvas/workspace';
 
+import { loadFile } from './file';
 // import { VectorSection } from './svg-sidepanel';
 
 import Topbar from './topbar';
-import { loadJSONFile } from './file';
-
-// const SECTIONS = [...DEFAULT_SECTIONS];
-// SECTIONS.splice(SECTIONS.length - 3, 0, VectorSection);
 
 const useHeight = () => {
   const [height, setHeight] = React.useState(window.innerHeight);
@@ -34,13 +31,13 @@ const App = ({ store }) => {
         // If dropped items aren't files, reject them
         if (ev.dataTransfer.items[i].kind === 'file') {
           const file = ev.dataTransfer.items[i].getAsFile();
-          loadJSONFile(file, store);
+          loadFile(file, store);
         }
       }
     } else {
       // Use DataTransfer interface to access the file(s)
       for (let i = 0; i < ev.dataTransfer.files.length; i++) {
-        loadJSONFile(ev.dataTransfer.files[i], store);
+        loadFile(ev.dataTransfer.files[i], store);
       }
     }
   };
