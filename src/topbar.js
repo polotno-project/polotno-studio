@@ -94,6 +94,7 @@ export default observer(({ store }) => {
 
                   if (json) {
                     store.loadJSON(json);
+                    input.value = '';
                   }
                 };
                 reader.onerror = function () {
