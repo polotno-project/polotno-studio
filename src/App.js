@@ -22,9 +22,15 @@ const useHeight = () => {
 
 const App = ({ store }) => {
   const handleDrop = (ev) => {
+    console.log(ev);
     // Prevent default behavior (Prevent file from being opened)
     ev.preventDefault();
 
+    // skip the case if we dropped DOM element from side panel
+    // in that case Safari will have more data in "items"
+    if (ev.dataTransfer.files.length !== ev.dataTransfer.items.length) {
+      return;
+    }
     // Use DataTransfer interface to access the file(s)
     for (let i = 0; i < ev.dataTransfer.files.length; i++) {
       loadFile(ev.dataTransfer.files[i], store);
