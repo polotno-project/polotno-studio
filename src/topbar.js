@@ -8,11 +8,15 @@ import {
   Divider,
   Dialog,
   Classes,
+  Position,
+  Menu,
+  MenuItem,
 } from '@blueprintjs/core';
 import FaGithub from '@meronex/icons/fa/FaGithub';
 import FaDiscord from '@meronex/icons/fa/FaDiscord';
-import DownloadButton from 'polotno/toolbar/download-button';
 import { downloadFile } from 'polotno/utils/download';
+import { Popover2 } from '@blueprintjs/popover2';
+import { t } from 'polotno/utils/l10n';
 
 import styled from 'polotno/utils/styled';
 
@@ -29,6 +33,66 @@ const NavInner = styled('div')`
     display: flex;
   }
 `;
+
+const DownloadButton = ({ store }) => {
+  const [saving, setSaving] = React.useState(false);
+
+  const getName = () => {
+    const texts = [];
+    store.pages.forEach((p) => {
+      p.children.forEach((c) => {
+        if (c.type === 'text') {
+          texts.push(c.text);
+        }
+      });
+    });
+    const allWords = texts.join(' ').split(' ');
+    const words = allWords.slice(0, 6);
+    return words.join(' ').replace(/\s/g, '-').toLowerCase() || 'polotno';
+  };
+  return (
+    <Popover2
+      content={
+        <Menu>
+          <MenuItem
+            icon="media"
+            text={t('toolbar.saveAsImage')}
+            onClick={async () => {
+              store.pages.forEach((page, index) => {
+                // do not add index if we have just one page
+                const indexString =
+                  store.pages.length > 1 ? '-' + (index + 1) : '';
+                store.saveAsImage({
+                  pageId: page.id,
+                  fileName: getName() + indexString + '.png',
+                });
+              });
+            }}
+          />
+          <MenuItem
+            icon="document"
+            text={t('toolbar.saveAsPDF')}
+            onClick={async () => {
+              setSaving(true);
+              await store.saveAsPDF({
+                fileName: getName() + '.pdf',
+              });
+              setSaving(false);
+            }}
+          />
+        </Menu>
+      }
+      position={Position.BOTTOM}
+    >
+      <Button
+        icon="import"
+        text={t('toolbar.download')}
+        minimal
+        loading={saving}
+      />
+    </Popover2>
+  );
+};
 
 export default observer(({ store }) => {
   const inputRef = React.useRef();
@@ -113,6 +177,7 @@ export default observer(({ store }) => {
               const url =
                 'data:text/json;base64,' +
                 window.btoa(unescape(encodeURIComponent(JSON.stringify(json))));
+
               downloadFile(url, 'polotno.json');
             }}
           >
