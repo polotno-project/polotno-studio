@@ -13,7 +13,7 @@
   "dependencies": {
     "@meronex/icons": "^4.0.0",
     "localforage": "^1.10.0",
-    "polotno": "^0.39.11",
+    "polotno": "^0.39.12",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-icons": "^4.3.1",
