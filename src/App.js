@@ -6,11 +6,11 @@ import { SidePanel, DEFAULT_SECTIONS } from 'polotno/side-panel';
 import { Workspace } from 'polotno/canvas/workspace';
 
 import { loadFile } from './file';
-import { FlaticonSection } from './flaticon-sidepanel';
+// import { FlaticonSection } from './flaticon-sidepanel';
 
 import Topbar from './topbar';
 
-DEFAULT_SECTIONS.splice(3, 0, FlaticonSection);
+// DEFAULT_SECTIONS.splice(3, 0, FlaticonSection);
 
 const useHeight = () => {
   const [height, setHeight] = React.useState(window.innerHeight);
