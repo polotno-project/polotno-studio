@@ -24,7 +24,6 @@ const useHeight = () => {
 
 const App = ({ store }) => {
   const handleDrop = (ev) => {
-    console.log(ev);
     // Prevent default behavior (Prevent file from being opened)
     ev.preventDefault();
 
