@@ -100,7 +100,7 @@ export default observer(({ store }) => {
   const [faqOpened, toggleFaq] = React.useState(false);
 
   return (
-    <NavbarContainer className="bp3-navbar">
+    <NavbarContainer className="bp4-navbar">
       <NavInner>
         <Navbar.Group align={Alignment.LEFT}>
           <Button
@@ -200,7 +200,7 @@ export default observer(({ store }) => {
             href="https://github.com/lavrton/polotno-studio"
             target="_blank"
             icon={
-              <FaGithub className="bp3-icon" style={{ fontSize: '20px' }} />
+              <FaGithub className="bp4-icon" style={{ fontSize: '20px' }} />
             }
           >
             Github
@@ -210,7 +210,7 @@ export default observer(({ store }) => {
             href="https://discord.gg/W2VeKgsr9J"
             target="_blank"
             icon={
-              <FaDiscord className="bp3-icon" style={{ fontSize: '20px' }} />
+              <FaDiscord className="bp4-icon" style={{ fontSize: '20px' }} />
             }
           >
             Join Chat
