@@ -253,7 +253,7 @@ export default observer(({ store }) => {
               . The repository doesn't have full source.{' '}
               <strong>Polotno Studio</strong> is powered by{' '}
               <a href="https://polotno.dev/" target="_blank">
-                Polonto SDK project
+                Polotno SDK project
               </a>
               . All core "canvas editor" functionality are implemented by{' '}
               <strong>polotno</strong> npm package (which is not open source at
@@ -286,7 +286,7 @@ export default observer(({ store }) => {
               <strong>Polotno Studio</strong> I decided to make money around
               developers tools with{' '}
               <a href="https://polotno.dev/" target="_blank">
-                Polonto SDK
+                Polotno SDK
               </a>
               .
             </p>
@@ -294,14 +294,14 @@ export default observer(({ store }) => {
               <strong>Polotno Studio</strong> is a sandbox application and
               polished demonstration of{' '}
               <a href="https://polotno.dev/" target="_blank">
-                Polonto SDK
+                Polotno SDK
               </a>{' '}
               usage.
             </p>
             <p>
               With{' '}
               <a href="https://polotno.dev/" target="_blank">
-                Polonto SDK
+                Polotno SDK
               </a>{' '}
               you can build very different application with very different UI.
             </p>
