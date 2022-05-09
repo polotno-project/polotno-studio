@@ -290,14 +290,14 @@ export default observer(({ store }) => {
             style={{ height: '30px', marginBottom: '-4px' }}
           />
         </a> */}
-          <Button
+          {/* <Button
             icon="info-sign"
             minimal
             onClick={() => toggleQuestion(true)}
             intent="danger"
           >
             Important question for you (!)
-          </Button>
+          </Button> */}
           <AnchorButton
             minimal
             href="https://github.com/lavrton/polotno-studio"
@@ -415,7 +415,7 @@ export default observer(({ store }) => {
             </div>
           </div>
         </Dialog>
-        <Dialog
+        {/* <Dialog
           icon="info-sign"
           onClose={() => toggleQuestion(false)}
           title="Who are you?"
@@ -451,7 +451,7 @@ export default observer(({ store }) => {
               <Button onClick={() => toggleQuestion(false)}>Close</Button>
             </div>
           </div>
-        </Dialog>
+        </Dialog> */}
       </NavInner>
     </NavbarContainer>
   );
