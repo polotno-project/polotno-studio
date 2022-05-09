@@ -192,6 +192,7 @@ export default observer(({ store }) => {
   const inputRef = React.useRef();
 
   const [faqOpened, toggleFaq] = React.useState(false);
+  const [questionOpened, toggleQuestion] = React.useState(false);
 
   return (
     <NavbarContainer className="bp4-navbar">
@@ -289,6 +290,14 @@ export default observer(({ store }) => {
             style={{ height: '30px', marginBottom: '-4px' }}
           />
         </a> */}
+          <Button
+            icon="info-sign"
+            minimal
+            onClick={() => toggleQuestion(true)}
+            intent="danger"
+          >
+            Important question for you (!)
+          </Button>
           <AnchorButton
             minimal
             href="https://github.com/lavrton/polotno-studio"
@@ -403,6 +412,40 @@ export default observer(({ store }) => {
           <div className={Classes.DIALOG_FOOTER}>
             <div className={Classes.DIALOG_FOOTER_ACTIONS}>
               <Button onClick={() => toggleFaq(false)}>Close</Button>
+            </div>
+          </div>
+        </Dialog>
+        <Dialog
+          icon="info-sign"
+          onClose={() => toggleQuestion(false)}
+          title="Who are you?"
+          isOpen={questionOpened}
+          style={{
+            width: '80%',
+            maxWidth: '700px',
+          }}
+        >
+          <div className={Classes.DIALOG_BODY}>
+            <h2>How did you know about polotno?</h2>
+            <p>
+              Hello, dear friend. I am Anton Lavrenov, and I am a developer of
+              Polotno studio. I noticed that last days I have a lot more users
+              then usually. And I have no idea where people come from.
+            </p>
+            <p>
+              Please, tell me how do you know about Polotno Studio. Just drop a
+              message in{' '}
+              <a href="https://twitter.com/lavrton/" target="_blank">
+                @lavrton
+              </a>{' '}
+              on Twitter or by email{' '}
+              <a href="mailto:anton@polotno.dev">anton@polotno.dev</a>.
+            </p>
+            <p>Thank you! Enjoy the app!</p>
+          </div>
+          <div className={Classes.DIALOG_FOOTER}>
+            <div className={Classes.DIALOG_FOOTER_ACTIONS}>
+              <Button onClick={() => toggleQuestion(false)}>Close</Button>
             </div>
           </div>
         </Dialog>

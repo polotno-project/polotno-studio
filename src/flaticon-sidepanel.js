@@ -20,8 +20,6 @@ export const FlatIconPanel = observer(({ store }) => {
     getSize: (res) => Math.floor(res.metadata.total / res.metadata.count),
   });
 
-  console.log(data);
-
   return (
     <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
       <InputGroup
