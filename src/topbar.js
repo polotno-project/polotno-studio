@@ -439,7 +439,10 @@ export default observer(({ store }) => {
                 @lavrton
               </a>{' '}
               on Twitter or by email{' '}
-              <a href="mailto:anton@polotno.dev">anton@polotno.dev</a>.
+              <a href="mailto:anton@polotno.dev" target="_blank">
+                anton@polotno.dev
+              </a>
+              .
             </p>
             <p>Thank you! Enjoy the app!</p>
           </div>
