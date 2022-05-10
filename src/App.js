@@ -10,7 +10,8 @@ import { IllustrationsSection } from './illustrations-section';
 
 import Topbar from './topbar';
 
-DEFAULT_SECTIONS.splice(3, 0, IllustrationsSection);
+// hide it for now
+// DEFAULT_SECTIONS.splice(3, 0, IllustrationsSection);
 
 const useHeight = () => {
   const [height, setHeight] = React.useState(window.innerHeight);
