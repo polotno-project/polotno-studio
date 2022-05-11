@@ -1,22 +1,24 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
 import { InputGroup } from '@blueprintjs/core';
+import { isAlive } from 'mobx-state-tree';
 
 import { useInfiniteAPI } from 'polotno/utils/use-api';
-
+import { urlToBase64, svgToURL } from 'polotno/utils/svg';
 import { SectionTab } from 'polotno/side-panel';
-import { svgToURL } from 'polotno/utils/svg';
 import { getKey } from 'polotno/utils/validate-key';
 import { getImageSize } from 'polotno/utils/image';
 import FaVectorSquare from '@meronex/icons/fa/FaVectorSquare';
 
 import { ImagesGrid } from 'polotno/side-panel/images-grid';
 
+const API = 'https://api.polotno.dev/api';
+
 export const FlatIconPanel = observer(({ store }) => {
   // load data
   const { data, isLoading, loadMore, setQuery } = useInfiniteAPI({
     getAPI: ({ page, query }) =>
-      `http://localhost:3001/api/get-flaticon?q=${query}&page=${page}&KEY=${getKey()}`,
+      `${API}/get-flaticon?q=${query}&page=${page}&KEY=${getKey()}`,
     getSize: (res) => Math.floor(res.metadata.total / res.metadata.count),
   });
 
@@ -38,28 +40,37 @@ export const FlatIconPanel = observer(({ store }) => {
         getPreview={(item) => item.images['64']}
         isLoading={isLoading}
         onSelect={async (item, pos, element) => {
-          // const req = await fetch(
-          //   `https://api.polotno.dev/api/download-svgapi?key=${getKey()}&path=${
-          //     item.path
-          //   }`
-          // );
-          // const json = await req.json();
-          // const base64 = await svgToURL(json.content);
-          // if (element && element.type === 'image') {
-          //   element.set({ clipSrc: base64 });
-          //   return;
-          // }
-          const url = item.images['256'];
-          const { width, height } = await getImageSize(url);
-          const x = (pos?.x || store.width / 2) - width / 2;
-          const y = (pos?.y || store.height / 2) - height / 2;
-          store.activePage?.addElement({
-            type: 'svg',
-            width,
-            height,
-            x,
-            y,
-            src: url,
+          if (element && element.type === 'image' && !element.locked) {
+            const req = await fetch(
+              `${API}/download-flaticon?id=${item.id}&KEY=${getKey()}`
+            );
+            const json = await req.json();
+            const base64 = await svgToURL(json.svg);
+            element.set({ clipSrc: base64 });
+            return;
+          }
+          const { width, height } = await getImageSize(item.images['256']);
+          store.history.transaction(async () => {
+            const x = (pos?.x || store.width / 2) - width / 2;
+            const y = (pos?.y || store.height / 2) - height / 2;
+            const svg = store.activePage?.addElement({
+              type: 'svg',
+              width,
+              height,
+              x,
+              y,
+            });
+            const req = await fetch(
+              `http://localhost:3001/api/download-flaticon?id=${
+                item.id
+              }&KEY=${getKey()}`
+            );
+            const json = await req.json();
+            console.log(json.svg);
+            const base64 = await svgToURL(json.svg);
+            if (isAlive(svg)) {
+              await svg.set({ src: base64 });
+            }
           });
         }}
         rowsNumber={4}

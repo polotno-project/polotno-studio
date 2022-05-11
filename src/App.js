@@ -7,11 +7,13 @@ import { Workspace } from 'polotno/canvas/workspace';
 
 import { loadFile } from './file';
 import { IllustrationsSection } from './illustrations-section';
+import { FlaticonSection } from './flaticon-section';
 
 import Topbar from './topbar';
 
 // hide it for now
 // DEFAULT_SECTIONS.splice(3, 0, IllustrationsSection);
+DEFAULT_SECTIONS.splice(3, 0, FlaticonSection);
 
 const useHeight = () => {
   const [height, setHeight] = React.useState(window.innerHeight);
