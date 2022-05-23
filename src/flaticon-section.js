@@ -61,9 +61,7 @@ export const FlatIconPanel = observer(({ store }) => {
               y,
             });
             const req = await fetch(
-              `http://localhost:3001/api/download-flaticon?id=${
-                item.id
-              }&KEY=${getKey()}`
+              `${API}/api/download-flaticon?id=${item.id}&KEY=${getKey()}`
             );
             const json = await req.json();
             console.log(json.svg);
