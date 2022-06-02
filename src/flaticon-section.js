@@ -64,7 +64,6 @@ export const FlatIconPanel = observer(({ store }) => {
               `${API}/download-flaticon?id=${item.id}&KEY=${getKey()}`
             );
             const json = await req.json();
-            console.log(json.svg);
             const base64 = await svgToURL(json.svg);
             if (isAlive(svg)) {
               await svg.set({ src: base64 });

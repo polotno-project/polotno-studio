@@ -1,7 +1,7 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
 import { InputGroup } from '@blueprintjs/core';
-
+import { isAlive } from 'mobx-state-tree';
 import { useInfiniteAPI } from 'polotno/utils/use-api';
 
 import { SectionTab } from 'polotno/side-panel';
@@ -34,38 +34,57 @@ export const SVGPanel = observer(({ store }) => {
           marginBottom: '20px',
         }}
       />
-      <ImagesGrid
-        shadowEnabled={false}
-        images={data?.map((data) => data.icons).flat()}
-        getPreview={(item) => item.url}
-        isLoading={isLoading}
-        onSelect={async (item, pos, element) => {
-          const req = await fetch(
-            `https://api.polotno.dev/api/download-svgapi?key=${getKey()}&path=${
-              item.path
-            }`
-          );
-          const json = await req.json();
-          const base64 = await svgToURL(json.content);
-          if (element && element.type === 'image') {
-            element.set({ clipSrc: base64 });
-            return;
-          }
-          const { width, height } = await getImageSize(item.url);
-          const x = (pos?.x || store.width / 2) - width / 2;
-          const y = (pos?.y || store.height / 2) - height / 2;
-          store.activePage?.addElement({
-            type: 'svg',
-            width,
-            height,
-            x,
-            y,
-            src: base64,
-          });
+      <div
+        style={{
+          filter: 'invert(1)',
+          height: 'calc(100% - 40px)',
+          overflow: 'hidden',
         }}
-        rowsNumber={4}
-        loadMore={loadMore}
-      />
+      >
+        <ImagesGrid
+          shadowEnabled={false}
+          images={data?.map((data) => data.icons).flat()}
+          getPreview={(item) => item.url}
+          isLoading={isLoading}
+          onSelect={async (item, pos, element) => {
+            if (element && element.type === 'image' && !element.locked) {
+              const req = await fetch(
+                `https://api.polotno.dev/api/download-svgapi?key=${getKey()}&path=${
+                  item.path
+                }`
+              );
+              const json = await req.json();
+              const base64 = await svgToURL(json.content);
+              element.set({ clipSrc: base64 });
+              return;
+            }
+            const { width, height } = await getImageSize(item.url);
+            store.history.transaction(async () => {
+              const x = (pos?.x || store.width / 2) - width / 2;
+              const y = (pos?.y || store.height / 2) - height / 2;
+              const svg = store.activePage?.addElement({
+                type: 'svg',
+                width,
+                height,
+                x,
+                y,
+              });
+              const req = await fetch(
+                `http://localhost:3001/api/download-svgapi?key=${getKey()}&path=${
+                  item.path
+                }`
+              );
+              const json = await req.json();
+              const base64 = await svgToURL(json.content);
+              if (isAlive(svg)) {
+                await svg.set({ src: base64 });
+              }
+            });
+          }}
+          rowsNumber={4}
+          loadMore={loadMore}
+        />
+      </div>
     </div>
   );
 });
