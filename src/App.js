@@ -9,6 +9,7 @@ import { loadFile } from './file';
 import { IllustrationsSection } from './illustrations-section';
 import { FlaticonSection } from './flaticon-section';
 import { VectorSection } from './svg-sidepanel';
+import { IconFinderSection } from './iconfinder-section';
 
 import Topbar from './topbar';
 
@@ -16,6 +17,7 @@ import Topbar from './topbar';
 // DEFAULT_SECTIONS.splice(3, 0, IllustrationsSection);
 // DEFAULT_SECTIONS.splice(3, 0, FlaticonSection);
 // DEFAULT_SECTIONS.splice(3, 0, VectorSection);
+DEFAULT_SECTIONS.splice(3, 0, IconFinderSection);
 
 const useHeight = () => {
   const [height, setHeight] = React.useState(window.innerHeight);
