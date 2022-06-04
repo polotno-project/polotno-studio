@@ -18,7 +18,9 @@ export const IconFinderPanel = observer(({ store }) => {
   const { data, isLoading, loadMore, setQuery } = useInfiniteAPI({
     getAPI: ({ page, query }) =>
       `${API}/get-iconfinder?query=${query}&offset=${page}&KEY=${getKey()}`,
-    getSize: (res) => Math.floor(res.total_count / 50),
+    getSize: (res) => {
+      return Math.ceil(res.total_count / 50);
+    },
   });
 
   return (
