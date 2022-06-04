@@ -11,7 +11,7 @@ import FaVectorSquare from '@meronex/icons/fa/FaVectorSquare';
 
 import { ImagesGrid } from 'polotno/side-panel/images-grid';
 
-const API = 'http://api.polotno.dev/api';
+const API = 'https://api.polotno.dev/api';
 
 export const IconFinderPanel = observer(({ store }) => {
   // load data
