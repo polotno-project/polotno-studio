@@ -15,6 +15,7 @@ import {
 } from '@blueprintjs/core';
 import FaGithub from '@meronex/icons/fa/FaGithub';
 import FaDiscord from '@meronex/icons/fa/FaDiscord';
+import BiCodeBlock from '@meronex/icons/bi/BiCodeBlock';
 import { downloadFile } from 'polotno/utils/download';
 import { Popover2 } from '@blueprintjs/popover2';
 import * as unit from 'polotno/utils/unit';
@@ -298,6 +299,16 @@ export default observer(({ store }) => {
           >
             Important question for you (!)
           </Button> */}
+          <AnchorButton
+            minimal
+            href="https://polotno.com"
+            target="_blank"
+            icon={
+              <BiCodeBlock className="bp4-icon" style={{ fontSize: '20px' }} />
+            }
+          >
+            API
+          </AnchorButton>
           <AnchorButton
             minimal
             href="https://github.com/lavrton/polotno-studio"
