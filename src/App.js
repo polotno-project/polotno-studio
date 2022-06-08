@@ -17,7 +17,7 @@ import Topbar from './topbar';
 // DEFAULT_SECTIONS.splice(3, 0, IllustrationsSection);
 // DEFAULT_SECTIONS.splice(3, 0, FlaticonSection);
 // DEFAULT_SECTIONS.splice(3, 0, VectorSection);
-DEFAULT_SECTIONS.splice(3, 0, IconFinderSection);
+DEFAULT_SECTIONS.splice(3, 1, IconFinderSection);
 
 const useHeight = () => {
   const [height, setHeight] = React.useState(window.innerHeight);
