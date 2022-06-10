@@ -2,7 +2,11 @@ import React from 'react';
 import { PolotnoContainer, SidePanelWrap, WorkspaceWrap } from 'polotno';
 import { Toolbar } from 'polotno/toolbar/toolbar';
 import { ZoomButtons } from 'polotno/toolbar/zoom-buttons';
-import { SidePanel, DEFAULT_SECTIONS } from 'polotno/side-panel';
+import {
+  SidePanel,
+  DEFAULT_SECTIONS,
+  ElementsSection,
+} from 'polotno/side-panel';
 import { Workspace } from 'polotno/canvas/workspace';
 
 import { loadFile } from './file';
@@ -10,14 +14,17 @@ import { IllustrationsSection } from './illustrations-section';
 import { FlaticonSection } from './flaticon-section';
 import { VectorSection } from './svg-sidepanel';
 import { IconFinderSection } from './iconfinder-section';
+import { ElementsPanel } from './elements-panel';
 
 import Topbar from './topbar';
 
+ElementsSection.Panel = ElementsPanel;
 // hide it for now
 // DEFAULT_SECTIONS.splice(3, 0, IllustrationsSection);
 // DEFAULT_SECTIONS.splice(3, 0, FlaticonSection);
 // DEFAULT_SECTIONS.splice(3, 0, VectorSection);
-DEFAULT_SECTIONS.splice(3, 1, IconFinderSection);
+DEFAULT_SECTIONS.splice(3, 1, ElementsSection);
+DEFAULT_SECTIONS.splice(3, 0, IconFinderSection);
 
 const useHeight = () => {
   const [height, setHeight] = React.useState(window.innerHeight);
