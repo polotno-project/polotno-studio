@@ -4,55 +4,21 @@
   "author": "Anton Lavrenov",
   "description": "Free design editor",
   "private": true,
-  "electronDeps": {
-    "electron": "^14.0.0",
-    "electron-builder": "^22.11.7",
-    "electron-is-dev": "^2.0.0",
-    "concurrently": "^6.2.1"
-  },
   "dependencies": {
     "@meronex/icons": "^4.0.0",
     "localforage": "^1.10.0",
     "polotno": "^0.43.12",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-icons": "^4.3.1",
-    "react-scripts": "5.0.0"
+    "react-icons": "^4.4.0",
+    "react-scripts": "5.0.1"
   },
-  "main": "public/electron.js",
-  "hardenedRuntime": true,
-  "gatekeeperAssess": false,
-  "build": {
-    "appId": "dev.polotno.studio",
-    "productName": "Polotno Studio",
-    "copyright": "Copyright © 2021 Anton Lavrenov",
-    "mac": {
-      "category": "public.app-category.utilities",
-      "icon": "build/icon@2x.png",
-      "entitlements": "build/entitlements.mac.plist",
-      "entitlementsInherit": "build/entitlements.mac.plist",
-      "provisioningProfile": "studio.provisionprofile",
-      "target": [
-        "mas"
-      ]
-    },
-    "files": [
-      "build/**/*",
-      "node_modules/**/*"
-    ],
-    "directories": {
-      "buildResources": "build"
-    }
-  },
+  "devDependencies": {},
   "homepage": ".",
   "scripts": {
-    "ppostinstall": "electron-builder install-app-deps",
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
-    "electron-dev": "concurrently \"BROWSER=none npm start\" \"electron .\"",
-    "preelectron-build": "npm run build",
-    "electron-build": "electron-builder"
+    "test": "react-scripts test"
   },
   "eslintConfig": {
     "extends": "react-app"
