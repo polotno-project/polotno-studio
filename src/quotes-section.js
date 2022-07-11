@@ -56,15 +56,9 @@ export const QuotesPanel = observer(({ store }) => {
 
     const run = async () => {
       setLoading(true);
-      let q = query;
-      let k = keywords;
 
-      if (!q && !k) {
-        q = '';
-        k = 'Like';
-      }
       const req = await fetch(
-        `${API}/get-quotes?query=${q}&keywords=${k}&KEY=${getKey()}`
+        `${API}/get-quotes?query=${query}&keywords=${keywords}&KEY=${getKey()}`
       );
       const json = await req.json();
       if (skipResults) {
