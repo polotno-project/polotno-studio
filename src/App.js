@@ -13,6 +13,7 @@ import { loadFile } from './file';
 import { IllustrationsSection } from './illustrations-section';
 import { FlaticonSection } from './flaticon-section';
 import { VectorSection } from './svg-sidepanel';
+import { QuotesSection } from './quotes-section';
 import { IconFinderSection } from './iconfinder-section';
 import { ElementsPanel } from './elements-panel';
 
@@ -24,6 +25,7 @@ ElementsSection.Panel = ElementsPanel;
 // DEFAULT_SECTIONS.splice(3, 0, FlaticonSection);
 // DEFAULT_SECTIONS.splice(3, 0, VectorSection);
 DEFAULT_SECTIONS.splice(3, 1, ElementsSection);
+DEFAULT_SECTIONS.splice(3, 1, QuotesSection);
 DEFAULT_SECTIONS.splice(3, 0, IconFinderSection);
 
 const useHeight = () => {
