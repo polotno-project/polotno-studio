@@ -25,7 +25,7 @@ ElementsSection.Panel = ElementsPanel;
 // DEFAULT_SECTIONS.splice(3, 0, FlaticonSection);
 // DEFAULT_SECTIONS.splice(3, 0, VectorSection);
 DEFAULT_SECTIONS.splice(3, 1, ElementsSection);
-DEFAULT_SECTIONS.splice(3, 1, QuotesSection);
+DEFAULT_SECTIONS.splice(3, 0, QuotesSection);
 DEFAULT_SECTIONS.splice(3, 0, IconFinderSection);
 
 const useHeight = () => {
