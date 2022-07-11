@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 import localforage from 'localforage';
 import { createStore } from 'polotno/model/store';
 import { unstable_setRemoveBackgroundEnabled } from 'polotno/config';
@@ -28,9 +28,10 @@ store.on('change', () => {
   } catch (e) {}
 });
 
-ReactDOM.render(
+const root = ReactDOM.createRoot(document.getElementById('root'));
+
+root.render(
   <React.StrictMode>
     <App store={store} />
-  </React.StrictMode>,
-  document.getElementById('root')
+  </React.StrictMode>
 );
