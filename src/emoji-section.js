@@ -4,23 +4,54 @@ import { InputGroup } from '@blueprintjs/core';
 import { isAlive } from 'mobx-state-tree';
 
 import { useInfiniteAPI } from 'polotno/utils/use-api';
-import { svgToURL } from 'polotno/utils/svg';
+import { urlToBase64, svgToURL } from 'polotno/utils/svg';
 import { SectionTab } from 'polotno/side-panel';
 import { getKey } from 'polotno/utils/validate-key';
+import { getImageSize } from 'polotno/utils/image';
+import EnEmojiHappy from '@meronex/icons/en/EnEmojiHappy';
 
 import { ImagesGrid } from 'polotno/side-panel/images-grid';
 
-const API = 'https://api.polotno.dev/api';
+const API = '';
 
-export const IconFinderPanel = observer(({ store }) => {
+const itemToURL = (item) => {
+  return API + '/twemoji/' + item.unicode.codePointAt(0).toString(16) + '.svg';
+};
+
+export const EmojiPanel = observer(({ store }) => {
   // load data
-  const { data, isLoading, loadMore, setQuery } = useInfiniteAPI({
-    getAPI: ({ page, query }) =>
-      `${API}/get-iconfinder?query=${query}&offset=${page}&KEY=${getKey()}`,
-    getSize: (res) => {
-      return Math.ceil(res.total_count / 50);
-    },
-  });
+  const [index, setIndex] = React.useState([]);
+  const [loading, setLoading] = React.useState(false);
+  const [query, setQuery] = React.useState('monkey');
+
+  React.useEffect(() => {
+    async function run() {
+      setLoading(true);
+      const req = await fetch(API + '/twemoji/index.json');
+      const json = await req.json();
+      setIndex(json);
+      setLoading(false);
+    }
+    run();
+  }, []);
+
+  const images = [];
+
+  if (query) {
+    index.forEach(({ emojiList }) => {
+      emojiList.forEach(({ unicode, tags }) => {
+        const str = tags.join('');
+        if (str.includes(query)) {
+          images.push({
+            unicode,
+            tags,
+          });
+        }
+      });
+    });
+  } else if (index.length) {
+    images.push(...index[0]?.emojiList.slice(0, 20));
+  }
 
   return (
     <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
@@ -30,29 +61,26 @@ export const IconFinderPanel = observer(({ store }) => {
         onChange={(e) => {
           setQuery(e.target.value);
         }}
+        type="search"
+        value={query}
         style={{
           marginBottom: '20px',
         }}
       />
       <ImagesGrid
         shadowEnabled={false}
-        images={data?.map((data) => data.icons).flat()}
-        getPreview={(item) => item.raster_sizes[6].formats[0].preview_url}
-        isLoading={isLoading}
+        images={images}
+        getPreview={itemToURL}
+        isLoading={loading}
         onSelect={async (item, pos, element) => {
-          const { download_url } = item.vector_sizes[0].formats[0];
+          const url = await itemToURL(item);
           if (element && element.type === 'image' && !element.locked) {
-            const req = await fetch(
-              `${API}/download-iconfinder?download_url=${download_url}&KEY=${getKey()}`
-            );
-            const json = await req.json();
-            const base64 = await svgToURL(json.content);
+            const base64 = await urlToBase64(url);
             element.set({ clipSrc: base64 });
             return;
           }
-          // const { width, height } = await getImageSize(item.images['256']);
-          const width = item.vector_sizes[0].size_width;
-          const height = item.vector_sizes[0].size_height;
+          const width = 200;
+          const height = 200;
           store.history.transaction(async () => {
             const x = (pos?.x || store.width / 2) - width / 2;
             const y = (pos?.y || store.height / 2) - height / 2;
@@ -63,31 +91,26 @@ export const IconFinderPanel = observer(({ store }) => {
               x,
               y,
             });
-            const req = await fetch(
-              `${API}/download-iconfinder?download_url=${download_url}&KEY=${getKey()}`
-            );
-            const json = await req.json();
-            const base64 = await svgToURL(json.content);
+            const base64 = await urlToBase64(url);
             if (isAlive(svg)) {
               await svg.set({ src: base64 });
             }
           });
         }}
         rowsNumber={4}
-        loadMore={loadMore}
       />
     </div>
   );
 });
 
 // define the new custom section
-export const IconFinderSection = {
-  name: 'IconFinder',
+export const EmojiSection = {
+  name: 'emoji',
   Tab: (props) => (
-    <SectionTab name="IconFinder" {...props}>
-      <img src="/iconfinder.svg" alt="IconFinder" width="20" />
+    <SectionTab name="Emoji" {...props}>
+      <EnEmojiHappy />
     </SectionTab>
   ),
   // we need observer to update component automatically on any store changes
-  Panel: IconFinderPanel,
+  Panel: EmojiPanel,
 };

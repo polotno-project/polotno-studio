@@ -2,31 +2,31 @@ import React from 'react';
 import { PolotnoContainer, SidePanelWrap, WorkspaceWrap } from 'polotno';
 import { Toolbar } from 'polotno/toolbar/toolbar';
 import { ZoomButtons } from 'polotno/toolbar/zoom-buttons';
-import {
-  SidePanel,
-  DEFAULT_SECTIONS,
-  ElementsSection,
-} from 'polotno/side-panel';
+import { SidePanel, DEFAULT_SECTIONS } from 'polotno/side-panel';
 import { Workspace } from 'polotno/canvas/workspace';
 
 import { loadFile } from './file';
-import { IllustrationsSection } from './illustrations-section';
-import { FlaticonSection } from './flaticon-section';
-import { VectorSection } from './svg-sidepanel';
+// import { IllustrationsSection } from './illustrations-section';
+// import { FlaticonSection } from './flaticon-section';
+// import { VectorSection } from './svg-sidepanel';
+import { QrSection } from './qr-section';
+// import { ThenounprojectSection } from './thenounproject-section';
 import { QuotesSection } from './quotes-section';
-import { IconFinderSection } from './iconfinder-section';
-import { ElementsPanel } from './elements-panel';
+// import { IconFinderSection } from './iconfinder-section';
+import { IconsSection } from './icons-section';
+import { ShapesSection } from './shapes-section';
+// import { EmojiSection } from './emoji-section';
 
 import Topbar from './topbar';
 
-ElementsSection.Panel = ElementsPanel;
 // hide it for now
 // DEFAULT_SECTIONS.splice(3, 0, IllustrationsSection);
-// DEFAULT_SECTIONS.splice(3, 0, FlaticonSection);
-// DEFAULT_SECTIONS.splice(3, 0, VectorSection);
-DEFAULT_SECTIONS.splice(3, 1, ElementsSection);
-DEFAULT_SECTIONS.splice(3, 0, QuotesSection);
-DEFAULT_SECTIONS.splice(3, 0, IconFinderSection);
+// replace elements section with just shapes
+DEFAULT_SECTIONS.splice(3, 1, ShapesSection);
+// add icons
+DEFAULT_SECTIONS.splice(3, 0, IconsSection);
+// add two more sections
+DEFAULT_SECTIONS.push(QuotesSection, QrSection);
 
 const useHeight = () => {
   const [height, setHeight] = React.useState(window.innerHeight);
