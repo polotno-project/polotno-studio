@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom/client';
 import localforage from 'localforage';
 import { createStore } from 'polotno/model/store';
 import { unstable_setRemoveBackgroundEnabled } from 'polotno/config';
+import { Auth0Provider } from '@auth0/auth0-react';
+import { createProject, ProjectContext } from './project';
 
 import './index.css';
 import App from './App';
@@ -28,10 +30,25 @@ store.on('change', () => {
   } catch (e) {}
 });
 
+const project = createProject({ store });
+window.project = project;
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
+const AUTH_DOMAIN = 'polotno-studio.eu.auth0.com';
+const PRODUCTION_ID = 'tuToNnC2EHw5lnSCTaG5kbjUYqVaVbZx';
+const LOCAL_ID = 'tuToNnC2EHw5lnSCTaG5kbjUYqVaVbZx';
+const isLocalhost =
+  typeof window !== undefined && window.location.href.indexOf('localhost') >= 0;
+const ID = isLocalhost ? LOCAL_ID : PRODUCTION_ID;
+const REDIRECT = isLocalhost
+  ? 'http://localhost:3000'
+  : 'https://studio.polotno.com';
+
 root.render(
-  <React.StrictMode>
-    <App store={store} />
-  </React.StrictMode>
+  <ProjectContext.Provider value={project}>
+    <Auth0Provider domain={AUTH_DOMAIN} clientId={ID} redirectUri={REDIRECT}>
+      <App store={store} />
+    </Auth0Provider>
+  </ProjectContext.Provider>
 );

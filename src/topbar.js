@@ -5,23 +5,32 @@ import {
   Navbar,
   Alignment,
   AnchorButton,
-  Divider,
+  NavbarDivider,
   Dialog,
   Classes,
   Position,
   Menu,
   HTMLSelect,
   Slider,
+  MenuItem,
+  MenuDivider,
+  EditableText,
+  Switch,
 } from '@blueprintjs/core';
 import FaGithub from '@meronex/icons/fa/FaGithub';
 import FaDiscord from '@meronex/icons/fa/FaDiscord';
 import BiCodeBlock from '@meronex/icons/bi/BiCodeBlock';
+import FaFileExport from '@meronex/icons/fa/FaFileExport';
+import FaFileImport from '@meronex/icons/fa/FaFileImport';
+
 import { downloadFile } from 'polotno/utils/download';
 import { Popover2 } from '@blueprintjs/popover2';
 import * as unit from 'polotno/utils/unit';
 import { t } from 'polotno/utils/l10n';
 
 import styled from 'polotno/utils/styled';
+
+import { useProject } from './project';
 
 const NavbarContainer = styled('div')`
   @media screen and (max-width: 500px) {
@@ -190,16 +199,141 @@ const DownloadButton = observer(({ store }) => {
 });
 
 export default observer(({ store }) => {
+  const project = useProject();
   const inputRef = React.useRef();
 
   const [faqOpened, toggleFaq] = React.useState(false);
-  const [questionOpened, toggleQuestion] = React.useState(false);
 
   return (
     <NavbarContainer className="bp4-navbar">
       <NavInner>
         <Navbar.Group align={Alignment.LEFT}>
-          <Button
+          <Popover2
+            content={
+              <Menu>
+                {/* <MenuDivider title={t('toolbar.layering')} /> */}
+                <MenuItem
+                  icon="plus"
+                  text="Create new design"
+                  onClick={() => {
+                    const ids = store.pages
+                      .map((page) => page.children.map((child) => child.id))
+                      .flat();
+                    const hasObjects = ids?.length;
+                    if (hasObjects) {
+                      if (
+                        !window.confirm('Remove all content for a new design?')
+                      ) {
+                        return;
+                      }
+                    }
+                    const pagesIds = store.pages.map((p) => p.id);
+                    store.deletePages(pagesIds);
+                    store.addPage();
+                    project.id = '';
+                    project.save();
+                  }}
+                />
+                <MenuItem
+                  icon="duplicate"
+                  text="Make a copy"
+                  onClick={() => {
+                    project.duplicate();
+                  }}
+                />
+                <MenuDivider />
+                <MenuItem
+                  icon={<FaFileImport />}
+                  text="Import from file"
+                  onClick={() => {
+                    document.querySelector('#load-project').click();
+                  }}
+                />
+                <MenuItem
+                  icon={<FaFileExport />}
+                  text="Export into file"
+                  onClick={() => {
+                    const json = store.toJSON();
+
+                    const url =
+                      'data:text/json;base64,' +
+                      window.btoa(
+                        unescape(encodeURIComponent(JSON.stringify(json)))
+                      );
+
+                    downloadFile(url, 'polotno.json');
+                  }}
+                />
+                <input
+                  type="file"
+                  id="load-project"
+                  accept=".json,.polotno"
+                  ref={inputRef}
+                  style={{ width: '180px', display: 'none' }}
+                  onChange={(e) => {
+                    var input = e.target;
+
+                    if (!input.files.length) {
+                      return;
+                    }
+
+                    var reader = new FileReader();
+                    reader.onloadend = function () {
+                      var text = reader.result;
+                      let json;
+                      try {
+                        json = JSON.parse(text);
+                      } catch (e) {
+                        alert('Can not load the project.');
+                      }
+
+                      if (json) {
+                        store.loadJSON(json);
+                        input.value = '';
+                      }
+                    };
+                    reader.onerror = function () {
+                      alert('Can not load the project.');
+                    };
+                    reader.readAsText(input.files[0]);
+                  }}
+                />
+                <MenuDivider />
+                <MenuItem
+                  text="About"
+                  icon="info-sign"
+                  onClick={() => {
+                    toggleFaq(true);
+                  }}
+                />
+              </Menu>
+            }
+            position={Position.BOTTOM_RIGHT}
+          >
+            <Button minimal text="File" />
+          </Popover2>
+          <div
+            style={{
+              paddingLeft: '30px',
+            }}
+          >
+            <EditableText
+              value={project.name}
+              placeholder="Project name"
+              onChange={(name) => {
+                project.name = name;
+                project.requestSave();
+              }}
+            />
+          </div>
+          <div style={{ paddingTop: '13px' }}>
+            <Switch
+              checked={project.private}
+              label="Private"
+              onChange={() => {}}
+            />
+          </div>
+          {/* <Button
             icon="new-object"
             minimal
             onClick={() => {
@@ -218,8 +352,8 @@ export default observer(({ store }) => {
             }}
           >
             New
-          </Button>
-          <label htmlFor="load-project">
+          </Button> */}
+          {/* <label htmlFor="load-project">
             <Button
               icon="folder-open"
               minimal
@@ -229,40 +363,6 @@ export default observer(({ store }) => {
             >
               Open
             </Button>
-            <input
-              type="file"
-              id="load-project"
-              accept=".json,.polotno"
-              ref={inputRef}
-              style={{ width: '180px', display: 'none' }}
-              onChange={(e) => {
-                var input = e.target;
-
-                if (!input.files.length) {
-                  return;
-                }
-
-                var reader = new FileReader();
-                reader.onloadend = function () {
-                  var text = reader.result;
-                  let json;
-                  try {
-                    json = JSON.parse(text);
-                  } catch (e) {
-                    alert('Can not load the project.');
-                  }
-
-                  if (json) {
-                    store.loadJSON(json);
-                    input.value = '';
-                  }
-                };
-                reader.onerror = function () {
-                  alert('Can not load the project.');
-                };
-                reader.readAsText(input.files[0]);
-              }}
-            />
           </label>
           <Button
             icon="floppy-disk"
@@ -278,7 +378,7 @@ export default observer(({ store }) => {
             }}
           >
             Save
-          </Button>
+          </Button> */}
         </Navbar.Group>
         <Navbar.Group align={Alignment.RIGHT}>
           {/* <a
@@ -299,6 +399,7 @@ export default observer(({ store }) => {
           >
             Important question for you (!)
           </Button> */}
+          <NavbarDivider />
           <AnchorButton
             minimal
             href="https://polotno.com"
@@ -309,16 +410,7 @@ export default observer(({ store }) => {
           >
             API
           </AnchorButton>
-          <AnchorButton
-            minimal
-            href="https://github.com/lavrton/polotno-studio"
-            target="_blank"
-            icon={
-              <FaGithub className="bp4-icon" style={{ fontSize: '20px' }} />
-            }
-          >
-            Github
-          </AnchorButton>
+
           <AnchorButton
             minimal
             href="https://discord.gg/W2VeKgsr9J"
@@ -329,11 +421,16 @@ export default observer(({ store }) => {
           >
             Join Chat
           </AnchorButton>
-          <Button icon="info-sign" minimal onClick={() => toggleFaq(true)}>
-            About
-          </Button>
+          <AnchorButton
+            minimal
+            href="https://github.com/lavrton/polotno-studio"
+            target="_blank"
+            icon={
+              <FaGithub className="bp4-icon" style={{ fontSize: '20px' }} />
+            }
+          ></AnchorButton>
 
-          <Divider />
+          <NavbarDivider />
           <DownloadButton store={store} />
           {/* <NavbarHeading>Polotno Studio</NavbarHeading> */}
         </Navbar.Group>
@@ -426,43 +523,6 @@ export default observer(({ store }) => {
             </div>
           </div>
         </Dialog>
-        {/* <Dialog
-          icon="info-sign"
-          onClose={() => toggleQuestion(false)}
-          title="Who are you?"
-          isOpen={questionOpened}
-          style={{
-            width: '80%',
-            maxWidth: '700px',
-          }}
-        >
-          <div className={Classes.DIALOG_BODY}>
-            <h2>How did you know about polotno?</h2>
-            <p>
-              Hello, dear friend. I am Anton Lavrenov, and I am a developer of
-              Polotno studio. I noticed that last days I have a lot more users
-              then usually. And I have no idea where people come from.
-            </p>
-            <p>
-              Please, tell me how do you know about Polotno Studio. Just drop a
-              message in{' '}
-              <a href="https://twitter.com/lavrton/" target="_blank">
-                @lavrton
-              </a>{' '}
-              on Twitter or by email{' '}
-              <a href="mailto:anton@polotno.dev" target="_blank">
-                anton@polotno.dev
-              </a>
-              .
-            </p>
-            <p>Thank you! Enjoy the app!</p>
-          </div>
-          <div className={Classes.DIALOG_FOOTER}>
-            <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-              <Button onClick={() => toggleQuestion(false)}>Close</Button>
-            </div>
-          </div>
-        </Dialog> */}
       </NavInner>
     </NavbarContainer>
   );

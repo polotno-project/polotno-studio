@@ -4,18 +4,19 @@ import { Toolbar } from 'polotno/toolbar/toolbar';
 import { ZoomButtons } from 'polotno/toolbar/zoom-buttons';
 import { SidePanel, DEFAULT_SECTIONS } from 'polotno/side-panel';
 import { Workspace } from 'polotno/canvas/workspace';
+import { useAuth0 } from '@auth0/auth0-react';
 
 import { loadFile } from './file';
 // import { IllustrationsSection } from './illustrations-section';
 // import { FlaticonSection } from './flaticon-section';
 // import { VectorSection } from './svg-sidepanel';
-import { QrSection } from './qr-section';
+import { QrSection } from './sections/qr-section';
 // import { ThenounprojectSection } from './thenounproject-section';
-import { QuotesSection } from './quotes-section';
-// import { IconFinderSection } from './iconfinder-section';
-import { IconsSection } from './icons-section';
-import { ShapesSection } from './shapes-section';
-// import { EmojiSection } from './emoji-section';
+import { QuotesSection } from './sections/quotes-section';
+import { IconsSection } from './sections/icons-section';
+import { ShapesSection } from './sections/shapes-section';
+import { MyDesignsSection } from './sections/my-designs-section';
+import { useProject } from './project';
 
 import Topbar from './topbar';
 
@@ -27,6 +28,7 @@ DEFAULT_SECTIONS.splice(3, 1, ShapesSection);
 DEFAULT_SECTIONS.splice(3, 0, IconsSection);
 // add two more sections
 DEFAULT_SECTIONS.push(QuotesSection, QrSection);
+DEFAULT_SECTIONS.unshift(MyDesignsSection);
 
 const useHeight = () => {
   const [height, setHeight] = React.useState(window.innerHeight);
@@ -39,6 +41,34 @@ const useHeight = () => {
 };
 
 const App = ({ store }) => {
+  const project = useProject();
+  const height = useHeight();
+
+  const { isAuthenticated, getAccessTokenSilently } = useAuth0();
+
+  React.useEffect(() => {
+    let url = new URL(window.location.href);
+    let params = new URLSearchParams(url.search);
+    let id = params.get('id'); // 'chrome-instant'
+    if (id) {
+      project.loadById(id);
+    }
+  }, [project]);
+
+  React.useEffect(() => {
+    if (isAuthenticated) {
+      getAccessTokenSilently()
+        .then((token) => {
+          project.authToken = token;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      project.authToken = null;
+    }
+  }, [isAuthenticated, project, getAccessTokenSilently]);
+
   const handleDrop = (ev) => {
     // Prevent default behavior (Prevent file from being opened)
     ev.preventDefault();
@@ -53,8 +83,6 @@ const App = ({ store }) => {
       loadFile(ev.dataTransfer.files[i], store);
     }
   };
-
-  const height = useHeight();
 
   return (
     <div
