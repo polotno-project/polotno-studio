@@ -46,8 +46,10 @@ const StableDiffusionPanel = observer(({ store }) => {
       </div>
       <InputGroup
         placeholder="Type your image generation prompt here..."
-        onChange={(e) => {
-          // setQuery(e.target.value);
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            handleGenerate();
+          }
         }}
         style={{
           marginBottom: '20px',
