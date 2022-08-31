@@ -6,23 +6,18 @@ import { SidePanel, DEFAULT_SECTIONS } from 'polotno/side-panel';
 import { Workspace } from 'polotno/canvas/workspace';
 
 import { loadFile } from './file';
-// import { IllustrationsSection } from './illustrations-section';
-// import { FlaticonSection } from './flaticon-section';
-// import { VectorSection } from './svg-sidepanel';
 import { QrSection } from './qr-section';
-// import { ThenounprojectSection } from './thenounproject-section';
 import { QuotesSection } from './quotes-section';
-// import { IconFinderSection } from './iconfinder-section';
 import { IconsSection } from './icons-section';
 import { ShapesSection } from './shapes-section';
-// import { EmojiSection } from './emoji-section';
+import { StableDiffusionSection } from './stable-diffusion-section';
 
 import Topbar from './topbar';
 
-// hide it for now
 // DEFAULT_SECTIONS.splice(3, 0, IllustrationsSection);
 // replace elements section with just shapes
 DEFAULT_SECTIONS.splice(3, 1, ShapesSection);
+DEFAULT_SECTIONS.splice(2, 0, StableDiffusionSection);
 // add icons
 DEFAULT_SECTIONS.splice(3, 0, IconsSection);
 // add two more sections
