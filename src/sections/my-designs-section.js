@@ -1,5 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
+import { observable } from 'mobx';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Button, Card, Menu, MenuItem, Position } from '@blueprintjs/core';
 import { Popover2 } from '@blueprintjs/popover2';
@@ -11,6 +12,20 @@ import * as api from '../api';
 import { useProject } from '../project';
 
 const API = 'http://localhost:3001/api';
+
+// upservable value
+// it will update on any paddle checkout event
+const checkoutToken = observable({ value: 0 });
+
+window.Paddle.Setup({
+  vendor: 118216,
+  eventCallback: function (data) {
+    // The data.event will specify the event type
+    if (data.event === 'Checkout.Complete') {
+      checkoutToken.value = Math.random();
+    }
+  },
+});
 
 const DesignCard = observer(({ design, project, onDelete }) => {
   return (
@@ -120,6 +135,15 @@ export const MyDesignsPanel = observer(({ store }) => {
     }
   }, [isAuthenticated, isLoading]);
 
+  React.useEffect(() => {
+    if (isAuthenticated) {
+      window.Paddle.Checkout.open({
+        product: 787594,
+        email: project.user.email,
+      });
+    }
+  }, [checkoutToken.value, isAuthenticated]);
+
   const half1 = [];
   const half2 = [];
 
@@ -142,19 +166,30 @@ export const MyDesignsPanel = observer(({ store }) => {
           }}
         >
           <div style={{ lineHeight: '30px' }}>Logged as {user.name}</div>
-          <Button onClick={logout}>Logout</Button>
-        </div>
-      )}
-      {!isAuthenticated && (
-        <div>
-          If you want to save your work into cloud storage you need to login.
-          <Button fill intent="primary" onClick={loginWithPopup}>
-            Ok, login
+          <Button
+            onClick={() => {
+              logout({ returnTo: window.location.origin });
+            }}
+          >
+            Logout
           </Button>
         </div>
       )}
-      {designsLoadings && <div>Loading...</div>}
-      {!designsLoadings && !designs.length && <div>No designs yet</div>}
+      {!isLoading && !isAuthenticated && (
+        <div>
+          <div style={{ paddingBottom: '10px' }}>
+            Cloud storage is available only for Polotno Studio supporters and
+            creators.
+          </div>
+          <Button fill intent="primary" onClick={loginWithPopup}>
+            Login or create account for 2 USD / month
+          </Button>
+        </div>
+      )}
+      {designsLoadings || (isLoading && <div>Loading...</div>)}
+      {isAuthenticated && !designsLoadings && !designs.length && (
+        <div>No designs yet</div>
+      )}
       {!isLoading && isAuthenticated && (
         <div style={{ display: 'flex' }}>
           <div style={{ width: '50%' }}>

@@ -8,8 +8,9 @@ export const useProject = () => useContext(ProjectContext);
 
 class Project {
   id = '';
-  authToken = '';
   name = '';
+  authToken = '';
+  user = {};
   skipSaving = false;
 
   constructor({ store }) {
@@ -35,9 +36,13 @@ class Project {
   async loadById(id) {
     this.id = id;
     this.updateUrlWithProjectId();
-    const { store, name } = await api.getProjectById({ id });
-    this.store.loadJSON(store);
-    this.name = name;
+    try {
+      const { store, name } = await api.getProjectById({ id });
+      this.store.loadJSON(store);
+      this.name = name;
+    } catch (e) {
+      alert("Project can't be loaded");
+    }
   }
 
   updateUrlWithProjectId() {
@@ -76,6 +81,10 @@ class Project {
   // }
 
   async save() {
+    if (!this.authToken) {
+      console.log('No login. Skip saving');
+      return;
+    }
     const json = this.store.toJSON();
     const maxWidth = 400;
     const preview = await this.store.toDataURL({

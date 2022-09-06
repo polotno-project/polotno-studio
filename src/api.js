@@ -2,6 +2,9 @@ const API = 'http://localhost:3001/api';
 
 export async function getProjectById({ id }) {
   const req = await fetch(`${API}/get-design?id=${id}`);
+  if (!req.ok) {
+    throw new Error('Project not found');
+  }
   const json = await req.json();
   return {
     store: json.data.store,

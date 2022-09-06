@@ -7,23 +7,21 @@ import { Workspace } from 'polotno/canvas/workspace';
 import { useAuth0 } from '@auth0/auth0-react';
 
 import { loadFile } from './file';
-// import { IllustrationsSection } from './illustrations-section';
-// import { FlaticonSection } from './flaticon-section';
-// import { VectorSection } from './svg-sidepanel';
 import { QrSection } from './sections/qr-section';
 // import { ThenounprojectSection } from './thenounproject-section';
 import { QuotesSection } from './sections/quotes-section';
 import { IconsSection } from './sections/icons-section';
 import { ShapesSection } from './sections/shapes-section';
+import { StableDiffusionSection } from './sections/stable-diffusion-section';
 import { MyDesignsSection } from './sections/my-designs-section';
 import { useProject } from './project';
 
 import Topbar from './topbar';
 
-// hide it for now
 // DEFAULT_SECTIONS.splice(3, 0, IllustrationsSection);
 // replace elements section with just shapes
 DEFAULT_SECTIONS.splice(3, 1, ShapesSection);
+DEFAULT_SECTIONS.splice(2, 0, StableDiffusionSection);
 // add icons
 DEFAULT_SECTIONS.splice(3, 0, IconsSection);
 // add two more sections
@@ -44,30 +42,37 @@ const App = ({ store }) => {
   const project = useProject();
   const height = useHeight();
 
-  const { isAuthenticated, getAccessTokenSilently } = useAuth0();
+  const { isAuthenticated, getAccessTokenSilently, isLoading } = useAuth0();
 
-  React.useEffect(() => {
+  const load = () => {
     let url = new URL(window.location.href);
     let params = new URLSearchParams(url.search);
     let id = params.get('id'); // 'chrome-instant'
     if (id) {
       project.loadById(id);
     }
-  }, [project]);
+  };
 
   React.useEffect(() => {
+    if (!isLoading) {
+      return;
+    }
     if (isAuthenticated) {
       getAccessTokenSilently()
         .then((token) => {
           project.authToken = token;
+          load();
         })
         .catch((err) => {
+          project.authToken = null;
+          load();
           console.log(err);
         });
     } else {
       project.authToken = null;
+      load();
     }
-  }, [isAuthenticated, project, getAccessTokenSilently]);
+  }, [isAuthenticated, project, getAccessTokenSilently, isLoading]);
 
   const handleDrop = (ev) => {
     // Prevent default behavior (Prevent file from being opened)
