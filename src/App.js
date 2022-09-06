@@ -17,11 +17,13 @@ import Topbar from './topbar';
 // DEFAULT_SECTIONS.splice(3, 0, IllustrationsSection);
 // replace elements section with just shapes
 DEFAULT_SECTIONS.splice(3, 1, ShapesSection);
-DEFAULT_SECTIONS.splice(2, 0, StableDiffusionSection);
+// DEFAULT_SECTIONS.splice(2, 0, StableDiffusionSection);
 // add icons
 DEFAULT_SECTIONS.splice(3, 0, IconsSection);
 // add two more sections
 DEFAULT_SECTIONS.push(QuotesSection, QrSection);
+
+DEFAULT_SECTIONS.push(StableDiffusionSection);
 
 const useHeight = () => {
   const [height, setHeight] = React.useState(window.innerHeight);
