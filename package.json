@@ -8,7 +8,7 @@
     "@auth0/auth0-react": "^1.10.2",
     "@meronex/icons": "^4.0.0",
     "localforage": "^1.10.0",
-    "polotno": "^1.0.0-11",
+    "polotno": "^1.0.0-18",
     "qrcode": "^1.5.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
