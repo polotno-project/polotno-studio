@@ -15,6 +15,7 @@ import {
 } from '@blueprintjs/core';
 import FaGithub from '@meronex/icons/fa/FaGithub';
 import FaDiscord from '@meronex/icons/fa/FaDiscord';
+import FaTwitter from '@meronex/icons/fa/FaTwitter';
 import BiCodeBlock from '@meronex/icons/bi/BiCodeBlock';
 import { downloadFile } from 'polotno/utils/download';
 import { Popover2 } from '@blueprintjs/popover2';
@@ -328,6 +329,16 @@ export default observer(({ store }) => {
             }
           >
             Join Chat
+          </AnchorButton>
+          <AnchorButton
+            minimal
+            href="https://twitter.com/lavrton"
+            target="_blank"
+            icon={
+              <FaTwitter className="bp4-icon" style={{ fontSize: '20px' }} />
+            }
+          >
+            Twitter
           </AnchorButton>
           <Button icon="info-sign" minimal onClick={() => toggleFaq(true)}>
             About
