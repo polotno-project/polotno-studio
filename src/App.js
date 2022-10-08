@@ -12,7 +12,7 @@ import { IconsSection } from './icons-section';
 import { ShapesSection } from './shapes-section';
 import { StableDiffusionSection } from './stable-diffusion-section';
 
-// import { ImageRemoveBackground } from './background-remover';
+import { ImageRemoveBackground } from './background-remover';
 
 import Topbar from './topbar';
 
@@ -72,7 +72,14 @@ const App = ({ store }) => {
             <SidePanel store={store} sections={DEFAULT_SECTIONS} />
           </SidePanelWrap>
           <WorkspaceWrap>
-            <Toolbar store={store} components={{}} />
+            <Toolbar
+              store={store}
+              components={
+                {
+                  // ImageRemoveBackground
+                }
+              }
+            />
             <Workspace store={store} />
             <ZoomButtons store={store} />
           </WorkspaceWrap>
