@@ -16,23 +16,21 @@ const StableDiffusionPanel = observer(({ store }) => {
   const [image, setImage] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
 
-  const handleGenerate = () => {
+  const handleGenerate = async () => {
     setLoading(true);
     setImage(null);
-    fetch(
+
+    const req = await fetch(
       `${API}/get-stable-diffusion?KEY=${getKey()}&prompt=${
         inputRef.current.value
       }`
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        setLoading(false);
-        setImage(data.output[0]);
-      })
-      .catch((e) => {
-        setLoading(false);
-        console.error(e);
-      });
+    );
+    setLoading(false);
+    if (!req.ok) {
+      alert('Something went wrong, please try again later...');
+    }
+    const data = await req.json();
+    setImage(data.output[0]);
   };
 
   return (
