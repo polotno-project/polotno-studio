@@ -76,7 +76,7 @@ const App = ({ store }) => {
               store={store}
               components={
                 {
-                  // ImageRemoveBackground
+                  // ImageRemoveBackground,
                 }
               }
             />

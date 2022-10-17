@@ -7,7 +7,8 @@ import { getKey } from 'polotno/utils/validate-key';
 
 let removeBackgroundFunc = async (url) => {
   const req = await fetch(
-    'http://localhost:3001/api/remove-image-background?KEY=' + getKey(),
+    'http://localhost:3001/api/remove-image-background-cloudinary?KEY=' +
+      getKey(),
     {
       method: 'POST',
       headers: {
@@ -27,11 +28,27 @@ let removeBackgroundFunc = async (url) => {
 export const RemoveBackgroundDialog = observer(
   ({ isOpen, onClose, element }) => {
     const [src, setSrc] = React.useState(element.src);
+
     React.useEffect(() => {
       setSrc(element.src);
     }, [element.src]);
 
     const [removing, setRemoving] = React.useState(false);
+
+    const [progress, setProgress] = React.useState(0);
+
+    React.useEffect(() => {
+      if (!isOpen || !removing) {
+        setProgress(0);
+      }
+      const averageTime = 30000;
+      const steps = 95;
+      const stepTime = averageTime / steps;
+      const interval = setInterval(() => {
+        setProgress((progress) => progress + 1);
+      }, stepTime);
+      return () => clearInterval(interval);
+    }, [isOpen, removing]);
 
     const handleRemove = async () => {
       setRemoving(true);
@@ -64,19 +81,8 @@ export const RemoveBackgroundDialog = observer(
           />
         </div>
         <div className={Classes.DIALOG_FOOTER} style={{ position: 'relative' }}>
-          <a
-            href="https://predis.ai"
-            style={{
-              display: 'inline-block',
-              position: 'absolute',
-              top: '50%',
-              transform: 'translateY(-50%)',
-            }}
-            target="_blank"
-          >
-            Powered by predis.ai
-          </a>
           <div className={Classes.DIALOG_FOOTER_ACTIONS}>
+            {removing && <span>{progress}%</span>}
             {!finished && (
               <Button onClick={handleRemove} loading={removing}>
                 {t('toolbar.removeBackground')}
