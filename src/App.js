@@ -74,11 +74,9 @@ const App = ({ store }) => {
           <WorkspaceWrap>
             <Toolbar
               store={store}
-              components={
-                {
-                  // ImageRemoveBackground,
-                }
-              }
+              components={{
+                ImageRemoveBackground,
+              }}
             />
             <Workspace store={store} />
             <ZoomButtons store={store} />

@@ -7,7 +7,7 @@ import { getKey } from 'polotno/utils/validate-key';
 
 let removeBackgroundFunc = async (url) => {
   const req = await fetch(
-    'http://localhost:3001/api/remove-image-background-cloudinary?KEY=' +
+    'https://api.polotno.com/api/remove-image-background-hotpot?KEY=' +
       getKey(),
     {
       method: 'POST',
@@ -25,9 +25,46 @@ let removeBackgroundFunc = async (url) => {
   return res.url;
 };
 
+const maxUsage = 8;
+
+// I know, it is unsafe to use localStorage
+// but I don't want to add any backend for this right now
+// and I don't want to use cookies
+// so it is just a simple hack
+// for prototype
+// I promise to fix it later
+// most of the text above wrote copilot
+const loadCredits = () => {
+  try {
+    const data = JSON.parse(
+      localStorage.getItem('removeBackgroundCredits') || '{}'
+    );
+    if (data.date !== new Date().toDateString()) {
+      return maxUsage;
+    }
+    return data.credits || maxUsage;
+  } catch (e) {}
+  return maxUsage;
+};
+
+const saveCredits = (credits) => {
+  localStorage.setItem(
+    'removeBackgroundCredits',
+    JSON.stringify({
+      date: new Date().toDateString(),
+      credits,
+    })
+  );
+};
+
 export const RemoveBackgroundDialog = observer(
   ({ isOpen, onClose, element }) => {
     const [src, setSrc] = React.useState(element.src);
+    const [credits, setCredits] = React.useState(loadCredits);
+
+    React.useEffect(() => {
+      saveCredits(credits);
+    }, [credits]);
 
     React.useEffect(() => {
       setSrc(element.src);
@@ -40,6 +77,7 @@ export const RemoveBackgroundDialog = observer(
     React.useEffect(() => {
       if (!isOpen || !removing) {
         setProgress(0);
+        return;
       }
       const averageTime = 30000;
       const steps = 95;
@@ -54,6 +92,7 @@ export const RemoveBackgroundDialog = observer(
       setRemoving(true);
       try {
         setSrc(await removeBackgroundFunc(element.src));
+        setCredits(credits - 1);
       } catch (e) {
         console.error(e);
       }
@@ -81,10 +120,26 @@ export const RemoveBackgroundDialog = observer(
           />
         </div>
         <div className={Classes.DIALOG_FOOTER} style={{ position: 'relative' }}>
+          <div style={{ position: 'absolute', top: '5px' }}>
+            Powered by{' '}
+            <a href="https://hotpot.ai/" target="_blank">
+              hotpot.ai
+            </a>
+          </div>
           <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-            {removing && <span>{progress}%</span>}
+            <div style={{ padding: '5px' }}>
+              {removing && <span>{progress}%</span>}
+              {!removing && !!credits && <div>You have {credits} credits.</div>}
+              {!removing && !credits && (
+                <div>You have no credits. They will renew tomorrow.</div>
+              )}
+            </div>
             {!finished && (
-              <Button onClick={handleRemove} loading={removing}>
+              <Button
+                onClick={handleRemove}
+                loading={removing}
+                disabled={credits < 1}
+              >
                 {t('toolbar.removeBackground')}
               </Button>
             )}
@@ -120,7 +175,6 @@ export const RemoveBackgroundDialog = observer(
 
 export const ImageRemoveBackground = ({ element }) => {
   const [removeDialogOpen, toggleDialog] = React.useState(false);
-  console.log(111);
   return (
     <>
       <Button
