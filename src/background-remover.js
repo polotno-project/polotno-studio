@@ -25,7 +25,7 @@ let removeBackgroundFunc = async (url) => {
   return res.url;
 };
 
-const maxUsage = 8;
+const maxUsage = 5;
 
 // I know, it is unsafe to use localStorage
 // but I don't want to add any backend for this right now
