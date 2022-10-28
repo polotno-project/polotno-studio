@@ -4,6 +4,7 @@ import { Button, Dialog, Classes } from '@blueprintjs/core';
 
 import { t } from 'polotno/utils/l10n';
 import { getKey } from 'polotno/utils/validate-key';
+import { useCredits } from './credits';
 
 let removeBackgroundFunc = async (url) => {
   const req = await fetch(
@@ -25,46 +26,13 @@ let removeBackgroundFunc = async (url) => {
   return res.url;
 };
 
-const maxUsage = 5;
-
-// I know, it is unsafe to use localStorage
-// but I don't want to add any backend for this right now
-// and I don't want to use cookies
-// so it is just a simple hack
-// for prototype
-// I promise to fix it later
-// most of the text above wrote copilot
-const loadCredits = () => {
-  try {
-    const data = JSON.parse(
-      localStorage.getItem('removeBackgroundCredits') || '{}'
-    );
-    if (data.date !== new Date().toDateString()) {
-      return maxUsage;
-    }
-    return data.credits || maxUsage;
-  } catch (e) {}
-  return maxUsage;
-};
-
-const saveCredits = (credits) => {
-  localStorage.setItem(
-    'removeBackgroundCredits',
-    JSON.stringify({
-      date: new Date().toDateString(),
-      credits,
-    })
-  );
-};
-
 export const RemoveBackgroundDialog = observer(
   ({ isOpen, onClose, element }) => {
     const [src, setSrc] = React.useState(element.src);
-    const [credits, setCredits] = React.useState(loadCredits);
-
-    React.useEffect(() => {
-      saveCredits(credits);
-    }, [credits]);
+    const { credits, consumeCredits } = useCredits(
+      'removeBackgroundCredits',
+      5
+    );
 
     React.useEffect(() => {
       setSrc(element.src);
@@ -92,7 +60,7 @@ export const RemoveBackgroundDialog = observer(
       setRemoving(true);
       try {
         setSrc(await removeBackgroundFunc(element.src));
-        setCredits(credits - 1);
+        consumeCredits();
       } catch (e) {
         console.error(e);
       }

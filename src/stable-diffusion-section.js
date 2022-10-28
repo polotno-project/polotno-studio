@@ -8,6 +8,7 @@ import { getImageSize } from 'polotno/utils/image';
 import FaBrain from '@meronex/icons/fa/FaBrain';
 
 import { ImagesGrid } from 'polotno/side-panel/images-grid';
+import { useCredits } from './credits';
 
 const API = 'https://api.polotno.dev/api';
 
@@ -15,8 +16,14 @@ const StableDiffusionPanel = observer(({ store }) => {
   const inputRef = React.useRef(null);
   const [image, setImage] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
+  const { credits, consumeCredits } = useCredits('stableDiffusionCredits', 10);
 
   const handleGenerate = async () => {
+    if (credits <= 0) {
+      alert('You have no credits left');
+      return;
+    }
+    consumeCredits();
     setLoading(true);
     setImage(null);
 
@@ -54,11 +61,16 @@ const StableDiffusionPanel = observer(({ store }) => {
         }}
         inputRef={inputRef}
       />
+      <p style={{ textAlign: 'center' }}>
+        {!!credits && <div>You have ({credits}) credits.</div>}
+        {!credits && <div>You have no credits. They will renew tomorrow.</div>}
+      </p>
       <Button
         onClick={handleGenerate}
         intent="primary"
         loading={loading}
         style={{ marginBottom: '40px' }}
+        disabled={credits <= 0}
       >
         Generate
       </Button>
@@ -97,7 +109,6 @@ const StableDiffusionPanel = observer(({ store }) => {
             });
           }}
           rowsNumber={1}
-          // loadMore={loadMore}
         />
       )}
     </div>
