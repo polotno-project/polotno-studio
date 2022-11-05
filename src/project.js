@@ -10,6 +10,7 @@ class Project {
   id = '';
   name = '';
   authToken = '';
+  private = false;
   user = {};
   skipSaving = false;
 
@@ -37,7 +38,10 @@ class Project {
     this.id = id;
     this.updateUrlWithProjectId();
     try {
-      const { store, name } = await api.getProjectById({ id });
+      const { store, name } = await api.getDesignById({
+        id,
+        authToken: this.authToken,
+      });
       this.store.loadJSON(store);
       this.name = name;
     } catch (e) {
@@ -52,7 +56,7 @@ class Project {
     let url = new URL(window.location.href);
     let params = new URLSearchParams(url.search);
     params.set('id', this.id);
-    window.history.pushState({}, null, `?${params.toString()}`);
+    window.history.replaceState({}, null, `/design/${this.id}`);
   }
 
   // async loadProject(dataJSON) {
@@ -91,10 +95,11 @@ class Project {
       pixelRatio: maxWidth / json.width,
       mimeType: 'image/jpeg',
     });
-    const res = await api.saveProject({
+    const res = await api.saveDesign({
       store: json,
       preview,
       id: this.id,
+      isPrivate: this.private,
       name: this.name,
       authToken: this.authToken,
     });

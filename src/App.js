@@ -18,7 +18,7 @@ import { useProject } from './project';
 
 import { ImageRemoveBackground } from './background-remover';
 
-import Topbar from './topbar';
+import Topbar from './topbar/topbar';
 
 // DEFAULT_SECTIONS.splice(3, 0, IllustrationsSection);
 // replace elements section with just shapes
@@ -50,15 +50,16 @@ const App = ({ store }) => {
 
   const load = () => {
     let url = new URL(window.location.href);
-    let params = new URLSearchParams(url.search);
-    let id = params.get('id'); // 'chrome-instant'
-    if (id) {
-      project.loadById(id);
+    // url example https://studio.polotno.com/design/5f9f1b0b
+    const reg = new RegExp('design/([a-zA-Z0-9_-]+)').exec(url.pathname);
+    const designId = reg && reg[1];
+    if (designId) {
+      project.loadById(designId);
     }
   };
 
   React.useEffect(() => {
-    if (!isLoading) {
+    if (isLoading) {
       return;
     }
     if (isAuthenticated) {

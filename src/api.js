@@ -1,9 +1,23 @@
+import localforage from 'localforage';
+
 const API = 'http://localhost:3001/api';
 
-export async function getProjectById({ id }) {
-  const req = await fetch(`${API}/get-design?id=${id}`);
+export async function getDesignById({ id, authToken }) {
+  if (id === 'local') {
+    const json = await localforage.getItem('polotno-state');
+    return {
+      store: json,
+      name: 'Local',
+    };
+  }
+  const req = await fetch(`${API}/designs/get?id=${id}`, {
+    headers: {
+      Authorization: authToken,
+      'Content-Type': 'application/json',
+    },
+  });
   if (!req.ok) {
-    throw new Error('Project not found');
+    throw new Error('Design not found');
   }
   const json = await req.json();
   return {
@@ -12,20 +26,51 @@ export async function getProjectById({ id }) {
   };
 }
 
-export async function saveProject({ store, preview, id, authToken, name }) {
-  const req = await fetch(`${API}/save-design`, {
+export async function listDesigns({ accessToken }) {
+  const req = await fetch(API + '/designs/list', {
+    method: 'GET',
+    headers: {
+      Authorization: accessToken,
+    },
+  });
+  return req.json();
+}
+
+export async function getUserSubscription({ accessToken }) {
+  const req = await fetch(API + '/user/subscription', {
+    method: 'GET',
+    headers: {
+      Authorization: accessToken,
+    },
+  });
+  return req.json();
+}
+
+export async function saveDesign({
+  store,
+  preview,
+  id,
+  authToken,
+  name,
+  isPrivate,
+}) {
+  if (id === 'local') {
+    localforage.setItem('polotno-state', store);
+    return;
+  }
+  const req = await fetch(`${API}/designs/save`, {
     method: 'POST',
     headers: {
       Authorization: authToken,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ store, preview, id, name }),
+    body: JSON.stringify({ store, preview, id, name, private: isPrivate }),
   });
   return await req.json();
 }
 
 export async function deleteDesign({ id, authToken }) {
-  const req = await fetch(`${API}/delete-design`, {
+  const req = await fetch(`${API}/designs/delete`, {
     method: 'POST',
     headers: {
       Authorization: authToken,

@@ -1,8 +1,14 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
-import { observable } from 'mobx';
 import { useAuth0 } from '@auth0/auth0-react';
-import { Button, Card, Menu, MenuItem, Position } from '@blueprintjs/core';
+import {
+  Button,
+  Card,
+  Menu,
+  MenuItem,
+  Position,
+  Spinner,
+} from '@blueprintjs/core';
 import { Popover2 } from '@blueprintjs/popover2';
 
 import { SectionTab } from 'polotno/side-panel';
@@ -10,30 +16,37 @@ import FaFolder from '@meronex/icons/fa/FaFolder';
 import * as api from '../api';
 
 import { useProject } from '../project';
+import { loadStripe } from '@stripe/stripe-js';
 
-const API = 'http://localhost:3001/api';
-
-// upservable value
-// it will update on any paddle checkout event
-const checkoutToken = observable({ value: 0 });
-
-window.Paddle.Setup({
-  vendor: 118216,
-  eventCallback: function (data) {
-    // The data.event will specify the event type
-    if (data.event === 'Checkout.Complete') {
-      checkoutToken.value = Math.random();
-    }
-  },
-});
+// Make sure to call `loadStripe` outside of a component’s render to avoid
+// recreating the `Stripe` object on every render.
+const stripePromise = loadStripe(
+  'pk_test_51LyF03L21WSvCFCy37g8aQ2foBaL8hvGAMO9eK6W6fwdSS7PQTpri1dnHata8aJFN9OTynU6L1ak0svNQNmgCMlL00qCp0K7DJ'
+);
 
 const DesignCard = observer(({ design, project, onDelete }) => {
+  const [loading, setLoading] = React.useState(false);
+  const handleSelect = async () => {
+    setLoading(true);
+    await project.loadById(design.id);
+    project.store.openSidePanel('photos');
+    setLoading(false);
+  };
+  const handleCopy = async () => {
+    setLoading(true);
+    if (project.id !== design.id) {
+      await project.loadById(design.id);
+    }
+    await project.duplicate();
+    project.store.openSidePanel('photos');
+    setLoading(false);
+  };
   return (
     <Card
       style={{ margin: '3px', padding: '0px', position: 'relative' }}
       interactive
       onClick={() => {
-        project.loadById(design.design_id);
+        handleSelect();
       }}
     >
       <img src={design.preview} style={{ width: '100%' }} />
@@ -47,6 +60,18 @@ const DesignCard = observer(({ design, project, onDelete }) => {
       >
         {design.name}
       </div>
+      {loading && (
+        <div
+          style={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+          }}
+        >
+          <Spinner />
+        </div>
+      )}
       <div
         style={{ position: 'absolute', top: '5px', right: '5px' }}
         onClick={(e) => {
@@ -56,19 +81,18 @@ const DesignCard = observer(({ design, project, onDelete }) => {
         <Popover2
           content={
             <Menu>
-              {/* <MenuDivider title={t('toolbar.layering')} /> */}
               <MenuItem
                 icon="document-open"
                 text="Open"
                 onClick={() => {
-                  project.loadById(design.design_id);
+                  handleSelect();
                 }}
               />
               <MenuItem
                 icon="duplicate"
                 text="Copy"
-                onClick={() => {
-                  project.duplicate();
+                onClick={async () => {
+                  handleCopy();
                 }}
               />
               <MenuItem
@@ -95,6 +119,39 @@ const DesignCard = observer(({ design, project, onDelete }) => {
   );
 });
 
+const PRICE = 10;
+
+const CheckoutForm = ({ user }) => {
+  return (
+    <div style={{ padding: '10px' }}>
+      <p>
+        Saving designs in Cloud is in early access and available for Polotno
+        Studio Fan users only.
+      </p>
+      <Button
+        intent="primary"
+        onClick={async () => {
+          const stripe = await stripePromise;
+          const { error } = await stripe.redirectToCheckout({
+            lineItems: [
+              {
+                price: 'price_1M0o6tL21WSvCFCyrnLZw7fC',
+                quantity: 1,
+              },
+            ],
+            mode: 'subscription',
+            successUrl: `http://localhost:3000/success`,
+            cancelUrl: `http://localhost:3000/cancel`,
+            customerEmail: user.email,
+          });
+        }}
+      >
+        Subscribe for {PRICE} USD/month
+      </Button>
+    </div>
+  );
+};
+
 export const MyDesignsPanel = observer(({ store }) => {
   const {
     isAuthenticated,
@@ -109,18 +166,14 @@ export const MyDesignsPanel = observer(({ store }) => {
 
   const [designsLoadings, setDesignsLoading] = React.useState(false);
   const [designs, setDesigns] = React.useState([]);
+  const [subscriptionLoading, setSubscriptionLoading] = React.useState(true);
+  const [subscription, setSubscription] = React.useState(null);
 
   const loadProjects = async () => {
     setDesignsLoading(true);
     const accessToken = await getAccessTokenSilently({});
 
-    const req = await fetch(API + '/get-user-designs', {
-      method: 'GET',
-      headers: {
-        Authorization: accessToken,
-      },
-    });
-    const res = await req.json();
+    const res = await api.listDesigns({ accessToken });
     setDesigns(res.data);
     setDesignsLoading(false);
   };
@@ -136,13 +189,21 @@ export const MyDesignsPanel = observer(({ store }) => {
   }, [isAuthenticated, isLoading]);
 
   React.useEffect(() => {
-    if (isAuthenticated) {
-      window.Paddle.Checkout.open({
-        product: 787594,
-        email: project.user.email,
-      });
+    if (isLoading) {
+      return;
     }
-  }, [checkoutToken.value, isAuthenticated]);
+    if (!isAuthenticated) {
+      return;
+    }
+    const run = async () => {
+      setSubscriptionLoading(true);
+      const accessToken = await getAccessTokenSilently({});
+      const res = await api.getUserSubscription({ accessToken });
+      setSubscription(res.subscription);
+      setSubscriptionLoading(false);
+    };
+    run();
+  }, [isLoading, isAuthenticated, getAccessTokenSilently]);
 
   const half1 = [];
   const half2 = [];
@@ -157,24 +218,6 @@ export const MyDesignsPanel = observer(({ store }) => {
 
   return (
     <div style={{ height: '100%' }}>
-      {user && (
-        <div
-          style={{
-            display: 'flex',
-            paddingBottom: '5px',
-            justifyContent: 'space-between',
-          }}
-        >
-          <div style={{ lineHeight: '30px' }}>Logged as {user.name}</div>
-          <Button
-            onClick={() => {
-              logout({ returnTo: window.location.origin });
-            }}
-          >
-            Logout
-          </Button>
-        </div>
-      )}
       {!isLoading && !isAuthenticated && (
         <div>
           <div style={{ paddingBottom: '10px' }}>
@@ -182,13 +225,22 @@ export const MyDesignsPanel = observer(({ store }) => {
             creators.
           </div>
           <Button fill intent="primary" onClick={loginWithPopup}>
-            Login or create account for 2 USD / month
+            Login or create account for {PRICE} USD / month
           </Button>
         </div>
       )}
+      {user && !subscriptionLoading && !subscription && (
+        <CheckoutForm user={user} />
+      )}
+
       {designsLoadings || (isLoading && <div>Loading...</div>)}
       {isAuthenticated && !designsLoadings && !designs.length && (
         <div>No designs yet</div>
+      )}
+      {designsLoadings && (
+        <div style={{ padding: '30px' }}>
+          <Spinner />
+        </div>
       )}
       {!isLoading && isAuthenticated && (
         <div style={{ display: 'flex' }}>
@@ -228,6 +280,7 @@ export const MyDesignsSection = {
       <FaFolder />
     </SectionTab>
   ),
+  visibleInList: false,
   // we need observer to update component automatically on any store changes
   Panel: MyDesignsPanel,
 };
