@@ -16,17 +16,21 @@ import { StableDiffusionSection } from './sections/stable-diffusion-section';
 import { MyDesignsSection } from './sections/my-designs-section';
 import { useProject } from './project';
 
+import { ImageRemoveBackground } from './background-remover';
+
 import Topbar from './topbar';
 
 // DEFAULT_SECTIONS.splice(3, 0, IllustrationsSection);
 // replace elements section with just shapes
 DEFAULT_SECTIONS.splice(3, 1, ShapesSection);
-DEFAULT_SECTIONS.splice(2, 0, StableDiffusionSection);
+// DEFAULT_SECTIONS.splice(2, 0, StableDiffusionSection);
 // add icons
 DEFAULT_SECTIONS.splice(3, 0, IconsSection);
 // add two more sections
 DEFAULT_SECTIONS.push(QuotesSection, QrSection);
 DEFAULT_SECTIONS.unshift(MyDesignsSection);
+
+DEFAULT_SECTIONS.push(StableDiffusionSection);
 
 const useHeight = () => {
   const [height, setHeight] = React.useState(window.innerHeight);
@@ -106,7 +110,12 @@ const App = ({ store }) => {
             <SidePanel store={store} sections={DEFAULT_SECTIONS} />
           </SidePanelWrap>
           <WorkspaceWrap>
-            <Toolbar store={store} />
+            <Toolbar
+              store={store}
+              components={{
+                ImageRemoveBackground,
+              }}
+            />
             <Workspace store={store} />
             <ZoomButtons store={store} />
           </WorkspaceWrap>

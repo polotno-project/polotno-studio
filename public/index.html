@@ -86,7 +86,7 @@
         payload: {
           environment: 'production',
         },
-        enabled: window.location.href.indexOf('studio.polotno.dev') >= 0,
+        enabled: window.location.href.indexOf('studio.polotno.com') >= 0,
         transform: function (payload) {
           payload.state = { state: window.store.toJSON() };
         },

@@ -19,6 +19,7 @@ import {
 } from '@blueprintjs/core';
 import FaGithub from '@meronex/icons/fa/FaGithub';
 import FaDiscord from '@meronex/icons/fa/FaDiscord';
+import FaTwitter from '@meronex/icons/fa/FaTwitter';
 import BiCodeBlock from '@meronex/icons/bi/BiCodeBlock';
 import FaFileExport from '@meronex/icons/fa/FaFileExport';
 import FaFileImport from '@meronex/icons/fa/FaFileImport';
@@ -428,7 +429,22 @@ export default observer(({ store }) => {
             icon={
               <FaGithub className="bp4-icon" style={{ fontSize: '20px' }} />
             }
-          ></AnchorButton>
+          >
+            Join Chat
+          </AnchorButton>
+          <AnchorButton
+            minimal
+            href="https://twitter.com/lavrton"
+            target="_blank"
+            icon={
+              <FaTwitter className="bp4-icon" style={{ fontSize: '20px' }} />
+            }
+          >
+            Twitter
+          </AnchorButton>
+          <Button icon="info-sign" minimal onClick={() => toggleFaq(true)}>
+            About
+          </Button>
 
           <NavbarDivider />
           <DownloadButton store={store} />
