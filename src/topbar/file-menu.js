@@ -2,23 +2,14 @@ import React from 'react';
 import { observer } from 'mobx-react-lite';
 import {
   Button,
-  Navbar,
-  Alignment,
-  AnchorButton,
-  NavbarDivider,
   Dialog,
   Classes,
   Position,
   Menu,
-  HTMLSelect,
-  Slider,
   MenuItem,
   MenuDivider,
-  EditableText,
-  Switch,
 } from '@blueprintjs/core';
 import { Popover2 } from '@blueprintjs/popover2';
-import { Tooltip2 } from '@blueprintjs/popover2';
 import FaFileExport from '@meronex/icons/fa/FaFileExport';
 import FaFileImport from '@meronex/icons/fa/FaFileImport';
 import { downloadFile } from 'polotno/utils/download';
@@ -181,34 +172,6 @@ export const FileMenu = observer(({ store, project }) => {
             , I created several similar apps for different companies around the
             world. So I decided to compile all my knowledge and experience into
             reusable Polotno project.
-          </p>
-          <h2>
-            Why Polotno Studio has no signups and no ads? How are you going to
-            support the project financially?
-          </h2>
-          <p>
-            Instead of monetizing the end-user application{' '}
-            <strong>Polotno Studio</strong> I decided to make money around
-            developers tools with{' '}
-            <a href="https://polotno.dev/" target="_blank">
-              Polotno SDK
-            </a>
-            .
-          </p>
-          <p>
-            <strong>Polotno Studio</strong> is a sandbox application and
-            polished demonstration of{' '}
-            <a href="https://polotno.dev/" target="_blank">
-              Polotno SDK
-            </a>{' '}
-            usage.
-          </p>
-          <p>
-            With{' '}
-            <a href="https://polotno.dev/" target="_blank">
-              Polotno SDK
-            </a>{' '}
-            you can build very different application with very different UI.
           </p>
         </div>
         <div className={Classes.DIALOG_FOOTER}>

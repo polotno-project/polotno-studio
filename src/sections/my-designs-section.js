@@ -16,13 +16,10 @@ import FaFolder from '@meronex/icons/fa/FaFolder';
 import * as api from '../api';
 
 import { useProject } from '../project';
-import { loadStripe } from '@stripe/stripe-js';
 
-// Make sure to call `loadStripe` outside of a component’s render to avoid
-// recreating the `Stripe` object on every render.
-const stripePromise = loadStripe(
-  'pk_test_51LyF03L21WSvCFCy37g8aQ2foBaL8hvGAMO9eK6W6fwdSS7PQTpri1dnHata8aJFN9OTynU6L1ak0svNQNmgCMlL00qCp0K7DJ'
-);
+import { PRICE, SubscribeButton } from '../subscribe-button';
+
+import { useSubscription } from '../subscription-context';
 
 const DesignCard = observer(({ design, project, onDelete }) => {
   const [loading, setLoading] = React.useState(false);
@@ -119,8 +116,6 @@ const DesignCard = observer(({ design, project, onDelete }) => {
   );
 });
 
-const PRICE = 10;
-
 const CheckoutForm = ({ user }) => {
   return (
     <div style={{ padding: '10px' }}>
@@ -128,26 +123,7 @@ const CheckoutForm = ({ user }) => {
         Saving designs in Cloud is in early access and available for Polotno
         Studio Fan users only.
       </p>
-      <Button
-        intent="primary"
-        onClick={async () => {
-          const stripe = await stripePromise;
-          const { error } = await stripe.redirectToCheckout({
-            lineItems: [
-              {
-                price: 'price_1M0o6tL21WSvCFCyrnLZw7fC',
-                quantity: 1,
-              },
-            ],
-            mode: 'subscription',
-            successUrl: `http://localhost:3000/success`,
-            cancelUrl: `http://localhost:3000/cancel`,
-            customerEmail: user.email,
-          });
-        }}
-      >
-        Subscribe for {PRICE} USD/month
-      </Button>
+      <SubscribeButton />
     </div>
   );
 };
@@ -166,8 +142,7 @@ export const MyDesignsPanel = observer(({ store }) => {
 
   const [designsLoadings, setDesignsLoading] = React.useState(false);
   const [designs, setDesigns] = React.useState([]);
-  const [subscriptionLoading, setSubscriptionLoading] = React.useState(true);
-  const [subscription, setSubscription] = React.useState(null);
+  const { subscription, subscriptionLoading } = useSubscription();
 
   const loadProjects = async () => {
     setDesignsLoading(true);
@@ -188,23 +163,6 @@ export const MyDesignsPanel = observer(({ store }) => {
     }
   }, [isAuthenticated, isLoading]);
 
-  React.useEffect(() => {
-    if (isLoading) {
-      return;
-    }
-    if (!isAuthenticated) {
-      return;
-    }
-    const run = async () => {
-      setSubscriptionLoading(true);
-      const accessToken = await getAccessTokenSilently({});
-      const res = await api.getUserSubscription({ accessToken });
-      setSubscription(res.subscription);
-      setSubscriptionLoading(false);
-    };
-    run();
-  }, [isLoading, isAuthenticated, getAccessTokenSilently]);
-
   const half1 = [];
   const half2 = [];
 
@@ -218,25 +176,20 @@ export const MyDesignsPanel = observer(({ store }) => {
 
   return (
     <div style={{ height: '100%' }}>
-      {!isLoading && !isAuthenticated && (
+      {!subscriptionLoading && !subscription && (
         <div>
           <div style={{ paddingBottom: '10px' }}>
-            Cloud storage is available only for Polotno Studio supporters and
-            creators.
+            Cloud storage is available only for Polotno Studio supporters.
           </div>
-          <Button fill intent="primary" onClick={loginWithPopup}>
-            Login or create account for {PRICE} USD / month
-          </Button>
+          <SubscribeButton fill />
         </div>
-      )}
-      {user && !subscriptionLoading && !subscription && (
-        <CheckoutForm user={user} />
       )}
 
       {designsLoadings || (isLoading && <div>Loading...</div>)}
-      {isAuthenticated && !designsLoadings && !designs.length && (
-        <div>No designs yet</div>
-      )}
+      {isAuthenticated &&
+        !designsLoadings &&
+        !designs.length &&
+        subscription && <div>No designs yet</div>}
       {designsLoadings && (
         <div style={{ padding: '30px' }}>
           <Spinner />

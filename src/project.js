@@ -50,7 +50,8 @@ class Project {
   }
 
   updateUrlWithProjectId() {
-    if (!this.id) {
+    if (!this.id || this.id === 'local') {
+      window.history.replaceState({}, null, `/`);
       return;
     }
     let url = new URL(window.location.href);
@@ -85,10 +86,6 @@ class Project {
   // }
 
   async save() {
-    if (!this.authToken) {
-      console.log('No login. Skip saving');
-      return;
-    }
     const json = this.store.toJSON();
     const maxWidth = 400;
     const preview = await this.store.toDataURL({

@@ -52,10 +52,8 @@ const App = ({ store }) => {
     let url = new URL(window.location.href);
     // url example https://studio.polotno.com/design/5f9f1b0b
     const reg = new RegExp('design/([a-zA-Z0-9_-]+)').exec(url.pathname);
-    const designId = reg && reg[1];
-    if (designId) {
-      project.loadById(designId);
-    }
+    const designId = (reg && reg[1]) || 'local';
+    project.loadById(designId);
   };
 
   React.useEffect(() => {
