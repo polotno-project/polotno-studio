@@ -31,8 +31,9 @@ export const loadImageFile = (file, store) => {
         store.width / img.width,
         store.height / img.height
       );
+      const type = file.type.indexOf('svg') > -1 ? 'svg' : 'image';
       store.activePage.addElement({
-        type: 'image',
+        type,
         width: img.width * scale,
         height: img.height * scale,
         src: url,
