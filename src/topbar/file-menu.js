@@ -44,13 +44,15 @@ export const FileMenu = observer(({ store, project }) => {
                 project.save();
               }}
             />
-            <MenuItem
-              icon="duplicate"
-              text="Make a copy"
-              onClick={() => {
-                project.duplicate();
-              }}
-            />
+            {project.id !== 'local' && (
+              <MenuItem
+                icon="duplicate"
+                text="Make a copy"
+                onClick={() => {
+                  project.duplicate();
+                }}
+              />
+            )}
             <MenuDivider />
             <MenuItem
               icon={<FaFileImport />}

@@ -17,7 +17,7 @@ import * as api from '../api';
 
 import { useProject } from '../project';
 
-import { PRICE, SubscribeButton } from '../subscribe-button';
+import { SubscribeButton } from '../subscribe-button';
 
 import { useSubscription } from '../subscription-context';
 
@@ -116,18 +116,6 @@ const DesignCard = observer(({ design, project, onDelete }) => {
   );
 });
 
-const CheckoutForm = ({ user }) => {
-  return (
-    <div style={{ padding: '10px' }}>
-      <p>
-        Saving designs in Cloud is in early access and available for Polotno
-        Studio Fan users only.
-      </p>
-      <SubscribeButton />
-    </div>
-  );
-};
-
 export const MyDesignsPanel = observer(({ store }) => {
   const {
     isAuthenticated,
@@ -179,7 +167,8 @@ export const MyDesignsPanel = observer(({ store }) => {
       {!subscriptionLoading && !subscription && (
         <div>
           <div style={{ paddingBottom: '10px' }}>
-            Cloud storage is available only for Polotno Studio supporters.
+            Cloud storage is experimental and available only for Polotno Studio
+            supporters.
           </div>
           <SubscribeButton fill />
         </div>
@@ -196,7 +185,7 @@ export const MyDesignsPanel = observer(({ store }) => {
         </div>
       )}
       {!isLoading && isAuthenticated && (
-        <div style={{ display: 'flex' }}>
+        <div style={{ display: 'flex', paddingTop: '5px' }}>
           <div style={{ width: '50%' }}>
             {half1.map((design) => (
               <DesignCard

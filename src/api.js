@@ -3,11 +3,11 @@ import localforage from 'localforage';
 const API = 'http://localhost:3001/api';
 
 export async function getDesignById({ id, authToken }) {
-  if (id === 'local' || !authToken) {
+  if (id === 'local') {
     const json = await localforage.getItem('polotno-state');
     return {
       store: json,
-      name: 'Local',
+      name: '',
     };
   }
   const req = await fetch(`${API}/designs/get?id=${id}`, {

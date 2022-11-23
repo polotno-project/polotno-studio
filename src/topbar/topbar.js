@@ -57,35 +57,42 @@ export default observer(({ store }) => {
           />
         </Navbar.Group>
         <Navbar.Group align={Alignment.RIGHT}>
-          <div
-            style={{
-              paddingRight: '10px',
-              maxWidth: '200px',
-            }}
-          >
-            <EditableText
-              value={project.name}
-              placeholder="Design name"
-              onChange={(name) => {
-                project.name = name;
-                project.requestSave();
-              }}
-            />
-          </div>
-          <Tooltip2
-            content={
-              project.private ? 'The design is private' : 'The design is public'
-            }
-          >
-            <Button
-              icon={project.private ? 'eye-off' : 'eye-on'}
-              onClick={() => {
-                project.private = !project.private;
-                project.requestSave();
-              }}
-            />
-          </Tooltip2>
-          <NavbarDivider />
+          {project.id !== 'local' && (
+            <>
+              <div
+                style={{
+                  paddingRight: '10px',
+                  maxWidth: '200px',
+                }}
+              >
+                <EditableText
+                  value={project.name}
+                  placeholder="Design name"
+                  onChange={(name) => {
+                    project.name = name;
+                    project.requestSave();
+                  }}
+                />
+              </div>
+              <Tooltip2
+                content={
+                  project.private
+                    ? 'The design is private'
+                    : 'The design is public'
+                }
+              >
+                <Button
+                  icon={project.private ? 'eye-off' : 'eye-on'}
+                  onClick={() => {
+                    project.private = !project.private;
+                    project.requestSave();
+                  }}
+                />
+              </Tooltip2>
+              <NavbarDivider />
+            </>
+          )}
+
           <AnchorButton
             minimal
             href="https://polotno.com"
