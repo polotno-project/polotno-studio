@@ -44,7 +44,7 @@ export const FileMenu = observer(({ store, project }) => {
                 project.save();
               }}
             />
-            {project.id !== 'local' && (
+            {/* {project.id !== 'local' && (
               <MenuItem
                 icon="duplicate"
                 text="Make a copy"
@@ -52,18 +52,20 @@ export const FileMenu = observer(({ store, project }) => {
                   project.duplicate();
                 }}
               />
-            )}
+            )} */}
             <MenuDivider />
             <MenuItem
-              icon={<FaFileImport />}
-              text="Import from file"
+              // icon={<FaFileImport />}
+              icon="folder-open"
+              text="Open"
               onClick={() => {
                 document.querySelector('#load-project').click();
               }}
             />
             <MenuItem
-              icon={<FaFileExport />}
-              text="Export into file"
+              // icon={<FaFileExport />}
+              icon="floppy-disk"
+              text="Save as"
               onClick={() => {
                 const json = store.toJSON();
 
