@@ -1,9 +1,10 @@
 import localforage from 'localforage';
 
-const API = 'http://localhost:3001/api';
+const API = 'https://polotno-studio-api.vercel.app/api';
 
 export async function getDesignById({ id, authToken }) {
-  if (id === 'local') {
+  // if (id === 'local') {
+  if (true) {
     const json = await localforage.getItem('polotno-state');
     return {
       store: json,
@@ -66,13 +67,13 @@ export async function saveDesign({
   name,
   isPrivate,
 }) {
-  if (id === 'local' || !authToken) {
-    localforage.setItem('polotno-state', store);
-    return {
-      id: 'local',
-      status: 'saved',
-    };
-  }
+  // if (id === 'local' || !authToken) {
+  localforage.setItem('polotno-state', store);
+  return {
+    id: 'local',
+    status: 'saved',
+  };
+  // }
   const req = await fetch(`${API}/designs/save`, {
     method: 'POST',
     headers: {

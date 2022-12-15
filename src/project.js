@@ -92,9 +92,9 @@ class Project {
       pixelRatio: maxWidth / json.width,
       mimeType: 'image/jpeg',
     });
-    if (this.authToken && this.id === 'local') {
-      this.id = '';
-    }
+    // if (this.authToken && this.id === 'local') {
+    //   this.id = '';
+    // }
     const res = await api.saveDesign({
       store: json,
       preview,

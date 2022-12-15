@@ -5,10 +5,17 @@ import { useAuth0 } from '@auth0/auth0-react';
 // Make sure to call `loadStripe` outside of a component’s render to avoid
 // recreating the `Stripe` object on every render.
 const stripePromise = loadStripe(
-  'pk_test_51LyF03L21WSvCFCy37g8aQ2foBaL8hvGAMO9eK6W6fwdSS7PQTpri1dnHata8aJFN9OTynU6L1ak0svNQNmgCMlL00qCp0K7DJ'
+  'pk_live_51LyF03L21WSvCFCy8B8HIcQJAfe85qaIwAw8su5ZnzujNdHzr3VqjaqiupqTdsrXEheyLNBkjLjzSNMlcLxLqAxz00iJaI1n0Z'
 );
 
-export const PRICE = 10;
+const PRICES = [
+  { id: 'price_1MFMkUL21WSvCFCycTEDKu0R', price: 2.5 },
+  { id: 'price_1MFMkLL21WSvCFCy1bgh9gbc', price: 4.5 },
+  { id: 'price_1MFMkDL21WSvCFCy6bmXbgsi', price: 9.5 },
+  { id: 'price_1LyFTZL21WSvCFCyULJEC1YU', price: 14.5 },
+];
+
+export const PRICE = PRICES[Math.floor(Math.random() * PRICES.length)];
 
 export const SubscribeButton = (props) => {
   const { isAuthenticated, loginWithPopup, user } = useAuth0();
@@ -21,7 +28,7 @@ export const SubscribeButton = (props) => {
     const { error } = await stripe.redirectToCheckout({
       lineItems: [
         {
-          price: 'price_1M0o6tL21WSvCFCyrnLZw7fC',
+          price: PRICE.id,
           quantity: 1,
         },
       ],
@@ -48,7 +55,7 @@ export const SubscribeButton = (props) => {
         subscribe();
       }}
     >
-      Subscribe for {PRICE} USD/month
+      Subscribe for {PRICE.price} USD/month
     </Button>
   );
 };
