@@ -23,7 +23,6 @@ const StableDiffusionPanel = observer(({ store }) => {
       alert('You have no credits left');
       return;
     }
-    consumeCredits();
     setLoading(true);
     setImage(null);
 
@@ -36,6 +35,7 @@ const StableDiffusionPanel = observer(({ store }) => {
     if (!req.ok) {
       alert('Something went wrong, please try again later...');
     }
+    consumeCredits();
     const data = await req.json();
     setImage(data.output[0]);
   };
