@@ -34,6 +34,7 @@ const StableDiffusionPanel = observer(({ store }) => {
     setLoading(false);
     if (!req.ok) {
       alert('Something went wrong, please try again later...');
+      return;
     }
     consumeCredits();
     const data = await req.json();
