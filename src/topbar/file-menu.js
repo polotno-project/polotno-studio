@@ -78,40 +78,7 @@ export const FileMenu = observer(({ store, project }) => {
                 downloadFile(url, 'polotno.json');
               }}
             />
-            <input
-              type="file"
-              id="load-project"
-              accept=".json,.polotno"
-              ref={inputRef}
-              style={{ width: '180px', display: 'none' }}
-              onChange={(e) => {
-                var input = e.target;
 
-                if (!input.files.length) {
-                  return;
-                }
-
-                var reader = new FileReader();
-                reader.onloadend = function () {
-                  var text = reader.result;
-                  let json;
-                  try {
-                    json = JSON.parse(text);
-                  } catch (e) {
-                    alert('Can not load the project.');
-                  }
-
-                  if (json) {
-                    store.loadJSON(json);
-                    input.value = '';
-                  }
-                };
-                reader.onerror = function () {
-                  alert('Can not load the project.');
-                };
-                reader.readAsText(input.files[0]);
-              }}
-            />
             <MenuDivider />
             <MenuItem
               text="About"
@@ -126,6 +93,40 @@ export const FileMenu = observer(({ store, project }) => {
       >
         <Button minimal text="File" />
       </Popover2>
+      <input
+        type="file"
+        id="load-project"
+        accept=".json,.polotno"
+        ref={inputRef}
+        style={{ width: '180px', display: 'none' }}
+        onChange={(e) => {
+          var input = e.target;
+
+          if (!input.files.length) {
+            return;
+          }
+
+          var reader = new FileReader();
+          reader.onloadend = function () {
+            var text = reader.result;
+            let json;
+            try {
+              json = JSON.parse(text);
+            } catch (e) {
+              alert('Can not load the project.');
+            }
+
+            if (json) {
+              store.loadJSON(json);
+              input.value = '';
+            }
+          };
+          reader.onerror = function () {
+            alert('Can not load the project.');
+          };
+          reader.readAsText(input.files[0]);
+        }}
+      />
       <Dialog
         icon="info-sign"
         onClose={() => toggleFaq(false)}
