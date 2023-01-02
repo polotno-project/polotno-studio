@@ -2,11 +2,6 @@ import React from 'react';
 import { Button } from '@blueprintjs/core';
 import { loadStripe } from '@stripe/stripe-js';
 import { useAuth0 } from '@auth0/auth0-react';
-// Make sure to call `loadStripe` outside of a component’s render to avoid
-// recreating the `Stripe` object on every render.
-const stripePromise = loadStripe(
-  'pk_live_51LyF03L21WSvCFCy8B8HIcQJAfe85qaIwAw8su5ZnzujNdHzr3VqjaqiupqTdsrXEheyLNBkjLjzSNMlcLxLqAxz00iJaI1n0Z'
-);
 
 const PRICES = [
   { id: 'price_1MFMkUL21WSvCFCycTEDKu0R', price: 2.5 },
@@ -24,7 +19,9 @@ export const SubscribeButton = (props) => {
   emailRef.current = user?.email;
 
   const subscribe = async () => {
-    const stripe = await stripePromise;
+    const stripe = await loadStripe(
+      'pk_live_51LyF03L21WSvCFCy8B8HIcQJAfe85qaIwAw8su5ZnzujNdHzr3VqjaqiupqTdsrXEheyLNBkjLjzSNMlcLxLqAxz00iJaI1n0Z'
+    );
     const { error } = await stripe.redirectToCheckout({
       lineItems: [
         {
@@ -38,7 +35,7 @@ export const SubscribeButton = (props) => {
       customerEmail: emailRef.current,
     });
     if (error) {
-      alert('Something went wrong');
+      alert('Something went wrong. Tell Anton about this in Discord...');
     }
   };
 

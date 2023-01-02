@@ -6,18 +6,13 @@ import {
   Alignment,
   AnchorButton,
   NavbarDivider,
-  Position,
-  Menu,
-  MenuItem,
-  EditableText,
 } from '@blueprintjs/core';
 import FaGithub from '@meronex/icons/fa/FaGithub';
 import FaDiscord from '@meronex/icons/fa/FaDiscord';
 import FaTwitter from '@meronex/icons/fa/FaTwitter';
 import BiCodeBlock from '@meronex/icons/bi/BiCodeBlock';
-import { Popover2 } from '@blueprintjs/popover2';
-import { Tooltip2 } from '@blueprintjs/popover2';
-
+import BisDiamond from '@meronex/icons/bi/BisDiamond';
+import { useAuth0 } from '@auth0/auth0-react';
 import styled from 'polotno/utils/styled';
 
 import { useProject } from '../project';
@@ -25,6 +20,7 @@ import { useProject } from '../project';
 import { FileMenu } from './file-menu';
 import { DownloadButton } from './download-button';
 import { UserMenu } from './user-menu';
+import { SubscriptionModal } from './subscription-modal';
 
 const NavbarContainer = styled('div')`
   @media screen and (max-width: 500px) {
@@ -42,6 +38,16 @@ const NavInner = styled('div')`
 
 export default observer(({ store }) => {
   const project = useProject();
+
+  const {
+    loginWithPopup,
+    isLoading,
+    getAccessTokenSilently,
+    isAuthenticated,
+    logout,
+  } = useAuth0();
+
+  const [modalVisible, setModalVisible] = React.useState(false);
 
   return (
     <NavbarContainer className="bp4-navbar">
@@ -93,10 +99,30 @@ export default observer(({ store }) => {
             </>
           )} */}
 
+          <Button
+            intent="primary"
+            icon={<BisDiamond className="bp4-icon" />}
+            style={{ backgroundColor: 'rgba(219, 30, 186, 1)' }}
+            onClick={async () => {
+              if (!isAuthenticated) {
+                const res = await loginWithPopup();
+              }
+              setModalVisible(true);
+            }}
+          >
+            Chip in!
+          </Button>
+          <SubscriptionModal
+            isOpen={modalVisible}
+            onClose={() => {
+              setModalVisible(false);
+            }}
+            store={store}
+          />
           <AnchorButton
-            minimal
             href="https://polotno.com"
             target="_blank"
+            minimal
             icon={
               <BiCodeBlock className="bp4-icon" style={{ fontSize: '20px' }} />
             }
