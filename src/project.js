@@ -42,7 +42,9 @@ class Project {
         id,
         authToken: this.authToken,
       });
-      this.store.loadJSON(store);
+      if (store) {
+        this.store.loadJSON(store);
+      }
       this.name = name;
     } catch (e) {
       alert("Project can't be loaded");
