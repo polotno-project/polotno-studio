@@ -150,7 +150,7 @@ export const FlatIconPanel = observer(({ store, query }) => {
 export const IconFinderPanel = observer(({ store, query }) => {
   // load data
   const count = 50;
-  const { data, isLoading, loadMore, setQuery } = useInfiniteAPI({
+  const { data, isLoading, loadMore, setQuery, error } = useInfiniteAPI({
     getAPI: ({ page, query }) =>
       `${API}/get-iconfinder?query=${query}&offset=${
         (page - 1) * count
@@ -205,6 +205,7 @@ export const IconFinderPanel = observer(({ store, query }) => {
         });
       }}
       rowsNumber={4}
+      error={error}
       loadMore={loadMore}
     />
   );
