@@ -41,48 +41,62 @@ export const DownloadButton = observer(({ store }) => {
             <option value="jpeg">JPEG</option>
             <option value="png">PNG</option>
             <option value="pdf">PDF</option>
+            <option value="html">HTML</option>
           </HTMLSelect>
-          <li class="bp4-menu-header">
-            <h6 class="bp4-heading">Size</h6>
-          </li>
-          <div style={{ padding: '10px' }}>
-            <Slider
-              value={quality}
-              labelRenderer={false}
-              // labelStepSize={0.4}
-              onChange={(quality) => {
-                setQuality(quality);
-              }}
-              stepSize={0.2}
-              min={0.2}
-              max={3}
-              showTrackFill={false}
-            />
-            {type === 'pdf' && (
-              <div>
-                {unit.pxToUnitRounded({
-                  px: store.width,
-                  dpi: store.dpi / quality,
-                  precious: 0,
-                  unit: 'mm',
-                })}{' '}
-                x{' '}
-                {unit.pxToUnitRounded({
-                  px: store.height,
-                  dpi: store.dpi / quality,
-                  precious: 0,
-                  unit: 'mm',
-                })}{' '}
-                mm
+
+          {type !== 'html' && (
+            <>
+              <li class="bp4-menu-header">
+                <h6 class="bp4-heading">Size</h6>
+              </li>
+              <div style={{ padding: '10px' }}>
+                <Slider
+                  value={quality}
+                  labelRenderer={false}
+                  // labelStepSize={0.4}
+                  onChange={(quality) => {
+                    setQuality(quality);
+                  }}
+                  stepSize={0.2}
+                  min={0.2}
+                  max={3}
+                  showTrackFill={false}
+                />
+                {type === 'pdf' && (
+                  <div>
+                    {unit.pxToUnitRounded({
+                      px: store.width,
+                      dpi: store.dpi / quality,
+                      precious: 0,
+                      unit: 'mm',
+                    })}{' '}
+                    x{' '}
+                    {unit.pxToUnitRounded({
+                      px: store.height,
+                      dpi: store.dpi / quality,
+                      precious: 0,
+                      unit: 'mm',
+                    })}{' '}
+                    mm
+                  </div>
+                )}
+                {type !== 'pdf' && (
+                  <div>
+                    {Math.round(store.width * quality)} x{' '}
+                    {Math.round(store.height * quality)} px
+                  </div>
+                )}
               </div>
-            )}
-            {type !== 'pdf' && (
-              <div>
-                {Math.round(store.width * quality)} x{' '}
-                {Math.round(store.height * quality)} px
+            </>
+          )}
+          {type === 'html' && (
+            <>
+              <div style={{ padding: '10px', maxWidth: '180px', opacity: 0.8 }}>
+                HTML export is very experimental. If you have issues with it,
+                please report to Anton on discord.
               </div>
-            )}
-          </div>
+            </>
+          )}
           <Button
             fill
             intent="primary"
@@ -94,6 +108,12 @@ export const DownloadButton = observer(({ store }) => {
                   fileName: getName() + '.pdf',
                   dpi: store.dpi / quality,
                   pixelRatio: 2 * quality,
+                });
+                setSaving(false);
+              } else if (type === 'html') {
+                setSaving(true);
+                await store.saveAsHTML({
+                  fileName: getName() + '.html',
                 });
                 setSaving(false);
               } else {
