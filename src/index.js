@@ -22,7 +22,7 @@ window.project = project;
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 const AUTH_DOMAIN = 'polotno-studio.eu.auth0.com';
-const PRODUCTION_ID = '61frZ6ob68OC1R1vkUjBrtoW5SXtyfQp';
+const PRODUCTION_ID = 'tuToNnC2EHw5lnSCTaG5kbjUYqVaVbZx';
 const LOCAL_ID = 'tuToNnC2EHw5lnSCTaG5kbjUYqVaVbZx';
 const isLocalhost =
   typeof window !== undefined && window.location.href.indexOf('localhost') >= 0;
@@ -30,8 +30,6 @@ const ID = isLocalhost ? LOCAL_ID : PRODUCTION_ID;
 const REDIRECT = isLocalhost
   ? 'http://localhost:3000'
   : 'https://studio.polotno.com';
-
-console.log({ isLocalhost, ID });
 
 root.render(
   <ProjectContext.Provider value={project}>
