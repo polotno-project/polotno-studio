@@ -31,6 +31,8 @@ const REDIRECT = isLocalhost
   ? 'http://localhost:3000'
   : 'https://studio.polotno.com';
 
+console.log({ isLocalhost, ID });
+
 root.render(
   <ProjectContext.Provider value={project}>
     <Auth0Provider domain={AUTH_DOMAIN} clientId={ID} redirectUri={REDIRECT}>
