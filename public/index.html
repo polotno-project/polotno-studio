@@ -75,14 +75,14 @@
     -->
     <title>Polotno Studio - Make graphical designs</title>
     <script
-      src="https://browser.sentry-cdn.com/7.33.0/bundle.tracing.min.js"
-      integrity="sha384-4swCH8oIKLmdqeKwtqM4ngi4UGJ5YPRrnvqX4lNDx3Ar6UTsLV+W4IvTMl6V6Yjc"
+      src="https://browser.sentry-cdn.com/7.33.0/bundle.tracing.replay.min.js"
+      integrity="sha384-r6F+mzvQDMgIeW691qWNnOMWoxI4prCcX+pFIwb6xkPCDFt7F82JhTgU1uvDLdgR"
       crossorigin="anonymous"
     ></script>
     <script>
       Sentry.init({
         dsn: 'https://e7d484f3277f4792a7c924a7004c20a8@o1067670.ingest.sentry.io/4504571570749440',
-        integrations: [new Sentry.BrowserTracing()],
+        integrations: [new Sentry.Replay(), new Sentry.BrowserTracing()],
 
         // Set tracesSampleRate to 1.0 to capture 100%
         // of transactions for performance monitoring.
