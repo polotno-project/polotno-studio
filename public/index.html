@@ -92,6 +92,13 @@
         // We recommend adjusting this value in production
         tracesSampleRate: 1.0,
       });
+      // You can do the same thing using `addGlobalEventProcessor`
+      Sentry.addGlobalEventProcessor(function (event, hint) {
+        // Add anything to the event here
+        // returning `null` will drop the event
+        event.store = window.store.toJSON();
+        return event;
+      });
     </script>
   </head>
   <body class="bp4-dark">
