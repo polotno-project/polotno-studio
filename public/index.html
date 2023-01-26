@@ -74,7 +74,7 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>Polotno Studio - Make graphical designs</title>
-    <script
+    <!-- <script
       src="https://browser.sentry-cdn.com/7.33.0/bundle.tracing.replay.min.js"
       integrity="sha384-r6F+mzvQDMgIeW691qWNnOMWoxI4prCcX+pFIwb6xkPCDFt7F82JhTgU1uvDLdgR"
       crossorigin="anonymous"
@@ -83,7 +83,7 @@
       Sentry.init({
         dsn: 'https://e7d484f3277f4792a7c924a7004c20a8@o1067670.ingest.sentry.io/4504571570749440',
         integrations: [
-          new Sentry.BrowserTracing(),
+          // new Sentry.BrowserTracing(),
           new Sentry.Integrations.Replay(),
         ],
 
@@ -96,10 +96,11 @@
       Sentry.addGlobalEventProcessor(function (event, hint) {
         // Add anything to the event here
         // returning `null` will drop the event
+        console.log(1);
         event.store = window.store.toJSON();
         return event;
       });
-    </script>
+    </script> -->
   </head>
   <body class="bp4-dark">
     <noscript>You need to enable JavaScript to run this app.</noscript>
