@@ -19,10 +19,6 @@ store.addPage();
 const project = createProject({ store });
 window.project = project;
 
-setTimeout(() => {
-  window.undefinedFunction();
-});
-
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 const AUTH_DOMAIN = 'polotno-studio.eu.auth0.com';
