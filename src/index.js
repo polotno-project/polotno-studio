@@ -9,35 +9,7 @@ import { SubscriptionProvider } from './subscription-context';
 
 import './index.css';
 import App from './App';
-
-import * as Sentry from '@sentry/browser';
-
-Sentry.init({
-  dsn: 'https://e7d484f3277f4792a7c924a7004c20a8@o1067670.ingest.sentry.io/4504571570749440',
-
-  // This sets the sample rate to be 10%. You may want this to be 100% while
-  // in development and sample at a lower rate in production
-  replaysSessionSampleRate: 0.1,
-  // If the entire session is not sampled, use the below sample rate to sample
-  // sessions when an error occurs.
-  replaysOnErrorSampleRate: 1.0,
-
-  integrations: [
-    new Sentry.Replay({
-      maskAllText: false,
-      blockAllMedia: false,
-    }),
-  ],
-});
-
-Sentry.addGlobalEventProcessor(function (event, hint) {
-  if (window.store) {
-    hint.attachments = [
-      { filename: 'store.json', data: JSON.stringify(window.store.toJSON()) },
-    ];
-  }
-  return event;
-});
+import './logger';
 
 unstable_setRemoveBackgroundEnabled(true);
 
