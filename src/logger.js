@@ -16,6 +16,11 @@ Sentry.init({
       blockAllMedia: false,
     }),
   ],
+  shouldSendCallback: function (data) {
+    // only send 10% of errors
+    var sampleRate = 10;
+    return Math.random() * 100 <= sampleRate;
+  },
   ignoreErrors: [
     // Random plugins/extensions
     'top.GLOBALS',
@@ -65,9 +70,12 @@ Sentry.init({
 
 Sentry.addGlobalEventProcessor(function (event, hint) {
   if (window.store) {
-    hint.attachments = [
-      { filename: 'store.json', data: JSON.stringify(window.store.toJSON()) },
-    ];
+    const data = JSON.stringify(window.store.toJSON());
+    if (data.length < 30000) {
+      hint.attachments = [
+        { filename: 'store.json', data: JSON.stringify(window.store.toJSON()) },
+      ];
+    }
   }
   return event;
 });
