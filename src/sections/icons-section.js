@@ -264,7 +264,7 @@ export const IconsPanel = ({ store }) => {
         >
           Noun Project
         </Button>
-        <Button
+        {/* <Button
           onClick={() => {
             setService('flaticon');
           }}
@@ -279,7 +279,7 @@ export const IconsPanel = ({ store }) => {
           }
         >
           FlatIcon
-        </Button>
+        </Button> */}
       </div>
       {service === 'flaticon' && (
         <FlatIconPanel query={delayedQuery} store={store} />
