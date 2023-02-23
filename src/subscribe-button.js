@@ -19,9 +19,7 @@ export const SubscribeButton = (props) => {
   emailRef.current = user?.email;
 
   const subscribe = async () => {
-    const stripe = await loadStripe(
-      'pk_live_51LyF03L21WSvCFCy8B8HIcQJAfe85qaIwAw8su5ZnzujNdHzr3VqjaqiupqTdsrXEheyLNBkjLjzSNMlcLxLqAxz00iJaI1n0Z'
-    );
+    const stripe = await loadStripe(process.env.REACT_APP_STRIPE_TOKEN);
     const { error } = await stripe.redirectToCheckout({
       lineItems: [
         {
