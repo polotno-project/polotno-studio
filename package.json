@@ -12,7 +12,7 @@
     "@stripe/react-stripe-js": "^1.16.4",
     "@stripe/stripe-js": "^1.46.0",
     "localforage": "^1.10.0",
-    "polotno": "^1.7.2",
+    "polotno": "^1.7.3",
     "qrcode": "^1.5.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
