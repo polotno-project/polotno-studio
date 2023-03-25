@@ -90,16 +90,16 @@ class Project {
   async save() {
     const json = this.store.toJSON();
     const maxWidth = 400;
-    const preview = await this.store.toDataURL({
-      pixelRatio: maxWidth / json.width,
-      mimeType: 'image/jpeg',
-    });
+    // const preview = await this.store.toDataURL({
+    //   pixelRatio: maxWidth / json.width,
+    //   mimeType: 'image/jpeg',
+    // });
     // if (this.authToken && this.id === 'local') {
     //   this.id = '';
     // }
     const res = await api.saveDesign({
       store: json,
-      preview,
+      // preview,
       id: this.id,
       isPrivate: this.private,
       name: this.name,
