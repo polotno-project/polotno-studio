@@ -13,6 +13,7 @@ class Project {
   private = false;
   user = {};
   skipSaving = false;
+  puterModalVisible = false;
 
   constructor({ store }) {
     mobx.makeAutoObservable(this);

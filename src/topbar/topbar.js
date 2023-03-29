@@ -6,6 +6,8 @@ import {
   Alignment,
   AnchorButton,
   NavbarDivider,
+  Dialog,
+  Classes,
 } from '@blueprintjs/core';
 import FaGithub from '@meronex/icons/fa/FaGithub';
 import FaDiscord from '@meronex/icons/fa/FaDiscord';
@@ -54,13 +56,14 @@ export default observer(({ store }) => {
       <NavInner>
         <Navbar.Group align={Alignment.LEFT}>
           <FileMenu store={store} project={project} />
-          {/* <Button
+          <Button
             text="My designs"
             intent="primary"
             onClick={() => {
-              store.openSidePanel('my-designs');
+              project.puterModalVisible = true;
+              // store.openSidePanel('my-designs');
             }}
-          /> */}
+          />
         </Navbar.Group>
         <Navbar.Group align={Alignment.RIGHT}>
           {/* {project.id !== 'local' && (

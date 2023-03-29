@@ -1,4 +1,5 @@
 import React from 'react';
+import { observer } from 'mobx-react-lite';
 import { PolotnoContainer, SidePanelWrap, WorkspaceWrap } from 'polotno';
 import { Toolbar } from 'polotno/toolbar/toolbar';
 import { ZoomButtons } from 'polotno/toolbar/zoom-buttons';
@@ -19,6 +20,7 @@ import { useProject } from './project';
 import { ImageRemoveBackground } from './background-remover';
 
 import Topbar from './topbar/topbar';
+import { PuterModal } from './puter-modal';
 
 // DEFAULT_SECTIONS.splice(3, 0, IllustrationsSection);
 // replace elements section with just shapes
@@ -42,7 +44,7 @@ const useHeight = () => {
   return height;
 };
 
-const App = ({ store }) => {
+const App = observer(({ store }) => {
   const project = useProject();
   const height = useHeight();
 
@@ -120,8 +122,14 @@ const App = ({ store }) => {
           </WorkspaceWrap>
         </PolotnoContainer>
       </div>
+      <PuterModal
+        isOpen={project.puterModalVisible}
+        onClose={() => {
+          project.puterModalVisible = false;
+        }}
+      />
     </div>
   );
-};
+});
 
 export default App;

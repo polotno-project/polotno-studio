@@ -5,6 +5,7 @@ import { Button, Dialog, Classes } from '@blueprintjs/core';
 import { t } from 'polotno/utils/l10n';
 import { getKey } from 'polotno/utils/validate-key';
 import { useCredits } from './credits';
+import { useProject } from './project';
 
 let removeBackgroundFunc = async (url) => {
   const req = await fetch(
@@ -28,6 +29,7 @@ let removeBackgroundFunc = async (url) => {
 
 export const RemoveBackgroundDialog = observer(
   ({ isOpen, onClose, element }) => {
+    const project = useProject();
     const [src, setSrc] = React.useState(element.src);
     const { credits, consumeCredits } = useCredits(
       'removeBackgroundCredits',
@@ -70,6 +72,17 @@ export const RemoveBackgroundDialog = observer(
 
     const finished = src !== element.src;
 
+    const moreButton = (
+      <a
+        onClick={() => {
+          project.puterModalVisible = true;
+        }}
+        href="#"
+      >
+        Need more?
+      </a>
+    );
+
     return (
       <Dialog
         // icon="info-sign"
@@ -97,9 +110,15 @@ export const RemoveBackgroundDialog = observer(
           <div className={Classes.DIALOG_FOOTER_ACTIONS}>
             <div style={{ padding: '5px' }}>
               {removing && <span>{progress}%</span>}
-              {!removing && !!credits && <div>You have {credits} credits.</div>}
+              {!removing && !!credits && (
+                <div>
+                  You have {credits} credits. {moreButton}
+                </div>
+              )}
               {!removing && !credits && (
-                <div>You have no credits. They will renew tomorrow.</div>
+                <div>
+                  You have no credits. They will renew tomorrow. {moreButton}
+                </div>
               )}
             </div>
             {!finished && (
