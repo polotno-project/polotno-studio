@@ -7,7 +7,3 @@ Design Editor made with [Polotno SDK](https://polotno.dev/). There is nothing su
 ### Found a bug? Or want to suggest a feature?
 
 Just create an issues in this repository!
-
----
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
