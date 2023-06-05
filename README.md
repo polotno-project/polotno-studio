@@ -2,7 +2,7 @@
 
 **[Launch the application](https://studio.polotno.dev/)**
 
-Design Editor made with [Polotno SDK](https://polotno.dev/). There is nothing super interesting in the repo yet, because all editor features are inside `polotno` package. But soon we will have much more addition features around `polotno` sdk.
+Design Editor made with [Polotno SDK](https://polotno.dev/). It several customizations from the default SDK, such as new side panels and saving feature.
 
 ### Found a bug? Or want to suggest a feature?
 
