@@ -88,3 +88,5 @@ Sentry.addGlobalEventProcessor(function (event, hint) {
   }
   return event;
 });
+
+window.Sentry = Sentry;
