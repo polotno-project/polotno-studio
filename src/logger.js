@@ -68,6 +68,22 @@ Sentry.init({
   ],
 });
 
+function base64ToUint8Array(base64DataUrl) {
+  // Remove the metadata prefix from the data URL
+  const base64String = base64DataUrl.split(',')[1];
+  // Decode the base64 string
+  const binaryString = atob(base64String);
+  // Create a Uint8Array to hold the decoded data
+  const buffer = new Uint8Array(binaryString.length);
+
+  // Fill the buffer with the decoded data
+  for (let i = 0; i < binaryString.length; i++) {
+    buffer[i] = binaryString.charCodeAt(i);
+  }
+
+  return buffer;
+}
+
 Sentry.addGlobalEventProcessor(function (event, hint) {
   if (window.store) {
     const data = JSON.stringify(window.store.toJSON());
@@ -80,7 +96,7 @@ Sentry.addGlobalEventProcessor(function (event, hint) {
       hint.attachments = [
         {
           filename: 'failedImage.png',
-          data: window.__failedImage,
+          data: base64ToUint8Array(window.__failedImage),
           contentType: 'image/png',
         },
       ];
