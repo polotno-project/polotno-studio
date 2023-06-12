@@ -76,11 +76,11 @@ Sentry.addGlobalEventProcessor(function (event, hint) {
         { filename: 'store.json', data: JSON.stringify(window.store.toJSON()) },
       ];
     }
-    if (window._failedImage) {
+    if (window.__failedImage) {
       hint.attachments = [
         {
           filename: 'failedImage.png',
-          data: window._failedImage,
+          data: window.__failedImage,
           contentType: 'image/png',
         },
       ];
