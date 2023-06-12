@@ -76,6 +76,15 @@ Sentry.addGlobalEventProcessor(function (event, hint) {
         { filename: 'store.json', data: JSON.stringify(window.store.toJSON()) },
       ];
     }
+    if (window._failedImage) {
+      hint.attachments = [
+        {
+          filename: 'failedImage.png',
+          data: window._failedImage,
+          contentType: 'image/png',
+        },
+      ];
+    }
   }
   return event;
 });

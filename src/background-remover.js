@@ -60,10 +60,18 @@ export const RemoveBackgroundDialog = observer(
 
     const handleRemove = async () => {
       setRemoving(true);
+      window.__failedImage = element.src;
       try {
         setSrc(await removeBackgroundFunc(element.src));
+        window.__failedImage = null;
         consumeCredits();
       } catch (e) {
+        if (window.Sentry) {
+          window.Sentry.captureException(new Error('Background remove error'));
+          setTimeout(() => {
+            window.__failedImage = null;
+          }, 1000);
+        }
         console.error(e);
       }
 
