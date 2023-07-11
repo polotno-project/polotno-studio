@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 
 import { createStore } from 'polotno/model/store';
-import { unstable_setRemoveBackgroundEnabled } from 'polotno/config';
+import { unstable_setAnimationsEnabled } from 'polotno/config';
 import { Auth0Provider } from '@auth0/auth0-react';
 import { createProject, ProjectContext } from './project';
 import { SubscriptionProvider } from './subscription-context';
@@ -22,6 +22,8 @@ But feel free to use this repository as a reference for your own project and to 
     'background: rgba(54, 213, 67, 1); color: white; padding: 5px;'
   );
 }
+
+unstable_setAnimationsEnabled(true);
 
 const store = createStore({ key: 'nFA5H9elEytDyPyvKL7T' });
 window.store = store;

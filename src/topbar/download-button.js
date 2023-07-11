@@ -8,6 +8,7 @@ import { t } from 'polotno/utils/l10n';
 export const DownloadButton = observer(({ store }) => {
   const [saving, setSaving] = React.useState(false);
   const [quality, setQuality] = React.useState(1);
+  const [fps, setFPS] = React.useState(10);
   const [type, setType] = React.useState('png');
 
   const getName = () => {
@@ -42,6 +43,7 @@ export const DownloadButton = observer(({ store }) => {
             <option value="png">PNG</option>
             <option value="pdf">PDF</option>
             <option value="html">HTML</option>
+            <option value="gif">GIF</option>
           </HTMLSelect>
 
           {type !== 'html' && (
@@ -86,6 +88,27 @@ export const DownloadButton = observer(({ store }) => {
                     {Math.round(store.height * quality)} px
                   </div>
                 )}
+                {type === 'gif' && (
+                  <>
+                    <li class="bp4-menu-header">
+                      <h6 class="bp4-heading">FPS</h6>
+                    </li>
+                    <div style={{ padding: '10px' }}>
+                      <Slider
+                        value={fps}
+                        // labelRenderer={false}
+                        labelStepSize={5}
+                        onChange={(fps) => {
+                          setFPS(fps);
+                        }}
+                        stepSize={1}
+                        min={5}
+                        max={30}
+                        showTrackFill={false}
+                      />
+                    </div>
+                  </>
+                )}
               </div>
             </>
           )}
@@ -114,6 +137,14 @@ export const DownloadButton = observer(({ store }) => {
                 setSaving(true);
                 await store.saveAsHTML({
                   fileName: getName() + '.html',
+                });
+                setSaving(false);
+              } else if (type === 'gif') {
+                setSaving(true);
+                await store.saveAsGIF({
+                  fileName: getName() + '.gif',
+                  pixelRatio: quality,
+                  fps,
                 });
                 setSaving(false);
               } else {
