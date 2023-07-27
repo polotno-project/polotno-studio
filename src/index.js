@@ -10,6 +10,7 @@ import { SubscriptionProvider } from './subscription-context';
 import './index.css';
 import App from './App';
 import './logger';
+import { ErrorBoundary } from 'react-error-boundary';
 
 if (window.location.host !== 'studio.polotno.com') {
   console.log(
@@ -45,12 +46,46 @@ const REDIRECT = isLocalhost
   ? 'http://localhost:3000'
   : 'https://studio.polotno.com';
 
+function Fallback({ error, resetErrorBoundary }) {
+  // Call resetErrorBoundary() to reset the error boundary and retry the render.
+
+  return (
+    <div style={{ width: '100vw', height: '100vh' }}>
+      <div style={{ textAlign: 'center', paddingTop: '40px' }}>
+        <p>Something went wrong in the app.</p>
+        <p>Try to reload the page.</p>
+        <p>If it does not work, clear cache and reload.</p>
+        <button
+          onClick={() => {
+            localStorage.clear();
+            window.location.reload();
+          }}
+        >
+          Clear cache and reload
+        </button>
+      </div>
+    </div>
+  );
+}
+
 root.render(
-  <ProjectContext.Provider value={project}>
-    <Auth0Provider domain={AUTH_DOMAIN} clientId={ID} redirectUri={REDIRECT}>
-      <SubscriptionProvider>
-        <App store={store} />
-      </SubscriptionProvider>
-    </Auth0Provider>
-  </ProjectContext.Provider>
+  <ErrorBoundary
+    FallbackComponent={Fallback}
+    onReset={(details) => {
+      // Reset the state of your app so the error doesn't happen again
+    }}
+    onError={(e) => {
+      if (window.Sentry) {
+        window.Sentry.captureException(e);
+      }
+    }}
+  >
+    <ProjectContext.Provider value={project}>
+      <Auth0Provider domain={AUTH_DOMAIN} clientId={ID} redirectUri={REDIRECT}>
+        <SubscriptionProvider>
+          <App store={store} />
+        </SubscriptionProvider>
+      </Auth0Provider>
+    </ProjectContext.Provider>
+  </ErrorBoundary>
 );
