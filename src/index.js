@@ -56,8 +56,8 @@ function Fallback({ error, resetErrorBoundary }) {
         <p>Try to reload the page.</p>
         <p>If it does not work, clear cache and reload.</p>
         <button
-          onClick={() => {
-            localStorage.clear();
+          onClick={async () => {
+            await project.clear();
             window.location.reload();
           }}
         >

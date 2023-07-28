@@ -116,6 +116,10 @@ class Project {
     this.id = '';
     this.save();
   }
+
+  async clear() {
+    await api.deleteDesign();
+  }
 }
 
 export const createProject = (...args) => new Project(...args);

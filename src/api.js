@@ -85,14 +85,15 @@ export async function saveDesign({
   return await req.json();
 }
 
-export async function deleteDesign({ id, authToken }) {
-  const req = await fetch(`${API}/designs/delete`, {
-    method: 'POST',
-    headers: {
-      Authorization: authToken,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ id }),
-  });
-  return await req.json();
+export async function deleteDesign({ id, authToken } = {}) {
+  await localforage.clear();
+  // const req = await fetch(`${API}/designs/delete`, {
+  //   method: 'POST',
+  //   headers: {
+  //     Authorization: authToken,
+  //     'Content-Type': 'application/json',
+  //   },
+  //   body: JSON.stringify({ id }),
+  // });
+  // return await req.json();
 }
