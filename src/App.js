@@ -5,6 +5,7 @@ import { Toolbar } from 'polotno/toolbar/toolbar';
 import { ZoomButtons } from 'polotno/toolbar/zoom-buttons';
 import { SidePanel, DEFAULT_SECTIONS } from 'polotno/side-panel';
 import { Workspace } from 'polotno/canvas/workspace';
+import { Tooltip } from 'polotno/canvas/tooltip';
 import { useAuth0 } from '@auth0/auth0-react';
 
 import { loadFile } from './file';
@@ -117,7 +118,7 @@ const App = observer(({ store }) => {
                 ImageRemoveBackground,
               }}
             />
-            <Workspace store={store} />
+            <Workspace store={store} components={{ Tooltip }} />
             <ZoomButtons store={store} />
           </WorkspaceWrap>
         </PolotnoContainer>
