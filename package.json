@@ -11,6 +11,7 @@
     "@sentry/tracing": "^7.34.0",
     "@stripe/react-stripe-js": "^1.16.4",
     "@stripe/stripe-js": "^1.46.0",
+    "jszip": "^3.10.1",
     "localforage": "^1.10.0",
     "polotno": "^1.14.5",
     "qrcode": "^1.5.1",
