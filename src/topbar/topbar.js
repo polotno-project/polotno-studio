@@ -6,8 +6,6 @@ import {
   Alignment,
   AnchorButton,
   NavbarDivider,
-  Dialog,
-  Classes,
 } from '@blueprintjs/core';
 import FaGithub from '@meronex/icons/fa/FaGithub';
 import FaDiscord from '@meronex/icons/fa/FaDiscord';
@@ -52,7 +50,7 @@ export default observer(({ store }) => {
   const [modalVisible, setModalVisible] = React.useState(false);
 
   return (
-    <NavbarContainer className="bp4-navbar">
+    <NavbarContainer className="bp5-navbar">
       <NavInner>
         <Navbar.Group align={Alignment.LEFT}>
           <FileMenu store={store} project={project} />
@@ -104,7 +102,7 @@ export default observer(({ store }) => {
 
           <Button
             intent="primary"
-            icon={<BisDiamond className="bp4-icon" />}
+            icon={<BisDiamond className="bp5-icon" />}
             style={{ backgroundColor: 'rgba(219, 30, 186, 1)' }}
             onClick={async () => {
               if (!isAuthenticated) {
@@ -127,7 +125,7 @@ export default observer(({ store }) => {
             target="_blank"
             minimal
             icon={
-              <BiCodeBlock className="bp4-icon" style={{ fontSize: '20px' }} />
+              <BiCodeBlock className="bp5-icon" style={{ fontSize: '20px' }} />
             }
           >
             API
@@ -138,7 +136,7 @@ export default observer(({ store }) => {
             href="https://discord.gg/W2VeKgsr9J"
             target="_blank"
             icon={
-              <FaDiscord className="bp4-icon" style={{ fontSize: '20px' }} />
+              <FaDiscord className="bp5-icon" style={{ fontSize: '20px' }} />
             }
           >
             Join Chat
@@ -148,7 +146,7 @@ export default observer(({ store }) => {
             href="https://github.com/lavrton/polotno-studio"
             target="_blank"
             icon={
-              <FaGithub className="bp4-icon" style={{ fontSize: '20px' }} />
+              <FaGithub className="bp5-icon" style={{ fontSize: '20px' }} />
             }
           ></AnchorButton>
           <AnchorButton
@@ -156,7 +154,7 @@ export default observer(({ store }) => {
             href="https://twitter.com/lavrton"
             target="_blank"
             icon={
-              <FaTwitter className="bp4-icon" style={{ fontSize: '20px' }} />
+              <FaTwitter className="bp5-icon" style={{ fontSize: '20px' }} />
             }
           ></AnchorButton>
           <NavbarDivider />

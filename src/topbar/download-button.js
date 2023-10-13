@@ -1,7 +1,13 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
-import { Button, Position, Menu, HTMLSelect, Slider } from '@blueprintjs/core';
-import { Popover2 } from '@blueprintjs/popover2';
+import {
+  Button,
+  Position,
+  Menu,
+  HTMLSelect,
+  Slider,
+  Popover,
+} from '@blueprintjs/core';
 import JSZip from 'jszip';
 import { downloadFile } from 'polotno/utils/download';
 import * as unit from 'polotno/utils/unit';
@@ -28,11 +34,11 @@ export const DownloadButton = observer(({ store }) => {
     return words.join(' ').replace(/\s/g, '-').toLowerCase() || 'polotno';
   };
   return (
-    <Popover2
+    <Popover
       content={
         <Menu>
-          <li class="bp4-menu-header">
-            <h6 class="bp4-heading">File type</h6>
+          <li class="bp5-menu-header">
+            <h6 class="bp5-heading">File type</h6>
           </li>
           <HTMLSelect
             fill
@@ -51,8 +57,8 @@ export const DownloadButton = observer(({ store }) => {
 
           {type !== 'html' && (
             <>
-              <li class="bp4-menu-header">
-                <h6 class="bp4-heading">Quality</h6>
+              <li class="bp5-menu-header">
+                <h6 class="bp5-heading">Quality</h6>
               </li>
               <div style={{ padding: '10px' }}>
                 <Slider
@@ -77,8 +83,8 @@ export const DownloadButton = observer(({ store }) => {
                 )}
                 {type === 'gif' && (
                   <>
-                    <li class="bp4-menu-header">
-                      <h6 class="bp4-heading">FPS</h6>
+                    <li class="bp5-menu-header">
+                      <h6 class="bp5-heading">FPS</h6>
                     </li>
                     <div style={{ padding: '10px' }}>
                       <Slider
@@ -99,8 +105,8 @@ export const DownloadButton = observer(({ store }) => {
               </div>
               {type === 'pdf' && (
                 <>
-                  <li class="bp4-menu-header">
-                    <h6 class="bp4-heading">Page Size</h6>
+                  <li class="bp5-menu-header">
+                    <h6 class="bp5-heading">Page Size</h6>
                   </li>
                   <div style={{ padding: '10px' }}>
                     <Slider
@@ -256,6 +262,6 @@ export const DownloadButton = observer(({ store }) => {
           setQuality(1);
         }}
       />
-    </Popover2>
+    </Popover>
   );
 });

@@ -8,10 +8,8 @@ import {
   Menu,
   MenuItem,
   MenuDivider,
+  Popover,
 } from '@blueprintjs/core';
-import { Popover2 } from '@blueprintjs/popover2';
-import FaFileExport from '@meronex/icons/fa/FaFileExport';
-import FaFileImport from '@meronex/icons/fa/FaFileImport';
 import { downloadFile } from 'polotno/utils/download';
 
 export const FileMenu = observer(({ store, project }) => {
@@ -20,7 +18,7 @@ export const FileMenu = observer(({ store, project }) => {
   const [faqOpened, toggleFaq] = React.useState(false);
   return (
     <>
-      <Popover2
+      <Popover
         content={
           <Menu>
             {/* <MenuDivider title={t('toolbar.layering')} /> */}
@@ -92,7 +90,7 @@ export const FileMenu = observer(({ store, project }) => {
         position={Position.BOTTOM_RIGHT}
       >
         <Button minimal text="File" />
-      </Popover2>
+      </Popover>
       <input
         type="file"
         id="load-project"
