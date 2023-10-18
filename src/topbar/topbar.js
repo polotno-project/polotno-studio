@@ -57,6 +57,7 @@ export default observer(({ store }) => {
           <Button
             text="My designs"
             intent="primary"
+            style={{ marginLeft: '20px' }}
             onClick={() => {
               project.puterModalVisible = true;
               // store.openSidePanel('my-designs');
