@@ -36,6 +36,26 @@ const NavInner = styled('div')`
   }
 `;
 
+const PlayButton = observer(({ store }) => {
+  return (
+    <Button
+      icon={store.isPlaying ? 'pause' : 'play'}
+      onClick={() => {
+        if (store.isPlaying) {
+          store.stop();
+        } else {
+          store.play();
+        }
+      }}
+      style={{
+        marginRight: '10px',
+      }}
+    >
+      Preview
+    </Button>
+  );
+});
+
 export default observer(({ store }) => {
   const project = useProject();
 
@@ -159,6 +179,7 @@ export default observer(({ store }) => {
             }
           ></AnchorButton>
           <NavbarDivider />
+          <PlayButton store={store} />
           <DownloadButton store={store} />
           <UserMenu store={store} project={project} />
           {/* <NavbarHeading>Polotno Studio</NavbarHeading> */}
