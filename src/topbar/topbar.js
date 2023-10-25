@@ -23,6 +23,8 @@ import { UserMenu } from './user-menu';
 import { SubscriptionModal } from './subscription-modal';
 
 const NavbarContainer = styled('div')`
+  white-space: nowrap;
+
   @media screen and (max-width: 500px) {
     overflow-x: auto;
     overflow-y: hidden;
