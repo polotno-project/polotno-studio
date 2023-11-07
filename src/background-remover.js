@@ -9,7 +9,7 @@ import { useProject } from './project';
 
 let removeBackgroundFunc = async (url) => {
   const req = await fetch(
-    'https://api.polotno.com/api/remove-image-background-hotpot?KEY=' +
+    'https://api.polotno.com/api/remove-image-background-predicate?KEY=' +
       getKey(),
     {
       method: 'POST',
@@ -109,12 +109,6 @@ export const RemoveBackgroundDialog = observer(
           />
         </div>
         <div className={Classes.DIALOG_FOOTER} style={{ position: 'relative' }}>
-          <div style={{ position: 'absolute', top: '5px' }}>
-            Powered by{' '}
-            <a href="https://hotpot.ai/" target="_blank">
-              hotpot.ai
-            </a>
-          </div>
           <div className={Classes.DIALOG_FOOTER_ACTIONS}>
             <div style={{ padding: '5px' }}>
               {removing && <span>{progress}%</span>}
