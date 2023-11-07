@@ -9,7 +9,7 @@ import { useProject } from './project';
 
 let removeBackgroundFunc = async (url) => {
   const req = await fetch(
-    'https://api.polotno.com/api/remove-image-background-predicate?KEY=' +
+    'https://api.polotno.com/api/remove-image-background-replicate?KEY=' +
       getKey(),
     {
       method: 'POST',
