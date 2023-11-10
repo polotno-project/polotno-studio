@@ -39,6 +39,15 @@ const NavInner = styled('div')`
 `;
 
 const PlayButton = observer(({ store }) => {
+  const hasAnimations = store.find((el) => {
+    if (!el.animations) {
+      return false;
+    }
+    return !!el.animations.find((el) => el.enabled);
+  });
+  if (!hasAnimations) {
+    return null;
+  }
   return (
     <Button
       icon={store.isPlaying ? 'pause' : 'play'}
