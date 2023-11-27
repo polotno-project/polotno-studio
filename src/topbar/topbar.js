@@ -39,10 +39,12 @@ const NavInner = styled('div')`
 `;
 
 const PlayButton = observer(({ store }) => {
+  console.log('render play button', store.pages[0].children[0].x);
   const hasAnimations = store.find((el) => {
     if (!el.animations) {
       return false;
     }
+    console.log(el);
     return !!el.animations.find((el) => el.enabled);
   });
   if (!hasAnimations) {
