@@ -16,6 +16,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import styled from 'polotno/utils/styled';
 
 import { useProject } from '../project';
+import { forEveryChild } from 'polotno/model/group-model';
 
 import { FileMenu } from './file-menu';
 import { DownloadButton } from './download-button';
@@ -39,13 +40,12 @@ const NavInner = styled('div')`
 `;
 
 const PlayButton = observer(({ store }) => {
-  console.log('render play button', store.pages[0].children[0].x);
-  const hasAnimations = store.find((el) => {
-    if (!el.animations) {
-      return false;
+  let hasAnimations = false;
+  forEveryChild({ children: store.pages }, (child) => {
+    const hasAnim = child.animations?.find((el) => el.enabled);
+    if (hasAnim) {
+      hasAnimations = true;
     }
-    console.log(el);
-    return !!el.animations.find((el) => el.enabled);
   });
   if (!hasAnimations) {
     return null;

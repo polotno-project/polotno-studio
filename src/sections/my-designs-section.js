@@ -8,8 +8,8 @@ import {
   MenuItem,
   Position,
   Spinner,
+  Popover
 } from '@blueprintjs/core';
-import { Popover2 } from '@blueprintjs/popover2';
 
 import { SectionTab } from 'polotno/side-panel';
 import FaFolder from '@meronex/icons/fa/FaFolder';
@@ -75,7 +75,7 @@ const DesignCard = observer(({ design, project, onDelete }) => {
           e.stopPropagation();
         }}
       >
-        <Popover2
+        <Popover
           content={
             <Menu>
               <MenuItem
@@ -110,7 +110,7 @@ const DesignCard = observer(({ design, project, onDelete }) => {
           position={Position.BOTTOM}
         >
           <Button icon="more" />
-        </Popover2>
+        </Popover>
       </div>
     </Card>
   );
