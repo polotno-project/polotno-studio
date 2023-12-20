@@ -286,7 +286,7 @@ const StableDiffusionPanel = observer(({ store }) => {
 export const StableDiffusionSection = {
   name: 'stable-diffusion',
   Tab: (props) => (
-    <SectionTab name="AI Generated" {...props}>
+    <SectionTab name="AI Img" {...props}>
       <FaBrain />
     </SectionTab>
   ),
