@@ -58,8 +58,7 @@ const App = observer(({ store }) => {
   React.useEffect(() => {
     if (project.language.startsWith('fr')) {
       setTranslations(fr);
-    }
-    if (project.language.startsWith('id')) {
+    } else if (project.language.startsWith('id')) {
       setTranslations(id);
     } else if (project.language.startsWith('ru')) {
       setTranslations(ru);
