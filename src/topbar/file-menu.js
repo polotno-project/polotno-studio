@@ -78,6 +78,13 @@ export const FileMenu = observer(({ store, project }) => {
                 }}
               />
               <MenuItem
+                text="Portuguese"
+                active={project.language.startsWith('pt')}
+                onClick={() => {
+                  project.setLanguage('pt');
+                }}
+              />
+              <MenuItem
                 text="French"
                 active={project.language.startsWith('fr')}
                 onClick={() => {

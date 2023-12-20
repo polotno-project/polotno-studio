@@ -25,6 +25,7 @@ import fr from './translations/fr';
 import en from './translations/en';
 import id from './translations/id';
 import ru from './translations/ru';
+import ptBr from './translations/pt-br';
 
 import Topbar from './topbar/topbar';
 import { PuterModal } from './puter-modal';
@@ -62,6 +63,8 @@ const App = observer(({ store }) => {
       setTranslations(id);
     } else if (project.language.startsWith('ru')) {
       setTranslations(ru);
+    } else if (project.language.startsWith('pt')) {
+      setTranslations(ptBr);
     } else {
       setTranslations(en);
     }
