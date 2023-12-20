@@ -6,6 +6,7 @@ import { ZoomButtons } from 'polotno/toolbar/zoom-buttons';
 import { SidePanel, DEFAULT_SECTIONS } from 'polotno/side-panel';
 import { Workspace } from 'polotno/canvas/workspace';
 import { Tooltip } from 'polotno/canvas/tooltip';
+import { setTranslations } from 'polotno/config';
 import { useAuth0 } from '@auth0/auth0-react';
 
 import { loadFile } from './file';
@@ -19,6 +20,11 @@ import { MyDesignsSection } from './sections/my-designs-section';
 import { useProject } from './project';
 
 import { ImageRemoveBackground } from './background-remover';
+
+import fr from './translations/fr';
+import en from './translations/en';
+import id from './translations/id';
+import ru from './translations/ru';
 
 import Topbar from './topbar/topbar';
 import { PuterModal } from './puter-modal';
@@ -48,6 +54,19 @@ const useHeight = () => {
 const App = observer(({ store }) => {
   const project = useProject();
   const height = useHeight();
+
+  React.useEffect(() => {
+    if (project.language.startsWith('fr')) {
+      setTranslations(fr);
+    }
+    if (project.language.startsWith('id')) {
+      setTranslations(id);
+    } else if (project.language.startsWith('ru')) {
+      setTranslations(ru);
+    } else {
+      setTranslations(en);
+    }
+  }, [project.language]);
 
   const { isAuthenticated, getAccessTokenSilently, isLoading } = useAuth0();
 

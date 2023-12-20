@@ -6,6 +6,9 @@ import { unstable_setAnimationsEnabled } from 'polotno/config';
 import { Auth0Provider } from '@auth0/auth0-react';
 import { createProject, ProjectContext } from './project';
 import { SubscriptionProvider } from './subscription-context';
+import { setTranslations } from 'polotno/config';
+
+import fr from './translations/fr.json';
 
 import './index.css';
 import App from './App';

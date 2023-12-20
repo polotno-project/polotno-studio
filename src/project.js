@@ -14,6 +14,8 @@ class Project {
   user = {};
   skipSaving = false;
   puterModalVisible = false;
+  language =
+    localStorage.getItem('polotno-language') || navigator.language || 'en';
 
   constructor({ store }) {
     mobx.makeAutoObservable(this);
@@ -22,6 +24,11 @@ class Project {
     store.on('change', () => {
       this.requestSave();
     });
+  }
+
+  setLanguage(lang) {
+    this.language = lang;
+    localStorage.setItem('polotno-language', lang);
   }
 
   requestSave() {

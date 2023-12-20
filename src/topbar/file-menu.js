@@ -42,15 +42,6 @@ export const FileMenu = observer(({ store, project }) => {
                 project.save();
               }}
             />
-            {/* {project.id !== 'local' && (
-              <MenuItem
-                icon="duplicate"
-                text="Make a copy"
-                onClick={() => {
-                  project.duplicate();
-                }}
-              />
-            )} */}
             <MenuDivider />
             <MenuItem
               // icon={<FaFileImport />}
@@ -78,6 +69,36 @@ export const FileMenu = observer(({ store, project }) => {
             />
 
             <MenuDivider />
+            <MenuItem text="Language" icon="translate">
+              <MenuItem
+                text="English"
+                active={project.language.startsWith('en')}
+                onClick={() => {
+                  project.setLanguage('en');
+                }}
+              />
+              <MenuItem
+                text="French"
+                active={project.language.startsWith('fr')}
+                onClick={() => {
+                  project.setLanguage('fr');
+                }}
+              />
+              <MenuItem
+                text="Russian"
+                active={project.language.startsWith('ru')}
+                onClick={() => {
+                  project.setLanguage('ru');
+                }}
+              />
+              <MenuItem
+                text="Indonesian"
+                active={project.language.startsWith('id')}
+                onClick={() => {
+                  project.setLanguage('id');
+                }}
+              />
+            </MenuItem>
             <MenuItem
               text="About"
               icon="info-sign"

@@ -37,8 +37,8 @@ export const DownloadButton = observer(({ store }) => {
     <Popover
       content={
         <Menu>
-          <li class="bp5-menu-header">
-            <h6 class="bp5-heading">File type</h6>
+          <li className="bp5-menu-header">
+            <h6 className="bp5-heading">File type</h6>
           </li>
           <HTMLSelect
             fill
@@ -57,8 +57,8 @@ export const DownloadButton = observer(({ store }) => {
 
           {type !== 'html' && (
             <>
-              <li class="bp5-menu-header">
-                <h6 class="bp5-heading">Quality</h6>
+              <li className="bp5-menu-header">
+                <h6 className="bp5-heading">Quality</h6>
               </li>
               <div style={{ padding: '10px' }}>
                 <Slider
@@ -83,8 +83,8 @@ export const DownloadButton = observer(({ store }) => {
                 )}
                 {type === 'gif' && (
                   <>
-                    <li class="bp5-menu-header">
-                      <h6 class="bp5-heading">FPS</h6>
+                    <li className="bp5-menu-header">
+                      <h6 className="bp5-heading">FPS</h6>
                     </li>
                     <div style={{ padding: '10px' }}>
                       <Slider
@@ -105,8 +105,8 @@ export const DownloadButton = observer(({ store }) => {
               </div>
               {type === 'pdf' && (
                 <>
-                  <li class="bp5-menu-header">
-                    <h6 class="bp5-heading">Page Size</h6>
+                  <li className="bp5-menu-header">
+                    <h6 className="bp5-heading">Page Size</h6>
                   </li>
                   <div style={{ padding: '10px' }}>
                     <Slider
