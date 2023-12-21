@@ -297,11 +297,11 @@ export const IconsPanel = ({ store }) => {
 // // define the new custom section
 export const IconsSection = {
   name: 'icons',
-  Tab: (props) => (
-    <SectionTab name="Icons" {...props}>
+  Tab: observer((props) => (
+    <SectionTab name={t('sidePanel.icons')} {...props}>
       <FaVectorSquare />
     </SectionTab>
-  ),
+  )),
   // we need observer to update component automatically on any store changes
   Panel: IconsPanel,
 };

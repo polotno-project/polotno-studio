@@ -134,6 +134,8 @@
     "subHeaderText": "Подзаголовок",
     "createSubHeader": "Создать подзаголовок",
     "bodyText": "Текст",
-    "createBody": "Создать текст"
+    "createBody": "Создать текст",
+
+    "icons": "Иконки"
   }
 }

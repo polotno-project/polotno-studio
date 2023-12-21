@@ -134,6 +134,7 @@
     "subHeaderText": "Sub Header",
     "createSubHeader": "Create sub header",
     "bodyText": "Body text",
-    "createBody": "Create body text"
+    "createBody": "Create body text",
+    "icons": "Icons"
   }
 }
