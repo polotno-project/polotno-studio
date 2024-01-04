@@ -39,7 +39,7 @@ const NounContainer = styled('div')`
 
 export const NounprojectPanel = observer(({ store, query }) => {
   // load data
-  const { data, isLoading, loadMore, setQuery } = useInfiniteAPI({
+  const { data, isLoading, loadMore, setQuery, hasMore } = useInfiniteAPI({
     defaultQuery: query,
     getAPI: ({ page, query }) =>
       `${API}/get-nounproject?query=${query}&page=${page}&limit=${limit}&KEY=${getKey()}`,
@@ -85,7 +85,7 @@ export const NounprojectPanel = observer(({ store, query }) => {
           });
         }}
         rowsNumber={4}
-        loadMore={loadMore}
+        loadMore={hasMore && loadMore}
       />
     </NounContainer>
   );
@@ -149,15 +149,16 @@ export const FlatIconPanel = observer(({ store, query }) => {
 export const IconFinderPanel = observer(({ store, query }) => {
   // load data
   const count = 50;
-  const { data, isLoading, loadMore, setQuery, error } = useInfiniteAPI({
-    getAPI: ({ page, query }) =>
-      `${API}/get-iconfinder?query=${query}&offset=${
-        (page - 1) * count
-      }&count=${count}&KEY=${getKey()}`,
-    getSize: (res) => {
-      return Math.ceil(res.total_count / count);
-    },
-  });
+  const { data, isLoading, loadMore, setQuery, error, hasMore } =
+    useInfiniteAPI({
+      getAPI: ({ page, query }) =>
+        `${API}/get-iconfinder?query=${query}&offset=${
+          (page - 1) * count
+        }&count=${count}&KEY=${getKey()}`,
+      getSize: (res) => {
+        return Math.ceil(res.total_count / count);
+      },
+    });
 
   React.useEffect(() => {
     setQuery(query);
@@ -205,7 +206,7 @@ export const IconFinderPanel = observer(({ store, query }) => {
       }}
       rowsNumber={4}
       error={error}
-      loadMore={loadMore}
+      loadMore={hasMore && loadMore}
     />
   );
 });
