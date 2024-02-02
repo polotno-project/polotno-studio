@@ -113,7 +113,7 @@ class Project {
   async save() {
     this.status = 'saving';
     const storeJSON = this.store.toJSON();
-    const maxWidth = 100;
+    const maxWidth = 200;
     const preview = await this.store.toDataURL({
       pixelRatio: maxWidth / this.store.activePage?.computedWidth,
       mimeType: 'image/jpeg',
