@@ -26,7 +26,7 @@ export const FileMenu = observer(({ store, project }) => {
               icon="plus"
               text="Create new design"
               onClick={() => {
-                project.clearNewDesign();
+                project.createNewDesign();
               }}
             />
             <MenuDivider />

@@ -4,6 +4,8 @@ import localforage from 'localforage';
 
 import * as api from './api';
 
+window.localforage = localforage;
+
 export const ProjectContext = createContext({});
 
 export const useProject = () => useContext(ProjectContext);
@@ -111,7 +113,7 @@ class Project {
   async save() {
     this.status = 'saving';
     const storeJSON = this.store.toJSON();
-    const maxWidth = 200;
+    const maxWidth = 100;
     const preview = await this.store.toDataURL({
       pixelRatio: maxWidth / this.store.activePage?.computedWidth,
       mimeType: 'image/jpeg',

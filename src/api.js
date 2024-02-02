@@ -5,6 +5,7 @@ import { dataURLtoBlob } from './blob';
 async function writeFile(fileName, data) {
   if (window.puter.auth.isSignedIn()) {
     await window.puter.fs.write(fileName, data, { createMissingParents: true });
+    // await new Promise((resolve) => setTimeout(resolve, 1000));
   } else {
     await localforage.setItem(fileName, data);
   }
