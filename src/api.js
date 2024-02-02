@@ -2,8 +2,12 @@ import { nanoid } from 'nanoid';
 import localforage from 'localforage';
 import { dataURLtoBlob } from './blob';
 
+const isSignedIn = () => {
+  return window.puter?.auth?.isSignedIn();
+};
+
 async function writeFile(fileName, data) {
-  if (window.puter.auth.isSignedIn()) {
+  if (isSignedIn()) {
     await window.puter.fs.write(fileName, data, { createMissingParents: true });
     // await new Promise((resolve) => setTimeout(resolve, 1000));
   } else {
@@ -12,21 +16,21 @@ async function writeFile(fileName, data) {
 }
 
 async function readFile(fileName) {
-  if (window.puter.auth.isSignedIn()) {
+  if (isSignedIn()) {
     return await window.puter.fs.read(fileName);
   }
   return await localforage.getItem(fileName);
 }
 
 async function deleteFile(fileName) {
-  if (window.puter.auth.isSignedIn()) {
+  if (isSignedIn()) {
     return await window.puter.fs.delete(fileName);
   }
   return await localforage.removeItem(fileName);
 }
 
 async function readKv(key) {
-  if (window.puter.auth.isSignedIn()) {
+  if (isSignedIn()) {
     return await window.puter.kv.get(key);
   } else {
     return await localforage.getItem(key);
@@ -34,7 +38,7 @@ async function readKv(key) {
 }
 
 async function writeKv(key, value) {
-  if (window.puter.auth.isSignedIn()) {
+  if (isSignedIn()) {
     return await window.puter.kv.set(key, value);
   } else {
     return await localforage.setItem(key, value);
@@ -91,8 +95,9 @@ export async function saveDesign({ storeJSON, preview, name, id }) {
     id = nanoid(10);
   }
 
-  await writeFile(`designs/${id}.json`, JSON.stringify(storeJSON));
   await writeFile(`designs/${id}.jpg`, dataURLtoBlob(preview));
+  await writeFile(`designs/${id}.json`, JSON.stringify(storeJSON));
+
   let list = await listDesigns();
   const existing = list.find((design) => design.id === id);
   if (existing) {
