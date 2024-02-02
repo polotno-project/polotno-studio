@@ -114,15 +114,17 @@ class Project {
     this.status = 'saving';
     const storeJSON = this.store.toJSON();
     const maxWidth = 200;
-    const preview = await this.store.toDataURL({
+    const canvas = await this.store._toCanvas({
       pixelRatio: maxWidth / this.store.activePage?.computedWidth,
-      mimeType: 'image/jpeg',
       pageId: this.store.activePage?.id,
+    });
+    const blob = await new Promise((resolve) => {
+      canvas.toBlob(resolve, 'image/jpeg', 0.9);
     });
     try {
       const res = await api.saveDesign({
         storeJSON,
-        preview,
+        preview: blob,
         id: this.id,
         name: this.name,
       });

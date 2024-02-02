@@ -9,7 +9,6 @@ const isSignedIn = () => {
 async function writeFile(fileName, data) {
   if (isSignedIn()) {
     await window.puter.fs.write(fileName, data, { createMissingParents: true });
-    // await new Promise((resolve) => setTimeout(resolve, 1000));
   } else {
     await localforage.setItem(fileName, data);
   }
@@ -95,8 +94,11 @@ export async function saveDesign({ storeJSON, preview, name, id }) {
     id = nanoid(10);
   }
 
-  await writeFile(`designs/${id}.jpg`, dataURLtoBlob(preview));
-  await writeFile(`designs/${id}.json`, JSON.stringify(storeJSON));
+  const previewPath = `designs/${id}.jpg`;
+  const storePath = `designs/${id}.json`;
+
+  await writeFile(previewPath, preview);
+  await writeFile(storePath, JSON.stringify(storeJSON));
 
   let list = await listDesigns();
   const existing = list.find((design) => design.id === id);
