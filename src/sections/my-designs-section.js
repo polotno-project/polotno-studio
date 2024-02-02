@@ -1,6 +1,5 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
-import { useAuth0 } from '@auth0/auth0-react';
 import {
   Button,
   Card,
@@ -8,36 +7,34 @@ import {
   MenuItem,
   Position,
   Spinner,
-  Popover
+  Popover,
 } from '@blueprintjs/core';
+
+import { CloudWarning } from '../cloud-warning';
 
 import { SectionTab } from 'polotno/side-panel';
 import FaFolder from '@meronex/icons/fa/FaFolder';
+import { useProject } from '../project';
 import * as api from '../api';
 
-import { useProject } from '../project';
-
-import { SubscribeButton } from '../subscribe-button';
-
-import { useSubscription } from '../subscription-context';
-
-const DesignCard = observer(({ design, project, onDelete }) => {
+const DesignCard = observer(({ design, store, onDelete }) => {
   const [loading, setLoading] = React.useState(false);
+  const [previewURL, setPreviewURL] = React.useState(design.previewURL);
+
+  React.useEffect(() => {
+    const load = async () => {
+      const url = await api.getPreview({ id: design.id });
+      setPreviewURL(url);
+    };
+    load();
+  }, []);
+
   const handleSelect = async () => {
     setLoading(true);
-    await project.loadById(design.id);
-    project.store.openSidePanel('photos');
+    window.project.loadById(design.id);
     setLoading(false);
   };
-  const handleCopy = async () => {
-    setLoading(true);
-    if (project.id !== design.id) {
-      await project.loadById(design.id);
-    }
-    await project.duplicate();
-    project.store.openSidePanel('photos');
-    setLoading(false);
-  };
+
   return (
     <Card
       style={{ margin: '3px', padding: '0px', position: 'relative' }}
@@ -46,7 +43,7 @@ const DesignCard = observer(({ design, project, onDelete }) => {
         handleSelect();
       }}
     >
-      <img src={design.preview} style={{ width: '100%' }} />
+      <img src={previewURL} style={{ width: '100%' }} />
       <div
         style={{
           overflow: 'hidden',
@@ -85,23 +82,19 @@ const DesignCard = observer(({ design, project, onDelete }) => {
                   handleSelect();
                 }}
               />
-              <MenuItem
+              {/* <MenuItem
                 icon="duplicate"
                 text="Copy"
                 onClick={async () => {
                   handleCopy();
                 }}
-              />
+              /> */}
               <MenuItem
                 icon="trash"
                 text="Delete"
                 onClick={() => {
                   if (window.confirm('Are you sure you want to delete it?')) {
-                    api.deleteDesign({
-                      id: design.design_id,
-                      authToken: project.authToken,
-                    });
-                    onDelete(design.design_id);
+                    onDelete({ id: design.id });
                   }
                 }}
               />
@@ -117,39 +110,25 @@ const DesignCard = observer(({ design, project, onDelete }) => {
 });
 
 export const MyDesignsPanel = observer(({ store }) => {
-  const {
-    isAuthenticated,
-    isLoading,
-    loginWithPopup,
-    getAccessTokenSilently,
-    user,
-    logout,
-  } = useAuth0();
-
   const project = useProject();
-
   const [designsLoadings, setDesignsLoading] = React.useState(false);
   const [designs, setDesigns] = React.useState([]);
-  const { subscription, subscriptionLoading } = useSubscription();
 
-  const loadProjects = async () => {
+  const loadDesigns = async () => {
     setDesignsLoading(true);
-    const accessToken = await getAccessTokenSilently({});
-
-    const res = await api.listDesigns({ accessToken });
-    setDesigns(res.data);
+    const list = await api.listDesigns();
+    setDesigns(list);
     setDesignsLoading(false);
   };
 
-  const handleProjectDelete = (id) => {
-    setDesigns(designs.filter((design) => design.design_id !== id));
+  const handleProjectDelete = ({ id }) => {
+    setDesigns(designs.filter((design) => design.id !== id));
+    api.deleteDesign({ id });
   };
 
   React.useEffect(() => {
-    if (isAuthenticated) {
-      loadProjects();
-    }
-  }, [isAuthenticated, isLoading]);
+    loadDesigns();
+  }, [project.cloudEnabled, project.designsLength]);
 
   const half1 = [];
   const half2 = [];
@@ -164,52 +143,60 @@ export const MyDesignsPanel = observer(({ store }) => {
 
   return (
     <div style={{ height: '100%' }}>
-      {!subscriptionLoading && !subscription && (
-        <div>
-          <div style={{ paddingBottom: '10px' }}>
-            Cloud storage is experimental and available only for Polotno Studio
-            supporters.
-          </div>
-          <SubscribeButton fill />
+      <Button
+        fill
+        intent="primary"
+        onClick={async () => {
+          project.createNewDesign();
+        }}
+      >
+        Create new design
+      </Button>
+      {!designsLoadings && !designs.length && (
+        <div style={{ paddingTop: '20px', textAlign: 'center', opacity: 0.6 }}>
+          You have no saved designs yet...
         </div>
       )}
-
-      {designsLoadings || (isLoading && <div>Loading...</div>)}
-      {isAuthenticated &&
-        !designsLoadings &&
-        !designs.length &&
-        subscription && <div>No designs yet</div>}
+      {!project.cloudEnabled && (
+        <div style={{ padding: '15px' }}>
+          <CloudWarning />
+        </div>
+      )}
+      {project.cloudEnabled && (
+        <div style={{ padding: '10px', textAlign: 'center' }}>
+          Cloud data saving powered by{' '}
+          <a href="https://puter.com" target="_blank">
+            Puter.com
+          </a>
+        </div>
+      )}
       {designsLoadings && (
         <div style={{ padding: '30px' }}>
           <Spinner />
         </div>
       )}
-      {!isLoading && isAuthenticated && (
-        <div style={{ display: 'flex', paddingTop: '5px' }}>
-          <div style={{ width: '50%' }}>
-            {half1.map((design) => (
-              <DesignCard
-                design={design}
-                key={design.design_id}
-                store={store}
-                project={project}
-                onDelete={handleProjectDelete}
-              />
-            ))}
-          </div>
-          <div style={{ width: '50%' }}>
-            {half2.map((design) => (
-              <DesignCard
-                design={design}
-                key={design.design_id}
-                store={store}
-                project={project}
-                onDelete={handleProjectDelete}
-              />
-            ))}
-          </div>
+      <div style={{ display: 'flex', paddingTop: '5px' }}>
+        <div style={{ width: '50%' }}>
+          {half1.map((design) => (
+            <DesignCard
+              design={design}
+              key={design.id}
+              store={store}
+              onDelete={handleProjectDelete}
+            />
+          ))}
         </div>
-      )}
+        <div style={{ width: '50%' }}>
+          {half2.map((design) => (
+            <DesignCard
+              design={design}
+              key={design.id}
+              store={store}
+              onDelete={handleProjectDelete}
+            />
+          ))}
+        </div>
+      </div>
     </div>
   );
 });
@@ -222,7 +209,6 @@ export const MyDesignsSection = {
       <FaFolder />
     </SectionTab>
   ),
-  visibleInList: false,
   // we need observer to update component automatically on any store changes
   Panel: MyDesignsPanel,
 };

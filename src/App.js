@@ -7,16 +7,17 @@ import { SidePanel, DEFAULT_SECTIONS } from 'polotno/side-panel';
 import { Workspace } from 'polotno/canvas/workspace';
 import { Tooltip } from 'polotno/canvas/tooltip';
 import { setTranslations } from 'polotno/config';
-import { useAuth0 } from '@auth0/auth0-react';
 
 import { loadFile } from './file';
+
 import { QrSection } from './sections/qr-section';
-// import { ThenounprojectSection } from './thenounproject-section';
 import { QuotesSection } from './sections/quotes-section';
 import { IconsSection } from './sections/icons-section';
 import { ShapesSection } from './sections/shapes-section';
 import { StableDiffusionSection } from './sections/stable-diffusion-section';
 import { MyDesignsSection } from './sections/my-designs-section';
+// import { UploadSection } from './sections/upload-section';
+
 import { useProject } from './project';
 
 import { ImageRemoveBackground } from './background-remover';
@@ -28,16 +29,14 @@ import ru from './translations/ru';
 import ptBr from './translations/pt-br';
 
 import Topbar from './topbar/topbar';
-import { PuterModal } from './puter-modal';
 
-// DEFAULT_SECTIONS.splice(3, 0, IllustrationsSection);
 // replace elements section with just shapes
 DEFAULT_SECTIONS.splice(3, 1, ShapesSection);
-// DEFAULT_SECTIONS.splice(2, 0, StableDiffusionSection);
 // add icons
 DEFAULT_SECTIONS.splice(3, 0, IconsSection);
 // add two more sections
 DEFAULT_SECTIONS.push(QuotesSection, QrSection);
+// DEFAULT_SECTIONS.unshift(UploadSection);
 DEFAULT_SECTIONS.unshift(MyDesignsSection);
 
 DEFAULT_SECTIONS.push(StableDiffusionSection);
@@ -70,36 +69,9 @@ const App = observer(({ store }) => {
     }
   }, [project.language]);
 
-  const { isAuthenticated, getAccessTokenSilently, isLoading } = useAuth0();
-
-  const load = () => {
-    let url = new URL(window.location.href);
-    // url example https://studio.polotno.com/design/5f9f1b0b
-    const reg = new RegExp('design/([a-zA-Z0-9_-]+)').exec(url.pathname);
-    const designId = (reg && reg[1]) || 'local';
-    project.loadById(designId);
-  };
-
   React.useEffect(() => {
-    if (isLoading) {
-      return;
-    }
-    if (isAuthenticated) {
-      getAccessTokenSilently()
-        .then((token) => {
-          project.authToken = token;
-          load();
-        })
-        .catch((err) => {
-          project.authToken = null;
-          load();
-          console.log(err);
-        });
-    } else {
-      project.authToken = null;
-      load();
-    }
-  }, [isAuthenticated, project, getAccessTokenSilently, isLoading]);
+    project.firstLoad();
+  }, []);
 
   const handleDrop = (ev) => {
     // Prevent default behavior (Prevent file from being opened)
@@ -144,12 +116,6 @@ const App = observer(({ store }) => {
           </WorkspaceWrap>
         </PolotnoContainer>
       </div>
-      <PuterModal
-        isOpen={project.puterModalVisible}
-        onClose={() => {
-          project.puterModalVisible = false;
-        }}
-      />
     </div>
   );
 });

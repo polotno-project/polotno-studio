@@ -26,20 +26,7 @@ export const FileMenu = observer(({ store, project }) => {
               icon="plus"
               text="Create new design"
               onClick={() => {
-                const ids = store.pages
-                  .map((page) => page.children.map((child) => child.id))
-                  .flat();
-                const hasObjects = ids?.length;
-                if (hasObjects) {
-                  if (!window.confirm('Remove all content for a new design?')) {
-                    return;
-                  }
-                }
-                const pagesIds = store.pages.map((p) => p.id);
-                store.deletePages(pagesIds);
-                store.addPage();
-                project.id = '';
-                project.save();
+                project.clearNewDesign();
               }}
             />
             <MenuDivider />

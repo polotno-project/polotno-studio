@@ -28,7 +28,7 @@ const saveCredits = (key, credits) => {
   );
 };
 
-export const useCredits = (key = 'unknown', maxUsage = 5) => {
+export const useCredits = (key = 'unknown', maxUsage = 10) => {
   const [credits, setCredits] = React.useState(() =>
     loadCredits(key, maxUsage)
   );

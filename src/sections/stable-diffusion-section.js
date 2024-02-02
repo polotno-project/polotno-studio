@@ -47,17 +47,6 @@ const GenerateTab = observer(({ store }) => {
     setImage(data.output[0]);
   };
 
-  const moreButton = (
-    <a
-      onClick={() => {
-        project.puterModalVisible = true;
-      }}
-      href="#"
-    >
-      Need more?
-    </a>
-  );
-
   return (
     <>
       <div style={{ height: '40px', paddingTop: '5px' }}>
@@ -80,14 +69,8 @@ const GenerateTab = observer(({ store }) => {
         inputRef={inputRef}
       />
       <p style={{ textAlign: 'center' }}>
-        {!!credits && (
-          <div>
-            You have ({credits}) credits. {moreButton}
-          </div>
-        )}
-        {!credits && (
-          <div>You have no credits. They will renew tomorrow. {moreButton}</div>
-        )}
+        {!!credits && <div>You have ({credits}) credits.</div>}
+        {!credits && <div>You have no credits. They will renew tomorrow.</div>}
       </p>
       <Button
         onClick={handleGenerate}

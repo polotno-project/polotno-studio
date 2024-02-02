@@ -79,17 +79,6 @@ export const RemoveBackgroundDialog = observer(
 
     const finished = src !== element.src;
 
-    const moreButton = (
-      <a
-        onClick={() => {
-          project.puterModalVisible = true;
-        }}
-        href="#"
-      >
-        Need more?
-      </a>
-    );
-
     return (
       <Dialog
         // icon="info-sign"
@@ -111,15 +100,9 @@ export const RemoveBackgroundDialog = observer(
           <div className={Classes.DIALOG_FOOTER_ACTIONS}>
             <div style={{ padding: '5px' }}>
               {removing && <span>{progress}%</span>}
-              {!removing && !!credits && (
-                <div>
-                  You have {credits} credits. {moreButton}
-                </div>
-              )}
+              {!removing && !!credits && <div>You have {credits} credits.</div>}
               {!removing && !credits && (
-                <div>
-                  You have no credits. They will renew tomorrow. {moreButton}
-                </div>
+                <div>You have no credits. They will renew tomorrow.</div>
               )}
             </div>
             {!finished && (

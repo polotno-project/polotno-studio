@@ -1,21 +1,36 @@
 import * as mobx from 'mobx';
 import { createContext, useContext } from 'react';
+import localforage from 'localforage';
+
 import * as api from './api';
 
 export const ProjectContext = createContext({});
 
 export const useProject = () => useContext(ProjectContext);
 
+const getFromStorage = (key) => {
+  try {
+    return localStorage.getItem(key);
+  } catch (e) {
+    return null;
+  }
+};
+
+const setToStorage = (key, value) => {
+  try {
+    localStorage.setItem(key, value);
+  } catch (e) {}
+};
+
 class Project {
   id = '';
   name = '';
-  authToken = '';
-  private = false;
   user = {};
   skipSaving = false;
-  puterModalVisible = false;
-  language =
-    localStorage.getItem('polotno-language') || navigator.language || 'en';
+  cloudEnabled = false;
+  status = 'saved'; // or 'has-changes' or 'saving'
+  language = getFromStorage('polotno-language') || navigator.language || 'en';
+  designsLength = 0;
 
   constructor({ store }) {
     mobx.makeAutoObservable(this);
@@ -24,14 +39,21 @@ class Project {
     store.on('change', () => {
       this.requestSave();
     });
+
+    setInterval(() => {
+      mobx.runInAction(() => {
+        this.cloudEnabled = window.puter?.auth?.isSignedIn();
+      });
+    }, 100);
   }
 
   setLanguage(lang) {
     this.language = lang;
-    localStorage.setItem('polotno-language', lang);
+    setToStorage('polotno-language', lang);
   }
 
   requestSave() {
+    this.status = 'has-changes';
     if (this.saveTimeout) {
       return;
     }
@@ -42,20 +64,36 @@ class Project {
     }, 5000);
   }
 
+  async firstLoad() {
+    const deprecatedDesign = await localforage.getItem('polotno-state');
+    if (deprecatedDesign) {
+      this.store.loadJSON(deprecatedDesign);
+      await localforage.removeItem('polotno-state');
+      await this.save();
+      return;
+    }
+    const lastDesignId = await localforage.getItem('polotno-last-design-id');
+    if (lastDesignId) {
+      await this.loadById(lastDesignId);
+    }
+  }
+
   async loadById(id) {
     this.id = id;
-    this.updateUrlWithProjectId();
+    await localforage.setItem('polotno-last-design-id', id);
     try {
-      const { store, name } = await api.getDesignById({
+      const { storeJSON, name } = await api.loadById({
         id,
-        authToken: this.authToken,
       });
-      if (store) {
-        this.store.loadJSON(store);
+      if (storeJSON) {
+        this.store.loadJSON(storeJSON);
       }
       this.name = name;
     } catch (e) {
-      alert("Project can't be loaded");
+      console.error(e);
+      this.id = '';
+      this.name = 'Untitled Design';
+      await localforage.removeItem('polotno-last-design-id');
     }
   }
 
@@ -70,53 +108,30 @@ class Project {
     window.history.replaceState({}, null, `/design/${this.id}`);
   }
 
-  // async loadProject(dataJSON) {
-  //   this.name = dataJSON.name || '';
-  //   this.templateid = dataJSON.templateid || '';
-  //   this.productconfiguration = dataJSON.productconfiguration || {};
-
-  //   this.editorFunctions = await api.getEditorFunctions({
-  //     templateid: this.templateid,
-  //   });
-  //   const req = await fetch(dataJSON.project + '?timestamp=' + Date.now());
-  //   const json = await req.json();
-  //   json.pages.forEach((page) => {
-  //     page.children.forEach((element) => {
-  //       if (element.custom?.logoBlock) {
-  //         element.selectable = this.role === 'admin' ? true : false;
-  //       }
-  //     });
-  //   });
-  //   this.skipSaving = true;
-  //   this.store.loadJSON(json);
-  //   await this.store.waitLoading();
-  //   await new Promise((resolve) => setTimeout(resolve, 50));
-  //   this.store.history.clear();
-  //   this.skipSaving = false;
-  // }
-
   async save() {
-    const json = this.store.toJSON();
-    const maxWidth = 400;
-    // const preview = await this.store.toDataURL({
-    //   pixelRatio: maxWidth / json.width,
-    //   mimeType: 'image/jpeg',
-    // });
-    // if (this.authToken && this.id === 'local') {
-    //   this.id = '';
-    // }
-    const res = await api.saveDesign({
-      store: json,
-      // preview,
-      id: this.id,
-      isPrivate: this.private,
-      name: this.name,
-      authToken: this.authToken,
+    this.status = 'saving';
+    const storeJSON = this.store.toJSON();
+    const maxWidth = 200;
+    const preview = await this.store.toDataURL({
+      pixelRatio: maxWidth / this.store.activePage?.computedWidth,
+      mimeType: 'image/jpeg',
+      pageId: this.store.activePage?.id,
     });
-    if (res.status === 'saved') {
-      this.id = res.id;
-      this.updateUrlWithProjectId();
+    try {
+      const res = await api.saveDesign({
+        storeJSON,
+        preview,
+        id: this.id,
+        name: this.name,
+      });
+      if (res.status === 'saved') {
+        this.id = res.id;
+        await localforage.setItem('polotno-last-design-id', res.id);
+      }
+    } catch (e) {
+      console.error(e);
     }
+    this.status = 'saved';
   }
 
   async duplicate() {
@@ -125,7 +140,22 @@ class Project {
   }
 
   async clear() {
-    await api.deleteDesign();
+    this.store.clear();
+    this.store.addPage();
+    await localforage.removeItem('polotno-last-design-id');
+  }
+
+  async createNewDesign() {
+    await this.clear();
+    window.project.name = 'Untitled Design';
+    window.project.id = '';
+    this.store.openSidePanel('photos');
+    await window.project.save();
+  }
+
+  async signIn() {
+    await window.puter.auth.signIn();
+    this.designsLength = await api.backupFromLocalToCloud();
   }
 }
 
