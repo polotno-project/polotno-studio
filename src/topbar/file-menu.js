@@ -120,7 +120,7 @@ export const FileMenu = observer(({ store, project }) => {
           }
 
           var reader = new FileReader();
-          reader.onloadend = function () {
+          reader.onloadend = async function () {
             var text = reader.result;
             let json;
             try {
@@ -130,7 +130,9 @@ export const FileMenu = observer(({ store, project }) => {
             }
 
             if (json) {
+              await project.createNewDesign();
               store.loadJSON(json);
+              project.save();
               input.value = '';
             }
           };

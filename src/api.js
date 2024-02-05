@@ -117,75 +117,103 @@ export const getPreview = async ({ id }) => {
   return URL.createObjectURL(preview);
 };
 
-const getPublicSubDomain = async () => {
-  const user = await window.puter.auth.getUser();
-  const subdomain = user.username + '-pltn';
-  return subdomain;
+const batchCall = (asyncFunction) => {
+  let cachedPromise = null;
+  return async (...args) => {
+    if (!cachedPromise) {
+      cachedPromise = asyncFunction(...args).catch((error) => {
+        // Reset cachedPromise on error to allow retry
+        cachedPromise = null;
+        throw error;
+      });
+    }
+    return cachedPromise;
+  };
 };
 
-const validatePublicAssets = async () => {
-  const sites = await window.puter.hosting.list();
-  const subdomain = await getPublicSubDomain();
-  const publicSite = sites.find((site) => site.subdomain === subdomain);
-  if (!publicSite) {
-    await window.puter.hosting.create(subdomain, 'uploads');
+let subDomainCache = null;
+const getPublicSubDomain = batchCall(async () => {
+  if (subDomainCache) {
+    return subDomainCache;
   }
-};
+  // fist we need to validate domain
+  const sites = await window.puter.hosting.list();
+  const user = await window.puter.auth.getUser();
+  const prefix = user.username + '-pltn-pld';
+  let subdomain = prefix;
+  const existingDomain = sites.find(
+    (site) => site.subdomain.indexOf(prefix) >= 0
+  );
+
+  if (existingDomain) {
+    subDomainCache = existingDomain.subdomain;
+    return existingDomain.subdomain;
+  }
+  let attempt = 1;
+  while (attempt < 10) {
+    const postfix = attempt > 1 ? `-${attempt}` : '';
+    subdomain = `${prefix}${postfix}`;
+    try {
+      await window.puter.fs.mkdir('uploads', { createMissingParents: true });
+      await window.puter.hosting.create(subdomain, 'uploads');
+      break;
+    } catch (error) {
+      attempt++;
+      continue;
+    }
+  }
+  if (attempt >= 10) {
+    throw new Error('Failed to create subdomain');
+  }
+  subDomainCache = subdomain;
+  return subdomain;
+});
 
 export const listAssets = async () => {
   const list = (await readKv('assets-list')) || [];
   for (const asset of list) {
-    if (!asset.src) {
-      asset.src = await getAssetSrc({ id: asset.id });
-    }
+    asset.src = await getAssetSrc({ id: asset.id });
+    asset.preview = await getAssetPreviewSrc({ id: asset.id });
   }
   return list;
 };
 
-export const getFileURL = async ({ uid }) => {
-  const resp = await (
-    await fetch('https://api.puter.com/auth/create-access-token', {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${window.puter.authToken}`,
-      },
-      body: JSON.stringify({
-        permissions: [`fs:${uid}:read`],
-      }),
-      method: 'POST',
-    })
-  ).json();
-  const token = resp.token;
-  const url = `https://api.puter.com/token-read?uid=${uid}&token=${token}`;
-  return url;
-};
-
 export const getAssetSrc = async ({ id }) => {
   if (window.puter.auth.isSignedIn()) {
-    await validatePublicAssets();
     const subdomain = await getPublicSubDomain();
-    return `https://${subdomain}.puter.com/${id}`;
+    return `https://${subdomain}.puter.site/${id}`;
   } else {
-    return await readFile(`uploads/${id}`);
+    const file = await readFile(`uploads/${id}`);
+    return URL.createObjectURL(file);
   }
 };
 
-export const uploadAsset = async ({ file }) => {
+export const getAssetPreviewSrc = async ({ id }) => {
+  if (window.puter.auth.isSignedIn()) {
+    const subdomain = await getPublicSubDomain();
+    return `https://${subdomain}.puter.site/${id}-preview`;
+  } else {
+    const file = await readFile(`uploads/${id}-preview`);
+    console.log('file', file);
+    return URL.createObjectURL(file);
+  }
+};
+
+export const uploadAsset = async ({ file, preview, type }) => {
   const list = await listAssets();
   const id = nanoid(10);
   await writeFile(`uploads/${id}`, file);
-  list.push({ id });
+  await writeFile(`uploads/${id}-preview`, preview);
+  list.push({ id, type });
   await writeKv('assets-list', list);
 
-  // now make sure we have a public link
-  await validatePublicAssets();
   const src = await getAssetSrc({ id });
-  return { id, src };
+  const previewSrc = await getAssetPreviewSrc({ id });
+  return { id, src, preview: previewSrc };
 };
 
 export const deleteAsset = async ({ id }) => {
   const list = await listAssets();
   const newList = list.filter((asset) => asset.id !== id);
-  console.log(id, newList);
   await writeKv('assets-list', newList);
 };

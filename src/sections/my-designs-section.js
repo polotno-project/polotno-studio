@@ -142,7 +142,7 @@ export const MyDesignsPanel = observer(({ store }) => {
   });
 
   return (
-    <div style={{ height: '100%' }}>
+    <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
       <Button
         fill
         intent="primary"
@@ -175,7 +175,14 @@ export const MyDesignsPanel = observer(({ store }) => {
           <Spinner />
         </div>
       )}
-      <div style={{ display: 'flex', paddingTop: '5px' }}>
+      <div
+        style={{
+          display: 'flex',
+          paddingTop: '5px',
+          height: '100%',
+          overflow: 'auto',
+        }}
+      >
         <div style={{ width: '50%' }}>
           {half1.map((design) => (
             <DesignCard
