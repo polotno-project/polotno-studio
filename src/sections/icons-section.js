@@ -11,14 +11,13 @@ import styled from 'polotno/utils/styled';
 import { t } from 'polotno/utils/l10n';
 import { useInfiniteAPI } from 'polotno/utils/use-api';
 import FaVectorSquare from '@meronex/icons/fa/FaVectorSquare';
+import { getAPI } from 'polotno/utils/api';
 
 import { ImagesGrid } from 'polotno/side-panel/images-grid';
 
-const API = 'https://api.polotno.dev/api';
-
 const iconToSrc = async (id) => {
   const req = await fetch(
-    `${API}/download-nounproject?id=${id}&KEY=${getKey()}`
+    `${getAPI()}/download-nounproject?id=${id}&KEY=${getKey()}`
   );
   const text = await req.text();
   const base64 = await svgToURL(text);
@@ -41,7 +40,7 @@ export const NounprojectPanel = observer(({ store, query }) => {
   const { data, isLoading, loadMore, setQuery, hasMore } = useInfiniteAPI({
     defaultQuery: query,
     getAPI: ({ page, query }) =>
-      `${API}/get-nounproject?query=${query}&page=${page}&limit=${limit}&KEY=${getKey()}`,
+      `${getAPI()}/get-nounproject?query=${query}&page=${page}&limit=${limit}&KEY=${getKey()}`,
     getSize: (res) => {
       return res.pagesNumber;
     },
@@ -94,7 +93,7 @@ export const FlatIconPanel = observer(({ store, query }) => {
   // load data
   const { data, isLoading, loadMore, setQuery } = useInfiniteAPI({
     getAPI: ({ page, query }) =>
-      `${API}/get-flaticon?q=${query}&page=${page}&KEY=${getKey()}`,
+      `${getAPI()}/get-flaticon?q=${query}&page=${page}&KEY=${getKey()}`,
     getSize: (res) => Math.floor(res.metadata.total / res.metadata.count),
   });
 
@@ -111,7 +110,7 @@ export const FlatIconPanel = observer(({ store, query }) => {
       onSelect={async (item, pos, element) => {
         if (element && element.type === 'image' && !element.locked) {
           const req = await fetch(
-            `${API}/download-flaticon?id=${item.id}&KEY=${getKey()}`
+            `${getAPI()}/download-flaticon?id=${item.id}&KEY=${getKey()}`
           );
           const json = await req.json();
           const base64 = await svgToURL(json.svg);
@@ -130,7 +129,7 @@ export const FlatIconPanel = observer(({ store, query }) => {
             y,
           });
           const req = await fetch(
-            `${API}/download-flaticon?id=${item.id}&KEY=${getKey()}`
+            `${getAPI()}/download-flaticon?id=${item.id}&KEY=${getKey()}`
           );
           const json = await req.json();
           const base64 = await svgToURL(json.svg);
@@ -151,7 +150,7 @@ export const IconFinderPanel = observer(({ store, query }) => {
   const { data, isLoading, loadMore, setQuery, error, hasMore } =
     useInfiniteAPI({
       getAPI: ({ page, query }) =>
-        `${API}/get-iconfinder?query=${query}&offset=${
+        `${getAPI()}/get-iconfinder?query=${query}&offset=${
           (page - 1) * count
         }&count=${count}&KEY=${getKey()}`,
       getSize: (res) => {
@@ -173,7 +172,7 @@ export const IconFinderPanel = observer(({ store, query }) => {
         const { download_url } = item.vector_sizes[0].formats[0];
         if (element && element.type === 'image' && !element.locked) {
           const req = await fetch(
-            `${API}/download-iconfinder?download_url=${download_url}&KEY=${getKey()}`
+            `${getAPI()}/download-iconfinder?download_url=${download_url}&KEY=${getKey()}`
           );
           const json = await req.json();
           const base64 = await svgToURL(json.content);
@@ -194,7 +193,7 @@ export const IconFinderPanel = observer(({ store, query }) => {
             y,
           });
           const req = await fetch(
-            `${API}/download-iconfinder?download_url=${download_url}&KEY=${getKey()}`
+            `${getAPI()}/download-iconfinder?download_url=${download_url}&KEY=${getKey()}`
           );
           const json = await req.json();
           const base64 = await svgToURL(json.content);

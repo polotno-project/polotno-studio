@@ -2,16 +2,14 @@ import React from 'react';
 import { observer } from 'mobx-react-lite';
 import { InputGroup, Card, Button } from '@blueprintjs/core';
 
-import { useInfiniteAPI } from 'polotno/utils/use-api';
 // import { urlToBase64, svgToURL } from 'polotno/utils/svg';
 import { SectionTab } from 'polotno/side-panel';
 import { getKey } from 'polotno/utils/validate-key';
 // import { getImageSize } from 'polotno/utils/image';
 import FdCommentQuotes from '@meronex/icons/fd/FdCommentQuotes';
+import { getAPI } from 'polotno/utils/api';
 
 // import { ImagesGrid } from 'polotno/side-panel/images-grid';
-
-const API = 'https://api.polotno.dev/api';
 
 const KEYWORDS = [
   'Love',
@@ -58,7 +56,7 @@ export const QuotesPanel = observer(({ store }) => {
       setLoading(true);
 
       const req = await fetch(
-        `${API}/get-quotes?query=${query}&keywords=${keywords}&KEY=${getKey()}`
+        `${getAPI()}/get-quotes?query=${query}&keywords=${keywords}&KEY=${getKey()}`
       );
       if (!req.ok) {
         setLoading(false);

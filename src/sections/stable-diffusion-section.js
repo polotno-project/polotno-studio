@@ -11,11 +11,9 @@ import { t } from 'polotno/utils/l10n';
 
 import { ImagesGrid } from 'polotno/side-panel/images-grid';
 import { useCredits } from '../credits';
-import { useInfiniteAPI } from 'polotno/utils/use-api';
 import { getCrop } from 'polotno/utils/image';
 import { useProject } from '../project';
-
-const API = 'https://api.polotno.dev/api';
+import { getAPI } from 'polotno/utils/api';
 
 const GenerateTab = observer(({ store }) => {
   const project = useProject();
@@ -33,7 +31,7 @@ const GenerateTab = observer(({ store }) => {
     setImage(null);
 
     const req = await fetch(
-      `${API}/get-stable-diffusion?KEY=${getKey()}&prompt=${
+      `${getAPI()}/get-stable-diffusion?KEY=${getKey()}&prompt=${
         inputRef.current.value
       }`
     );
