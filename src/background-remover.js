@@ -6,10 +6,11 @@ import { t } from 'polotno/utils/l10n';
 import { getKey } from 'polotno/utils/validate-key';
 import { useCredits } from './credits';
 import { useProject } from './project';
+import { getAPI } from 'polotno/utils/api';
 
 let removeBackgroundFunc = async (url) => {
   const req = await fetch(
-    'http://localhost:3002/api/remove-image-background?KEY=' + getKey(),
+    `${getAPI()}/remove-image-background?KEY=` + getKey(),
     {
       method: 'POST',
       headers: {
