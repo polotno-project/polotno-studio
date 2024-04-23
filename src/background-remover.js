@@ -54,7 +54,7 @@ export const RemoveBackgroundDialog = observer(
           const left = 100 - progress;
           return Math.round(100 - left * 0.9);
         });
-      }, 100);
+      }, 1000);
       return () => clearInterval(interval);
     }, [isOpen, removing]);
 
