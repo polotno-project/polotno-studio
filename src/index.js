@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 
 import { createStore } from 'polotno/model/store';
 import { unstable_setAnimationsEnabled } from 'polotno/config';
+import { _dangerous } from 'polotno/utils/api';
 import { Auth0Provider } from '@auth0/auth0-react';
 import { createProject, ProjectContext } from './project';
 
@@ -23,6 +24,7 @@ But feel free to use this repository as a reference for your own project and to 
   );
 }
 
+_dangerous('https://api-cloudflare.polotno.com');
 unstable_setAnimationsEnabled(true);
 
 const store = createStore({ key: 'nFA5H9elEytDyPyvKL7T' });
