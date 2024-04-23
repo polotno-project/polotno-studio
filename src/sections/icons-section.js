@@ -15,7 +15,6 @@ import FaVectorSquare from '@meronex/icons/fa/FaVectorSquare';
 import { ImagesGrid } from 'polotno/side-panel/images-grid';
 
 const API = 'https://api.polotno.dev/api';
-// const API = 'http://localhost:3001/api';
 
 const iconToSrc = async (id) => {
   const req = await fetch(
