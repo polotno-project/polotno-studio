@@ -49,12 +49,12 @@ export const RemoveBackgroundDialog = observer(
         setProgress(0);
         return;
       }
-      const averageTime = 30000;
-      const steps = 95;
-      const stepTime = averageTime / steps;
       const interval = setInterval(() => {
-        setProgress((progress) => progress + 1);
-      }, stepTime);
+        setProgress((progress) => {
+          const left = 100 - progress;
+          return Math.round(100 - left * 0.9);
+        });
+      }, 100);
       return () => clearInterval(interval);
     }, [isOpen, removing]);
 
