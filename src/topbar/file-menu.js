@@ -168,7 +168,7 @@ export const FileMenu = observer(({ store, project }) => {
             </a>
             . The repository doesn't have full source.{' '}
             <strong>Polotno Studio</strong> is powered by{' '}
-            <a href="https://polotno.dev/" target="_blank">
+            <a href="https://polotno.com/" target="_blank">
               Polotno SDK project
             </a>
             . All core "canvas editor" functionality are implemented by{' '}
