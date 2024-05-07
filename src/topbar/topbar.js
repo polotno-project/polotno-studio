@@ -1,7 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
 import {
-  Button,
   Navbar,
   Alignment,
   AnchorButton,
@@ -20,7 +19,6 @@ import MdcCloudSync from '@meronex/icons/mdc/MdcCloudSync';
 import styled from 'polotno/utils/styled';
 
 import { useProject } from '../project';
-import { forEveryChild } from 'polotno/model/group-model';
 
 import { FileMenu } from './file-menu';
 import { DownloadButton } from './download-button';
@@ -42,36 +40,6 @@ const NavInner = styled('div')`
     display: flex;
   }
 `;
-
-const PlayButton = observer(({ store }) => {
-  let hasAnimations = false;
-  forEveryChild({ children: store.pages }, (child) => {
-    const hasAnim = child.animations?.find((el) => el.enabled);
-    if (hasAnim) {
-      hasAnimations = true;
-    }
-  });
-  if (!hasAnimations) {
-    return null;
-  }
-  return (
-    <Button
-      icon={store.isPlaying ? 'pause' : 'play'}
-      onClick={() => {
-        if (store.isPlaying) {
-          store.stop();
-        } else {
-          store.play();
-        }
-      }}
-      style={{
-        marginRight: '10px',
-      }}
-    >
-      Preview
-    </Button>
-  );
-});
 
 const Status = observer(({ project }) => {
   const Icon = !project.cloudEnabled
@@ -173,7 +141,6 @@ export default observer(({ store }) => {
             }
           ></AnchorButton>
           <NavbarDivider />
-          <PlayButton store={store} />
           <DownloadButton store={store} />
           <UserMenu store={store} project={project} />
           {/* <NavbarHeading>Polotno Studio</NavbarHeading> */}

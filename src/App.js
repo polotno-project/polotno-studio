@@ -6,6 +6,7 @@ import { ZoomButtons } from 'polotno/toolbar/zoom-buttons';
 import { SidePanel, DEFAULT_SECTIONS } from 'polotno/side-panel';
 import { Workspace } from 'polotno/canvas/workspace';
 import { Tooltip } from 'polotno/canvas/tooltip';
+import { PagesTimeline } from 'polotno/pages-timeline';
 import { setTranslations } from 'polotno/config';
 
 import { loadFile } from './file';
@@ -113,6 +114,7 @@ const App = observer(({ store }) => {
             />
             <Workspace store={store} components={{ Tooltip }} />
             <ZoomButtons store={store} />
+            <PagesTimeline store={store} />
           </WorkspaceWrap>
         </PolotnoContainer>
       </div>
