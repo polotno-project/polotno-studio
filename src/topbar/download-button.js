@@ -13,12 +13,52 @@ import { downloadFile } from 'polotno/utils/download';
 import * as unit from 'polotno/utils/unit';
 import { t } from 'polotno/utils/l10n';
 
+const saveAsVideo = async ({ store, pixelRatio, fps, onProgress }) => {
+  const json = store.toJSON();
+  const req = await fetch(
+    'https://api.polotno.dev/api/renders?KEY=nFA5H9elEytDyPyvKL7T',
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        design: json,
+        exportOptions: {
+          // use pixelRatio < 1 to have much smaller image at the result
+          pixelRatio,
+        },
+        format: 'mp4',
+        outputFormat: 'dataURL',
+      }),
+    }
+  );
+  const job = await req.json();
+  while (true) {
+    const jobReq = await fetch(
+      `https://api.polotno.dev/api/renders/${job.id}?KEY=nFA5H9elEytDyPyvKL7T`
+    );
+    const jobData = await jobReq.json();
+    if (jobData.status === 'done') {
+      downloadFile(jobData.output, 'polotno.mp4');
+      break;
+    } else if (jobData.status === 'error') {
+      throw new Error('Failed to render video');
+    } else {
+      onProgress(jobData.progress, jobData.status);
+    }
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+  }
+};
+
 export const DownloadButton = observer(({ store }) => {
   const [saving, setSaving] = React.useState(false);
   const [quality, setQuality] = React.useState(1);
   const [pageSizeModifier, setPageSizeModifier] = React.useState(1);
   const [fps, setFPS] = React.useState(10);
   const [type, setType] = React.useState('png');
+  const [progress, setProgress] = React.useState(0);
+  const [progressStatus, setProgressStatus] = React.useState('scheduled');
 
   const getName = () => {
     const texts = [];
@@ -52,10 +92,12 @@ export const DownloadButton = observer(({ store }) => {
             <option value="png">PNG</option>
             <option value="pdf">PDF</option>
             <option value="html">HTML</option>
+            <option value="json">JSON</option>
             <option value="gif">GIF</option>
+            <option value="mp4">mp4 Video</option>
           </HTMLSelect>
 
-          {type !== 'html' && (
+          {type !== 'json' && type !== 'mp4' && (
             <>
               <li className="bp5-menu-header">
                 <h6 className="bp5-heading">Quality</h6>
@@ -142,12 +184,27 @@ export const DownloadButton = observer(({ store }) => {
               )}
             </>
           )}
-          {type === 'html' && (
+          {type === 'json' && (
             <>
               <div style={{ padding: '10px', maxWidth: '180px', opacity: 0.8 }}>
-                HTML export is very experimental. If you have issues with it,
-                please report to Anton on discord.
+                JSON format is used for saving and loading projects. You can
+                save your project to a file and load it later via "File" {'->'}{' '}
+                "Open" menu.
               </div>
+            </>
+          )}
+          {type === 'mp4' && (
+            <>
+              <div style={{ padding: '10px', maxWidth: '180px', opacity: 0.8 }}>
+                Download your design as a video. This feature is experimental.
+              </div>
+              {saving && (
+                <div
+                  style={{ padding: '10px', maxWidth: '180px', opacity: 0.8 }}
+                >
+                  {progressStatus}: {progress} %
+                </div>
+              )}
             </>
           )}
           <Button
@@ -167,11 +224,30 @@ export const DownloadButton = observer(({ store }) => {
                   await store.saveAsHTML({
                     fileName: getName() + '.html',
                   });
+                } else if (type === 'json') {
+                  const json = store.toJSON();
+
+                  const url =
+                    'data:text/json;base64,' +
+                    window.btoa(
+                      unescape(encodeURIComponent(JSON.stringify(json)))
+                    );
+
+                  downloadFile(url, 'polotno.json');
                 } else if (type === 'gif') {
                   await store.saveAsGIF({
                     fileName: getName() + '.gif',
                     pixelRatio: quality,
                     fps,
+                  });
+                } else if (type === 'mp4') {
+                  await saveAsVideo({
+                    store,
+                    pixelRatio: quality,
+                    onProgress: (progress, status) => {
+                      setProgress(progress);
+                      setProgressStatus(status);
+                    },
                   });
                 } else {
                   if (store.pages.length < 3) {
@@ -259,7 +335,7 @@ export const DownloadButton = observer(({ store }) => {
         icon="import"
         text={t('toolbar.download')}
         intent="primary"
-        loading={saving}
+        // loading={saving}
         onClick={() => {
           setQuality(1);
         }}

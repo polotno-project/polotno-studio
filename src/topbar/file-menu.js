@@ -41,7 +41,7 @@ export const FileMenu = observer(({ store, project }) => {
             <MenuItem
               // icon={<FaFileExport />}
               icon="floppy-disk"
-              text="Save as"
+              text="Save as JSON"
               onClick={() => {
                 const json = store.toJSON();
 
