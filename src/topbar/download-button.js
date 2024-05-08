@@ -26,7 +26,7 @@ const saveAsVideo = async ({ store, pixelRatio, fps, onProgress }) => {
         design: json,
         exportOptions: {
           // use pixelRatio < 1 to have much smaller image at the result
-          pixelRatio,
+          pixelRatio: 0.2,
         },
         format: 'mp4',
         outputFormat: 'dataURL',
@@ -252,6 +252,8 @@ export const DownloadButton = observer(({ store }) => {
                       setProgressStatus(status);
                     },
                   });
+                  setProgressStatus('done');
+                  setProgress(0);
                 } else {
                   if (store.pages.length < 3) {
                     store.pages.forEach((page, index) => {
