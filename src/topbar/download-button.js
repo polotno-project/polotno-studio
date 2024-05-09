@@ -196,7 +196,8 @@ export const DownloadButton = observer(({ store }) => {
           {type === 'mp4' && (
             <>
               <div style={{ padding: '10px', maxWidth: '180px', opacity: 0.8 }}>
-                Download your design as a video. This feature is experimental.
+                Download your design as a video.{' '}
+                <strong>This feature is VERY experimental.</strong>
                 Please write to{' '}
                 <a href="mailto:anton@polotno.com">anton@polotno.com</a> for any
                 feedback!
