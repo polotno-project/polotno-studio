@@ -24,12 +24,8 @@ const saveAsVideo = async ({ store, pixelRatio, fps, onProgress }) => {
       },
       body: JSON.stringify({
         design: json,
-        exportOptions: {
-          // use pixelRatio < 1 to have much smaller image at the result
-          pixelRatio: 0.2,
-        },
+        pixelRatio,
         format: 'mp4',
-        outputFormat: 'dataURL',
       }),
     }
   );
@@ -97,7 +93,7 @@ export const DownloadButton = observer(({ store }) => {
             <option value="mp4">mp4 Video</option>
           </HTMLSelect>
 
-          {type !== 'json' && type !== 'mp4' && (
+          {type !== 'json' && (
             <>
               <li className="bp5-menu-header">
                 <h6 className="bp5-heading">Quality</h6>
@@ -245,6 +241,7 @@ export const DownloadButton = observer(({ store }) => {
                     fps,
                   });
                 } else if (type === 'mp4') {
+                  setProgressStatus('scheduled');
                   await saveAsVideo({
                     store,
                     pixelRatio: quality,
