@@ -69,6 +69,8 @@ export const DownloadButton = observer(({ store }) => {
     const words = allWords.slice(0, 6);
     return words.join(' ').replace(/\s/g, '-').toLowerCase() || 'polotno';
   };
+
+  const maxQuality = type === 'mp4' ? 1 : 300 / 72;
   return (
     <Popover
       content={
@@ -107,7 +109,7 @@ export const DownloadButton = observer(({ store }) => {
                   }}
                   stepSize={0.2}
                   min={0.2}
-                  max={300 / 72}
+                  max={maxQuality}
                   showTrackFill={false}
                 />
                 {type === 'pdf' && (
