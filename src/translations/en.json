@@ -40,8 +40,8 @@
     "crop": "Crop",
     "cropDone": "Done",
     "cropCancel": "Cancel",
-    "removeClip": "Remove clip",
-
+    "removeClip": "Remove mask",
+    "applyClip": "Apply mask",
     "removeMask": "Remove mask",
 
     "transparency": "Transparency",
