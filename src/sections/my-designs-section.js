@@ -52,7 +52,7 @@ const DesignCard = observer(({ design, store, onDelete }) => {
           padding: '3px',
         }}
       >
-        {design.name}
+        {design.name || 'Untitled'}
       </div>
       {loading && (
         <div

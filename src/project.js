@@ -30,7 +30,7 @@ class Project {
   user = {};
   skipSaving = false;
   cloudEnabled = false;
-  status = 'saved'; // or 'has-changes' or 'saving'
+  status = 'saved'; // or 'has-changes' or 'saving' or 'loading'
   language = getFromStorage('polotno-language') || navigator.language || 'en';
   designsLength = 0;
 
@@ -83,6 +83,7 @@ class Project {
   async loadById(id) {
     this.id = id;
     await localforage.setItem('polotno-last-design-id', id);
+    this.status = 'loading';
     try {
       const { storeJSON, name } = await api.loadById({
         id,
@@ -97,6 +98,7 @@ class Project {
       this.name = 'Untitled Design';
       await localforage.removeItem('polotno-last-design-id');
     }
+    this.status = 'saved';
   }
 
   updateUrlWithProjectId() {
