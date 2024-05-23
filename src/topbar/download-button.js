@@ -90,6 +90,7 @@ export const DownloadButton = observer(({ store }) => {
             <option value="png">PNG</option>
             <option value="pdf">PDF</option>
             <option value="html">HTML</option>
+            <option value="svg">SVG</option>
             <option value="json">JSON</option>
             <option value="gif">GIF</option>
             <option value="mp4">mp4 Video</option>
@@ -225,6 +226,10 @@ export const DownloadButton = observer(({ store }) => {
                 } else if (type === 'html') {
                   await store.saveAsHTML({
                     fileName: getName() + '.html',
+                  });
+                } else if (type === 'svg') {
+                  await store.saveAsSVG({
+                    fileName: getName() + '.svg',
                   });
                 } else if (type === 'json') {
                   const json = store.toJSON();
