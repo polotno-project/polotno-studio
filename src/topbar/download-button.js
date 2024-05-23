@@ -102,17 +102,21 @@ export const DownloadButton = observer(({ store }) => {
                 <h6 className="bp5-heading">Quality</h6>
               </li>
               <div style={{ padding: '10px' }}>
-                <Slider
-                  value={quality}
-                  labelRenderer={false}
-                  onChange={(quality) => {
-                    setQuality(quality);
-                  }}
-                  stepSize={0.2}
-                  min={0.2}
-                  max={maxQuality}
-                  showTrackFill={false}
-                />
+                {type !== 'html' &&
+                  type !==
+                    'svg'(
+                      <Slider
+                        value={quality}
+                        labelRenderer={false}
+                        onChange={(quality) => {
+                          setQuality(quality);
+                        }}
+                        stepSize={0.2}
+                        min={0.2}
+                        max={maxQuality}
+                        showTrackFill={false}
+                      />
+                    )}
                 {type === 'pdf' && (
                   <div>DPI: {Math.round(store.dpi * quality)}</div>
                 )}
