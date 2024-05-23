@@ -96,25 +96,23 @@ export const DownloadButton = observer(({ store }) => {
             <option value="mp4">mp4 Video</option>
           </HTMLSelect>
 
-          {type !== 'json' && (
+          {type !== 'json' && type !== 'html' && type !== 'svg' && (
             <>
               <li className="bp5-menu-header">
                 <h6 className="bp5-heading">Quality</h6>
               </li>
               <div style={{ padding: '10px' }}>
-                {type !== 'html' && type !== 'svg' && (
-                  <Slider
-                    value={quality}
-                    labelRenderer={false}
-                    onChange={(quality) => {
-                      setQuality(quality);
-                    }}
-                    stepSize={0.2}
-                    min={0.2}
-                    max={maxQuality}
-                    showTrackFill={false}
-                  />
-                )}
+                <Slider
+                  value={quality}
+                  labelRenderer={false}
+                  onChange={(quality) => {
+                    setQuality(quality);
+                  }}
+                  stepSize={0.2}
+                  min={0.2}
+                  max={maxQuality}
+                  showTrackFill={false}
+                />
                 {type === 'pdf' && (
                   <div>DPI: {Math.round(store.dpi * quality)}</div>
                 )}
