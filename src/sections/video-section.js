@@ -6,6 +6,7 @@ import { SectionTab } from 'polotno/side-panel';
 import { useInfiniteAPI } from 'polotno/utils/use-api';
 import { t } from 'polotno/utils/l10n';
 import { Video } from '@blueprintjs/icons';
+import { selectVideo } from 'polotno/side-panel/select-video';
 
 // this is a demo key just for that project
 // (!) please don't use it in your projects
@@ -13,8 +14,7 @@ import { Video } from '@blueprintjs/icons';
 const key = 'nFA5H9elEytDyPyvKL7T';
 
 // use Polotno API proxy into Pexels
-// WARNING: don't use on production! Use your own proxy and Pexles API key
-// const API = "https://api.polotno.com/api";
+// WARNING: don't use on production! Use your own proxy and Pexels API key
 const API = 'https://api.polotno.com/api/pexels/videos';
 
 const getPexelsVideoAPI = ({ query, page }) =>
@@ -60,38 +60,12 @@ export const VideosPanel = ({ store }) => {
           const src =
             image.video_files.find((f) => f.quality === 'hd')?.link ||
             image.video_files[0].link;
-          // // get url of image
-          // const src = image.src.large;
 
-          // // if we dropped image into svg element, le't apply mask for it
-          // if (element && element.type === 'svg' && element.contentEditable) {
-          //   element.set({ maskSrc: src });
-          //   return;
-          // }
-
-          // // get image size
-          const { width, height } = await getVideoSize(src);
-
-          // // if we dropped into another image, let's just recalucate crop and apply new image
-          // if (element && element.type === 'image' && element.contentEditable) {
-          //   const crop = getCrop(element, {
-          //     width,
-          //     height,
-          //   });
-          //   element.set({ src, ...crop });
-          //   return;
-          // }
-
-          // // otherwise let's create new image
-          const x = (pos?.x || store.width / 2) - width / 2;
-          const y = (pos?.y || store.height / 2) - height / 2;
-          store.activePage?.addElement({
-            type: 'video',
+          selectVideo({
             src,
-            width,
-            height,
-            x,
-            y,
+            store,
+            droppedPos: pos,
+            targetElement: element,
           });
         }}
         isLoading={isLoading}
@@ -100,13 +74,14 @@ export const VideosPanel = ({ store }) => {
         getCredit={(image) => (
           <span>
             Video by{' '}
-            <a href={image.user.url} target="_blank">
+            <a href={image.user.url} target="_blank" rel="noreferrer">
               {image.user.name}
             </a>{' '}
             on{' '}
             <a
               href="https://pexels.com/?utm_source=polotno&utm_medium=referral"
               target="_blank"
+              rel="noreferrer noopener"
             >
               Pexels
             </a>
