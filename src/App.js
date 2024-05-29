@@ -19,7 +19,7 @@ import { IconsSection } from './sections/icons-section';
 import { ShapesSection } from './sections/shapes-section';
 import { StableDiffusionSection } from './sections/stable-diffusion-section';
 import { MyDesignsSection } from './sections/my-designs-section';
-// import { VideosSection } from './sections/video-section';
+import { VideosSection } from './sections/videos-section';
 // import { UploadSection } from './sections/upload-section';
 
 import { useProject } from './project';
@@ -44,7 +44,7 @@ DEFAULT_SECTIONS.push(QuotesSection, QrSection);
 DEFAULT_SECTIONS.unshift(MyDesignsSection);
 
 DEFAULT_SECTIONS.push(StableDiffusionSection);
-// DEFAULT_SECTIONS.push(VideosSection);
+DEFAULT_SECTIONS.push(VideosSection);
 
 const useHeight = () => {
   const [height, setHeight] = React.useState(window.innerHeight);

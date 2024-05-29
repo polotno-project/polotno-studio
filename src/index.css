@@ -1,0 +1,7 @@
+.my-masonry-grid{
+    height:100%;
+    overflow:auto
+}
+.my-masonry-grid_column{
+    float: left;
+}
