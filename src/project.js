@@ -153,10 +153,12 @@ class Project {
 
   async createNewDesign() {
     await this.clear();
-    window.project.name = 'Untitled Design';
-    window.project.id = '';
+    this.name = 'Untitled Design';
+    this.id = '';
     this.store.openSidePanel('photos');
-    await window.project.save();
+    console.log('saving');
+    await this.save();
+    console.log('saving done');
   }
 
   async signIn() {

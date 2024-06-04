@@ -122,6 +122,7 @@ export const FileMenu = observer(({ store, project }) => {
           var reader = new FileReader();
           reader.onloadend = async function () {
             var text = reader.result;
+            console.log(JSON.parse(text));
             let json;
             try {
               json = JSON.parse(text);
