@@ -1,100 +1,175 @@
-import React from 'react';
-import { InputGroup } from '@blueprintjs/core';
-import { ImagesGrid } from 'polotno/side-panel/images-grid';
-import { getVideoSize } from 'polotno/utils/video';
-import { SectionTab } from 'polotno/side-panel';
-import { useInfiniteAPI } from 'polotno/utils/use-api';
-import { t } from 'polotno/utils/l10n';
-import { Video } from '@blueprintjs/icons';
-import { selectVideo } from 'polotno/side-panel/select-video';
+import React from "react";
+import { InputGroup } from "@blueprintjs/core";
+import { SectionTab } from "polotno/side-panel";
+import { useInfiniteAPI } from "polotno/utils/use-api";
+import { t } from "polotno/utils/l10n";
+import { Video } from "@blueprintjs/icons";
+import { selectVideo } from "polotno/side-panel/select-video";
+import { VideosGallery, VideosGalleryItem } from "../components/VideosGallery";
 
 // this is a demo key just for that project
 // (!) please don't use it in your projects
 // to create your own API key please go here: https://polotno.com/login
-const key = 'nFA5H9elEytDyPyvKL7T';
+const key = "nFA5H9elEytDyPyvKL7T";
 
 // use Polotno API proxy into Pexels
 // WARNING: don't use on production! Use your own proxy and Pexels API key
-const API = 'https://api.polotno.com/api/pexels/videos';
+const API = "https://api.polotno.com/api/pexels/videos";
 
 const getPexelsVideoAPI = ({ query, page }) =>
   `${API}/${
-    query ? 'search' : 'popular'
+    query ? "search" : "popular"
   }?query=${query}&per_page=20&page=${page}&KEY=${key}`;
 
 export const VideosPanel = ({ store }) => {
   const { setQuery, loadMore, isReachingEnd, data, isLoading, error } =
     useInfiniteAPI({
-      defaultQuery: '',
+      defaultQuery: "",
       getAPI: ({ page, query }) => getPexelsVideoAPI({ page, query }),
       getSize: (lastResponse) =>
         lastResponse.total_results / lastResponse.per_page,
     });
 
+  const handleOnSelect = (evt, video) => {
+    const targetHDVideoFile = video.video_files.find(
+      ({ quality }) => quality === "hd"
+    );
+
+    if (targetHDVideoFile) {
+      const { link: src } = targetHDVideoFile;
+      const targetElement = evt.targetElement;
+      const droppedPos = { x: 0, y: 0 };
+
+      selectVideo({ src, targetElement, droppedPos, store });
+    }
+  };
+
+  const handleClickOnUserLink = (evt) => {
+    evt.preventDefault();
+    evt.stopPropagation();
+
+    if (evt.currentTarget.href) {
+      window.open(evt.currentTarget?.href, "_blank");
+    }
+  };
+
+  const placeholder = t("sidePanel.searchPlaceholder");
+
+  const videos = (data || []).reduce(
+    (acc, { videos = [] } = {}) => acc.concat(...videos),
+    []
+  );
+
   return (
-    <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        width: "100%",
+        height: "100%",
+      }}
+    >
       <InputGroup
         leftIcon="search"
-        placeholder={t('sidePanel.searchPlaceholder')}
+        placeholder={placeholder}
         onChange={(e) => {
           setQuery(e.target.value);
         }}
         type="search"
         style={{
-          marginBottom: '20px',
+          marginBottom: "20px",
         }}
       />
-      <p style={{ textAlign: 'center' }}>
-        Videos by{' '}
+      <p style={{ textAlign: "center" }}>
+        Videos by{" "}
         <a href="https://www.pexels.com/" target="_blank">
           Pexels
         </a>
       </p>
-      <ImagesGrid
-        images={data
-          ?.map((item) => item.videos)
-          .flat()
-          .filter(Boolean)}
-        getPreview={(image) => image.image}
-        onSelect={async (image, pos, element) => {
-          const src =
-            image.video_files.find((f) => f.quality === 'hd')?.link ||
-            image.video_files[0].link;
-
-          selectVideo({
-            src,
-            store,
-            droppedPos: pos,
-            targetElement: element,
-          });
+      <div
+        style={{
+          flexGrow: "grow",
+          overflow: "hidden",
+          height: "100%",
+          padding: "8px 0",
         }}
-        isLoading={isLoading}
-        error={error}
-        loadMore={!isReachingEnd && loadMore}
-        getCredit={(image) => (
-          <span>
-            Video by{' '}
-            <a href={image.user.url} target="_blank" rel="noreferrer">
-              {image.user.name}
-            </a>{' '}
-            on{' '}
-            <a
-              href="https://pexels.com/?utm_source=polotno&utm_medium=referral"
-              target="_blank"
-              rel="noreferrer noopener"
-            >
-              Pexels
-            </a>
-          </span>
+      >
+        <VideosGallery
+          videos={videos}
+          fetcher={{
+            isLoading,
+            isReachingEnd,
+            loadMore,
+          }}
+        >
+          <VideosGallery.Cols cols={2}>
+            {({ videos }) => (
+              <>
+                {videos.map((video) => (
+                  <div
+                    style={{ marginTop: "8px", position: "relative" }}
+                    key={video.id}
+                  >
+                    <VideosGalleryItem id={video.id} onSelect={handleOnSelect}>
+                      {({ hovered }) => (
+                        <>
+                          {hovered && (
+                            <div
+                              style={{
+                                position: "absolute",
+                                width: "100%",
+                                bottom: 0,
+                                background: "rgba(0,0,0,.3)",
+                                zIndex: "20",
+                              }}
+                            >
+                              <div>
+                                <p style={{ textAlign: "center" }}>
+                                  <a
+                                    href={video.user.url}
+                                    target="_blank"
+                                    onClick={handleClickOnUserLink}
+                                  >
+                                    {video.user.name}
+                                  </a>
+                                </p>
+                              </div>
+                            </div>
+                          )}
+                          {hovered && (
+                            <VideosGalleryItem.Video
+                              url={video.video_files[0].link}
+                              image={video.image}
+                            />
+                          )}
+                          {!hovered && (
+                            <VideosGalleryItem.Preview
+                              image={video.image}
+                              alt={`preview ${video.image}`}
+                            />
+                          )}
+                        </>
+                      )}
+                    </VideosGalleryItem>
+                  </div>
+                ))}
+              </>
+            )}
+          </VideosGallery.Cols>
+        </VideosGallery>
+        {isLoading && (
+          <div>
+            <span>Loadinng ...</span>
+          </div>
         )}
-      />
+      </div>
     </div>
   );
 };
 
 // define the new custom section
 export const VideosSection = {
-  name: 'videos',
+  name: "videos",
   Tab: (props) => (
     <SectionTab name="Videos" {...props}>
       <Video />
