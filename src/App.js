@@ -19,6 +19,8 @@ import { IconsSection } from './sections/icons-section';
 import { ShapesSection } from './sections/shapes-section';
 import { StableDiffusionSection } from './sections/stable-diffusion-section';
 import { MyDesignsSection } from './sections/my-designs-section';
+
+import { AIWriteMenu } from './ai-text';
 // import { VideosSection } from './sections/video-section';
 // import { UploadSection } from './sections/upload-section';
 
@@ -114,9 +116,13 @@ const App = observer(({ store }) => {
               store={store}
               components={{
                 ImageRemoveBackground,
+                TextAIWrite: AIWriteMenu,
               }}
             />
-            <Workspace store={store} components={{ Tooltip }} />
+            <Workspace
+              store={store}
+              components={{ Tooltip, TextAIWrite: AIWriteMenu }}
+            />
             <ZoomButtons store={store} />
             <PagesTimeline store={store} />
           </WorkspaceWrap>
