@@ -2,7 +2,6 @@ export const loadJSONFile = (file, store) => {
   var reader = new FileReader();
   reader.onloadend = function () {
     var text = reader.result;
-    console.log(text);
     let json;
     try {
       json = JSON.parse(text);

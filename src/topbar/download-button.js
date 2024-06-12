@@ -196,7 +196,7 @@ export const DownloadButton = observer(({ store }) => {
           {type === 'mp4' && (
             <>
               <div style={{ padding: '10px', maxWidth: '180px', opacity: 0.8 }}>
-                <strong>Bete feature.</strong>{' '}
+                <strong>Beta feature.</strong>{' '}
                 <a href="mailto:anton@polotno.com">
                   Let us know what you think!
                 </a>
