@@ -7,6 +7,7 @@ import {
   HTMLSelect,
   Slider,
   Popover,
+  ProgressBar,
 } from '@blueprintjs/core';
 import JSZip from 'jszip';
 import { downloadFile } from 'polotno/utils/download';
@@ -93,7 +94,7 @@ export const DownloadButton = observer(({ store }) => {
             <option value="svg">SVG</option>
             <option value="json">JSON</option>
             <option value="gif">GIF</option>
-            <option value="mp4">mp4 Video</option>
+            <option value="mp4">MP4 Video (Beta)</option>
           </HTMLSelect>
 
           {type !== 'json' && type !== 'html' && type !== 'svg' && (
@@ -195,17 +196,16 @@ export const DownloadButton = observer(({ store }) => {
           {type === 'mp4' && (
             <>
               <div style={{ padding: '10px', maxWidth: '180px', opacity: 0.8 }}>
-                Download your design as a video.{' '}
-                <strong>This feature is VERY experimental.</strong>
-                Please write to{' '}
-                <a href="mailto:anton@polotno.com">anton@polotno.com</a> for any
-                feedback!
+                <strong>Bete feature.</strong>{' '}
+                <a href="mailto:anton@polotno.com">
+                  Let us know what you think!
+                </a>
               </div>
               {saving && (
                 <div
                   style={{ padding: '10px', maxWidth: '180px', opacity: 0.8 }}
                 >
-                  {progressStatus}: {progress} %
+                  <ProgressBar value={Math.max(3, progress) / 100} />
                 </div>
               )}
             </>
