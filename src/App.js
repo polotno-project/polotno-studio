@@ -48,11 +48,44 @@ DEFAULT_SECTIONS.unshift(MyDesignsSection);
 DEFAULT_SECTIONS.push(StableDiffusionSection);
 // DEFAULT_SECTIONS.push(VideosSection);
 
+const isStandalone = () => {
+  return (
+    window.matchMedia('(display-mode: standalone)').matches ||
+    window.navigator.standalone
+  );
+};
+
+const getOffsetHeight = () => {
+  let safeAreaInsetBottom = 0;
+
+  if (isStandalone()) {
+    // Try to get the safe area inset using env() variables
+    const safeAreaInsetBottomString = getComputedStyle(
+      document.documentElement
+    ).getPropertyValue('env(safe-area-inset-bottom)');
+    if (safeAreaInsetBottomString) {
+      safeAreaInsetBottom = parseFloat(safeAreaInsetBottomString);
+    }
+
+    // Fallback values for specific devices if env() is not supported
+    if (!safeAreaInsetBottom) {
+      const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+      if (/iPhone|iPad|iPod/i.test(userAgent) && !window.MSStream) {
+        // This is an approximation; you might need to adjust this value based on testing
+        safeAreaInsetBottom = 20; // Example fallback value for iPhone
+      }
+    }
+  }
+
+  return window.innerHeight - safeAreaInsetBottom;
+};
+
 const useHeight = () => {
-  const [height, setHeight] = React.useState(window.innerHeight);
+  const [height, setHeight] = React.useState(getOffsetHeight());
   React.useEffect(() => {
     window.addEventListener('resize', () => {
-      setHeight(window.innerHeight);
+      setHeight(getOffsetHeight());
     });
   }, []);
   return height;
