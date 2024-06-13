@@ -2,11 +2,11 @@ import React from 'react';
 import { observer } from 'mobx-react-lite';
 import { InputGroup, Button } from '@blueprintjs/core';
 import { Tab, Tabs } from '@blueprintjs/core';
+import { Clean } from '@blueprintjs/icons';
 
 import { SectionTab } from 'polotno/side-panel';
 import { getKey } from 'polotno/utils/validate-key';
 import { getImageSize } from 'polotno/utils/image';
-import FaBrain from '@meronex/icons/fa/FaBrain';
 import { t } from 'polotno/utils/l10n';
 
 import { ImagesGrid } from 'polotno/side-panel/images-grid';
@@ -67,8 +67,10 @@ const GenerateTab = observer(({ store }) => {
         inputRef={inputRef}
       />
       <p style={{ textAlign: 'center' }}>
-        {!!credits && <div>You have ({credits}) credits.</div>}
-        {!credits && <div>You have no credits. They will renew tomorrow.</div>}
+        {!!credits && <span>You have ({credits}) credits.</span>}
+        {!credits && (
+          <span>You have no credits. They will renew tomorrow.</span>
+        )}
       </p>
       <Button
         onClick={handleGenerate}
@@ -120,116 +122,7 @@ const GenerateTab = observer(({ store }) => {
   );
 });
 
-const RANDOM_QUERIES = [
-  'Magic mad scientist, inside cosmic labratory, radiating a glowing aura stuff, loot legends, stylized, digital illustration, video game icon, artstation, ilya kuvshinov, rossdraws',
-  'cute duckling sitting in a teacup, photography, minimalistic, 8 k ',
-  'anime girl',
-  'an mascot robot, smiling, modern robot, round robot, cartoon, flying, fist up, crypto coins background',
-];
-
-const SearchTab = observer(({ store }) => {
-  // load data
-  const [query, setQuery] = React.useState('');
-  const [data, setData] = React.useState(null);
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [error, setError] = React.useState(null);
-
-  const [delayedQuery, setDelayedQuery] = React.useState(
-    RANDOM_QUERIES[(RANDOM_QUERIES.length * Math.random()) | 0]
-  );
-
-  const requestTimeout = React.useRef();
-  React.useEffect(() => {
-    requestTimeout.current = setTimeout(() => {
-      setDelayedQuery(query);
-    }, 1000);
-    return () => {
-      clearTimeout(requestTimeout.current);
-    };
-  }, [query]);
-
-  React.useEffect(() => {
-    if (!delayedQuery) {
-      return;
-    }
-    async function load() {
-      setIsLoading(true);
-      setError(null);
-      try {
-        const req = await fetch(
-          `https://lexica.art/api/v1/search?q=${delayedQuery}`
-        );
-        const data = await req.json();
-        setData(data.images);
-      } catch (e) {
-        setError(e);
-      }
-      setIsLoading(false);
-    }
-    load();
-  }, [delayedQuery]);
-
-  return (
-    <>
-      <InputGroup
-        leftIcon="search"
-        placeholder={t('sidePanel.searchPlaceholder')}
-        onChange={(e) => {
-          setQuery(e.target.value);
-        }}
-        type="search"
-        style={{
-          marginBottom: '20px',
-        }}
-      />
-      <p>
-        Search AI images with{' '}
-        <a href="https://lexica.art/" target="_blank">
-          https://lexica.art/
-        </a>
-      </p>
-      <ImagesGrid
-        shadowEnabled={false}
-        images={data}
-        getPreview={(item) => item.srcSmall}
-        isLoading={isLoading}
-        error={error}
-        onSelect={async (item, pos, element) => {
-          if (element && element.type === 'svg' && element.contentEditable) {
-            element.set({ maskSrc: item.src });
-            return;
-          }
-
-          const { width, height } = await getImageSize(item.srcSmall);
-
-          if (element && element.type === 'image' && element.contentEditable) {
-            const crop = getCrop(element, {
-              width,
-              height,
-            });
-            element.set({ src: item.src, ...crop });
-            return;
-          }
-
-          const x = (pos?.x || store.width / 2) - width / 2;
-          const y = (pos?.y || store.height / 2) - height / 2;
-          store.activePage?.addElement({
-            type: 'image',
-            src: item.src,
-            width,
-            height,
-            x,
-            y,
-          });
-        }}
-        rowsNumber={2}
-      />
-    </>
-  );
-});
-
 const StableDiffusionPanel = observer(({ store }) => {
-  const [selectedTabId, setSelectedTabId] = React.useState('search');
   return (
     <div
       style={{
@@ -238,27 +131,7 @@ const StableDiffusionPanel = observer(({ store }) => {
         flexDirection: 'column',
       }}
     >
-      <Tabs
-        id="TabsExample"
-        defaultSelectedTabId="search"
-        onChange={(tabId) => {
-          setSelectedTabId(tabId);
-        }}
-      >
-        <Tab id="search" title="Search" />
-        <Tab id="generate" title="Generate" />
-      </Tabs>
-      <div
-        style={{
-          height: 'calc(100% - 20px)',
-          display: 'flex',
-          flexDirection: 'column',
-          paddingTop: '20px',
-        }}
-      >
-        {selectedTabId === 'search' && <SearchTab store={store} />}
-        {selectedTabId === 'generate' && <GenerateTab store={store} />}
-      </div>
+      <GenerateTab store={store} />
     </div>
   );
 });
@@ -268,7 +141,7 @@ export const StableDiffusionSection = {
   name: 'stable-diffusion',
   Tab: (props) => (
     <SectionTab name="AI Img" {...props}>
-      <FaBrain />
+      <Clean />
     </SectionTab>
   ),
   // we need observer to update component automatically on any store changes
