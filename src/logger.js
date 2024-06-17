@@ -18,7 +18,7 @@ Sentry.init({
   ],
   shouldSendCallback: function (data) {
     // only send 10% of errors
-    var sampleRate = 10;
+    var sampleRate = 100;
     return Math.random() * 100 <= sampleRate;
   },
   ignoreErrors: [
