@@ -57,6 +57,11 @@
     "offsetX": "Offset X",
     "offsetY": "Offset Y",
     "color": "Color",
+    "rotate": "Rotate",
+    "none": "None",
+    "bounce": "Bounce",
+    "blink": "Blink",
+    "clip": "Apply mask",
 
     "selectable": "Selectable",
     "draggable": "Draggable",
@@ -77,7 +82,11 @@
     "spaceEvenly": "Space evenly",
     "horizontalDistribution": "Horizontally",
     "verticalDistribution": "Vertically",
-    "strokeWidth": "Stroke Width"
+    "strokeWidth": "Stroke Width",
+    "colorPicker": {
+      "solid": "Solid",
+      "linear": "Linear"
+    }
   },
   "workspace": {
     "noPages": "There are no pages yet...",
@@ -104,6 +113,9 @@
     "uploadFont": "Upload font",
     "myFonts": "My fonts",
     "photos": "Photos",
+    "videos": "Videos",
+    "animations": "Animations",
+    "effects": "Effects",
     "elements": "Elements",
     "shapes": "Shapes",
     "lines": "Lines",

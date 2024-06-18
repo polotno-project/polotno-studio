@@ -36,6 +36,9 @@ import ptBr from './translations/pt-br';
 
 import Topbar from './topbar/topbar';
 
+// load default translations
+setTranslations(en);
+
 // replace elements section with just shapes
 DEFAULT_SECTIONS.splice(3, 1, ShapesSection);
 // add icons
@@ -97,15 +100,15 @@ const App = observer(({ store }) => {
 
   React.useEffect(() => {
     if (project.language.startsWith('fr')) {
-      setTranslations(fr);
+      setTranslations(fr, { validate: true });
     } else if (project.language.startsWith('id')) {
-      setTranslations(id);
+      setTranslations(id, { validate: true });
     } else if (project.language.startsWith('ru')) {
-      setTranslations(ru);
+      setTranslations(ru, { validate: true });
     } else if (project.language.startsWith('pt')) {
-      setTranslations(ptBr);
+      setTranslations(ptBr, { validate: true });
     } else {
-      setTranslations(en);
+      setTranslations(en, { validate: true });
     }
   }, [project.language]);
 
