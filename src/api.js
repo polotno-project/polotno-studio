@@ -1,48 +1,74 @@
 import { nanoid } from 'nanoid';
 import localforage from 'localforage';
-import { dataURLtoBlob } from './blob';
 
 const isSignedIn = () => {
   return window.puter?.auth?.isSignedIn();
 };
 
-async function writeFile(fileName, data) {
+const withTimeout =
+  (fn) =>
+  async (...args) => {
+    const startTime = Date.now();
+    const timeoutId = setTimeout(async () => {
+      // Log timeout error with Sentry
+      const error = new Error('API call timeout');
+      window.Sentry?.captureException(error, {
+        extra: {
+          function: fn.name,
+          arguments: args,
+          elapsedTime: Date.now() - startTime,
+          user: await window.puter?.auth?.getUser(),
+        },
+      });
+    }, 5000);
+
+    try {
+      const result = await fn(...args);
+      clearTimeout(timeoutId);
+      return result;
+    } catch (error) {
+      clearTimeout(timeoutId);
+      throw error;
+    }
+  };
+
+const writeFile = withTimeout(async function writeFile(fileName, data) {
   if (isSignedIn()) {
     await window.puter.fs.write(fileName, data, { createMissingParents: true });
   } else {
     await localforage.setItem(fileName, data);
   }
-}
+});
 
-async function readFile(fileName) {
+const readFile = withTimeout(async function readFile(fileName) {
   if (isSignedIn()) {
     return await window.puter.fs.read(fileName);
   }
   return await localforage.getItem(fileName);
-}
+});
 
-async function deleteFile(fileName) {
+const deleteFile = withTimeout(async function deleteFile(fileName) {
   if (isSignedIn()) {
     return await window.puter.fs.delete(fileName);
   }
   return await localforage.removeItem(fileName);
-}
+});
 
-async function readKv(key) {
+const readKv = withTimeout(async function readKv(key) {
   if (isSignedIn()) {
     return await window.puter.kv.get(key);
   } else {
     return await localforage.getItem(key);
   }
-}
+});
 
-async function writeKv(key, value) {
+const writeKv = withTimeout(async function writeKv(key, value) {
   if (isSignedIn()) {
     return await window.puter.kv.set(key, value);
   } else {
     return await localforage.setItem(key, value);
   }
-}
+});
 
 export async function backupFromLocalToCloud() {
   const localDesigns = (await localforage.getItem('designs-list')) || [];
