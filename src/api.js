@@ -20,7 +20,7 @@ const withTimeout =
           user: await window.puter?.auth?.getUser(),
         },
       });
-    }, 5000);
+    }, 15000);
 
     try {
       const result = await fn(...args);
