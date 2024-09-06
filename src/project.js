@@ -116,10 +116,13 @@ class Project {
     this.status = 'saving';
     const storeJSON = this.store.toJSON();
     const maxWidth = 200;
-    const canvas = await this.store._toCanvas({
-      pixelRatio: maxWidth / this.store.activePage?.computedWidth,
-      pageId: this.store.activePage?.id,
-    });
+    const canvas = this.store.pages.length
+      ? await this.store._toCanvas({
+          pixelRatio: maxWidth / this.store.activePage?.computedWidth,
+          pageId: this.store.activePage?.id,
+        })
+      : // if there is no page, create a dummy canvas
+        document.createElement('canvas');
     const blob = await new Promise((resolve) => {
       canvas.toBlob(resolve, 'image/jpeg', 0.9);
     });
