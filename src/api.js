@@ -6,7 +6,7 @@ const isSignedIn = () => {
 };
 
 const withTimeout =
-  (fn) =>
+  (fn, name) =>
   async (...args) => {
     const startTime = Date.now();
     const timeoutId = setTimeout(async () => {
@@ -14,7 +14,7 @@ const withTimeout =
       const error = new Error('API call timeout');
       window.Sentry?.captureException(error, {
         extra: {
-          function: fn.name,
+          function: name,
           arguments: args,
           elapsedTime: Date.now() - startTime,
           user: await window.puter?.auth?.getUser(),
@@ -38,21 +38,21 @@ const writeFile = withTimeout(async function writeFile(fileName, data) {
   } else {
     await localforage.setItem(fileName, data);
   }
-});
+}, 'writeFile');
 
 const readFile = withTimeout(async function readFile(fileName) {
   if (isSignedIn()) {
     return await window.puter.fs.read(fileName);
   }
   return await localforage.getItem(fileName);
-});
+}, 'readFile');
 
 const deleteFile = withTimeout(async function deleteFile(fileName) {
   if (isSignedIn()) {
     return await window.puter.fs.delete(fileName);
   }
   return await localforage.removeItem(fileName);
-});
+}, 'deleteFile');
 
 const readKv = withTimeout(async function readKv(key) {
   if (isSignedIn()) {
@@ -60,7 +60,7 @@ const readKv = withTimeout(async function readKv(key) {
   } else {
     return await localforage.getItem(key);
   }
-});
+}, 'readKv');
 
 const writeKv = withTimeout(async function writeKv(key, value) {
   if (isSignedIn()) {
@@ -68,7 +68,7 @@ const writeKv = withTimeout(async function writeKv(key, value) {
   } else {
     return await localforage.setItem(key, value);
   }
-});
+}, 'writeKv');
 
 export async function backupFromLocalToCloud() {
   const localDesigns = (await localforage.getItem('designs-list')) || [];
