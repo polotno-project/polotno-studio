@@ -22,6 +22,7 @@ const withTimeout =
           elapsedTime: Date.now() - startTime,
           user: await window.puter?.auth?.getUser(),
           version,
+          size: JSON.stringify(args).length,
         },
       });
     }, 15000);
