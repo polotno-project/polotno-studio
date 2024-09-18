@@ -1,12 +1,11 @@
 import React from 'react';
 import { InputGroup } from '@blueprintjs/core';
-import { ImagesGrid } from 'polotno/side-panel/images-grid';
-import { getVideoSize } from 'polotno/utils/video';
 import { SectionTab } from 'polotno/side-panel';
 import { useInfiniteAPI } from 'polotno/utils/use-api';
 import { t } from 'polotno/utils/l10n';
 import { Video } from '@blueprintjs/icons';
 import { selectVideo } from 'polotno/side-panel/select-video';
+import { VideoGrid } from './video-grid/video-grid';
 
 // this is a demo key just for that project
 // (!) please don't use it in your projects
@@ -50,44 +49,43 @@ export const VideosPanel = ({ store }) => {
           Pexels
         </a>
       </p>
-      <ImagesGrid
-        images={data
-          ?.map((item) => item.videos)
-          .flat()
-          .filter(Boolean)}
-        getPreview={(image) => image.image}
-        onSelect={async (image, pos, element) => {
-          const src =
-            image.video_files.find((f) => f.quality === 'hd')?.link ||
-            image.video_files[0].link;
+        <VideoGrid
+            items={data
+                ?.map((item) => item.videos)
+                .flat()
+                .filter(Boolean)}
+            isLoading={isLoading}
+            error={error}
+            loadMore={!isReachingEnd && loadMore}
+            onSelect={async (image, pos, element) => {
+                const src =
+                    image.video_files.find((f) => f.quality === 'hd')?.link ||
+                    image.video_files[0].link;
 
-          selectVideo({
-            src,
-            store,
-            droppedPos: pos,
-            targetElement: element,
-          });
-        }}
-        isLoading={isLoading}
-        error={error}
-        loadMore={!isReachingEnd && loadMore}
-        getCredit={(image) => (
-          <span>
+                selectVideo({
+                    src,
+                    store,
+                    droppedPos: pos,
+                    targetElement: element,
+                });
+            }}
+            getCredit={(image) => (
+                <span>
             Video by{' '}
-            <a href={image.user.url} target="_blank" rel="noreferrer">
+                    <a href={image.user.url} target="_blank" rel="noreferrer">
               {image.user.name}
             </a>{' '}
-            on{' '}
-            <a
-              href="https://pexels.com/?utm_source=polotno&utm_medium=referral"
-              target="_blank"
-              rel="noreferrer noopener"
-            >
+                    on{' '}
+                    <a
+                        href="https://pexels.com/?utm_source=polotno&utm_medium=referral"
+                        target="_blank"
+                        rel="noreferrer noopener"
+                    >
               Pexels
             </a>
           </span>
-        )}
-      />
+            )}
+        />
     </div>
   );
 };
