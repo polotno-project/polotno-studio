@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom/client';
 
 import { createStore } from 'polotno/model/store';
 import { unstable_setAnimationsEnabled } from 'polotno/config';
-import { Auth0Provider } from '@auth0/auth0-react';
 import { createProject, ProjectContext } from './project';
 
 import './index.css';
@@ -80,9 +79,7 @@ root.render(
     }}
   >
     <ProjectContext.Provider value={project}>
-      <Auth0Provider domain={AUTH_DOMAIN} clientId={ID} redirectUri={REDIRECT}>
-        <App store={store} />
-      </Auth0Provider>
+      <App store={store} />
     </ProjectContext.Provider>
   </ErrorBoundary>
 );

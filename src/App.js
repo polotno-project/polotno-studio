@@ -7,7 +7,6 @@ import { Toolbar } from 'polotno/toolbar/toolbar';
 import { ZoomButtons } from 'polotno/toolbar/zoom-buttons';
 import { SidePanel, DEFAULT_SECTIONS } from 'polotno/side-panel';
 import { Workspace } from 'polotno/canvas/workspace';
-import { Tooltip } from 'polotno/canvas/tooltip';
 import { PagesTimeline } from 'polotno/pages-timeline';
 import { setTranslations } from 'polotno/config';
 
@@ -20,13 +19,7 @@ import { ShapesSection } from './sections/shapes-section';
 import { StableDiffusionSection } from './sections/stable-diffusion-section';
 import { MyDesignsSection } from './sections/my-designs-section';
 
-import { AIWriteMenu } from './ai-text';
-// import { VideosSection } from './sections/video-section';
-// import { UploadSection } from './sections/upload-section';
-
 import { useProject } from './project';
-
-import { ImageRemoveBackground } from './background-remover';
 
 import fr from './translations/fr';
 import en from './translations/en';
@@ -148,17 +141,8 @@ const App = observer(({ store }) => {
             <SidePanel store={store} sections={DEFAULT_SECTIONS} />
           </SidePanelWrap>
           <WorkspaceWrap>
-            <Toolbar
-              store={store}
-              components={{
-                ImageRemoveBackground,
-                TextAIWrite: AIWriteMenu,
-              }}
-            />
-            <Workspace
-              store={store}
-              components={{ Tooltip, TextAIWrite: AIWriteMenu }}
-            />
+            <Toolbar store={store} />
+            <Workspace store={store} />
             <ZoomButtons store={store} />
             <PagesTimeline store={store} />
           </WorkspaceWrap>

@@ -11,7 +11,7 @@ Sentry.init({
   replaysOnErrorSampleRate: 1.0,
 
   integrations: [
-    new Sentry.Replay({
+    Sentry.replayIntegration({
       maskAllText: false,
       blockAllMedia: false,
     }),
@@ -84,25 +84,25 @@ function base64ToUint8Array(base64DataUrl) {
   return buffer;
 }
 
-Sentry.addGlobalEventProcessor(function (event, hint) {
-  if (window.store) {
-    const data = JSON.stringify(window.store.toJSON());
-    if (data.length < 30000) {
-      hint.attachments = [
-        { filename: 'store.json', data: JSON.stringify(window.store.toJSON()) },
-      ];
-    }
-    if (window.__failedImage) {
-      hint.attachments = [
-        {
-          filename: 'failedImage.png',
-          data: base64ToUint8Array(window.__failedImage),
-          contentType: 'image/png',
-        },
-      ];
-    }
-  }
-  return event;
-});
+// Sentry.addGlobalEventProcessor(function (event, hint) {
+//   if (window.store) {
+//     const data = JSON.stringify(window.store.toJSON());
+//     if (data.length < 30000) {
+//       hint.attachments = [
+//         { filename: 'store.json', data: JSON.stringify(window.store.toJSON()) },
+//       ];
+//     }
+//     if (window.__failedImage) {
+//       hint.attachments = [
+//         {
+//           filename: 'failedImage.png',
+//           data: base64ToUint8Array(window.__failedImage),
+//           contentType: 'image/png',
+//         },
+//       ];
+//     }
+//   }
+//   return event;
+// });
 
 window.Sentry = Sentry;

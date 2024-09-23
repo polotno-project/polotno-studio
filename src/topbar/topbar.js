@@ -116,16 +116,6 @@ export default observer(({ store }) => {
 
           <AnchorButton
             minimal
-            href="https://discord.gg/W2VeKgsr9J"
-            target="_blank"
-            icon={
-              <FaDiscord className="bp5-icon" style={{ fontSize: '20px' }} />
-            }
-          >
-            Join Chat
-          </AnchorButton>
-          <AnchorButton
-            minimal
             href="https://github.com/lavrton/polotno-studio"
             target="_blank"
             icon={
