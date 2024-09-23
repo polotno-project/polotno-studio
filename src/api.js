@@ -12,19 +12,30 @@ const withTimeout =
     const timeoutId = setTimeout(async () => {
       // Log timeout error with Sentry
       const error = new Error('API call timeout');
-      const req = await fetch('https://api.puter.com/version');
-      const version = await req.json();
+      try {
+        const req = await fetch('https://api.puter.com/version');
+        const version = await req.json();
 
-      window.Sentry?.captureException(error, {
-        extra: {
-          function: name,
-          arguments: args,
-          elapsedTime: Date.now() - startTime,
-          user: await window.puter?.auth?.getUser(),
-          version,
-          size: JSON.stringify(args).length,
-        },
-      });
+        window.Sentry?.captureException(error, {
+          extra: {
+            function: name,
+            arguments: args,
+            elapsedTime: Date.now() - startTime,
+            user: await window.puter?.auth?.getUser(),
+            version,
+            size: JSON.stringify(args).length,
+          },
+        });
+      } catch (e) {
+        window.Sentry?.captureException(
+          new Error('Failed to log error to Sentry'),
+          {
+            extra: {
+              originalError: e.message,
+            },
+          }
+        );
+      }
     }, 15000);
 
     try {
