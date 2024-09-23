@@ -122,12 +122,18 @@ export const FileMenu = observer(({ store, project }) => {
           var reader = new FileReader();
           reader.onloadend = async function () {
             var text = reader.result;
-            console.log(JSON.parse(text));
             let json;
             try {
               json = JSON.parse(text);
             } catch (e) {
               alert('Can not load the project.');
+            }
+
+            const errors = store.validate(json);
+            if (errors.length > 0) {
+              alert('Can not load the project. See console for details.');
+              console.error(errors);
+              return;
             }
 
             if (json) {
