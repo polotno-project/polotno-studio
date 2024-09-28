@@ -54,6 +54,7 @@ export const UploadPanel = observer(({ store }) => {
   const [isUploading, setUploading] = React.useState(false);
   const [isLoading, setLoading] = React.useState(false);
   const project = useProject();
+  const enableAddElement = React.useRef(true);
 
   const load = async () => {
     setLoading(true);
@@ -105,6 +106,7 @@ export const UploadPanel = observer(({ store }) => {
             icon="upload"
             style={{ width: '100%' }}
             onClick={() => {
+              enableAddElement.current = false;
               document.querySelector('#input-file')?.click();
             }}
             loading={isUploading}
@@ -170,15 +172,17 @@ export const UploadPanel = observer(({ store }) => {
 
           const x = (pos?.x || store.width / 2) - width / 2;
           const y = (pos?.y || store.height / 2) - height / 2;
-
-          store.activePage?.addElement({
-            type,
-            src: image,
-            x,
-            y,
-            width,
-            height,
-          });
+          if(enableAddElement.current === true) {
+            store.activePage?.addElement({
+              type,
+              src: image,
+              x,
+              y,
+              width,
+              height,
+            });
+          }
+          enableAddElement.current = true;
         }}
       />
     </div>
