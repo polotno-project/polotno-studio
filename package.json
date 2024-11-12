@@ -6,15 +6,15 @@
   "private": true,
   "dependencies": {
     "@meronex/icons": "^4.0.0",
-    "@sentry/browser": "^8.31.0",
+    "@sentry/browser": "^8.38.0",
     "@sentry/tracing": "^7.114.0",
     "jszip": "^3.10.1",
     "localforage": "^1.10.0",
-    "polotno": "^2.14.8",
+    "polotno": "^2.14.9",
     "qrcode": "^1.5.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-error-boundary": "^4.0.13",
+    "react-error-boundary": "^4.1.2",
     "react-scripts": "5.0.1"
   },
   "homepage": ".",
