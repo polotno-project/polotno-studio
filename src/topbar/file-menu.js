@@ -54,7 +54,28 @@ export const FileMenu = observer(({ store, project }) => {
                 downloadFile(url, 'polotno.json');
               }}
             />
+            <MenuItem
+              // icon={<FaFileExport />}
+              icon="floppy-disk"
+              text="Save as Name"
+              onClick={() => {
+                const json = store.toJSON();
 
+                // Prompt the user for a custom filename
+                const customFileName = prompt('Enter a File Name');
+
+                if (customFileName) {
+                  const filename = `${customFileName}.json`;
+                  const url =
+                    'data:text/json;base64,' +
+                    window.btoa(
+                      unescape(encodeURIComponent(JSON.stringify(json)))
+                    );
+
+                  downloadFile(url, filename);
+                }
+              }}
+            />
             <MenuDivider />
             <MenuItem text="Language" icon="translate">
               <MenuItem
