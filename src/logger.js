@@ -1,7 +1,7 @@
 import * as Sentry from '@sentry/browser';
 
 Sentry.init({
-  dsn: process.env.REACT_APP_SENTRY_DNS,
+  dsn: import.meta.env.REACT_APP_SENTRY_DNS,
 
   // This sets the sample rate to be 10%. You may want this to be 100% while
   // in development and sample at a lower rate in production
