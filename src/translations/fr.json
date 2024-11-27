@@ -78,7 +78,35 @@
     "spaceEvenly": "Espac. égal",
     "horizontalDistribution": "Horiz.",
     "verticalDistribution": "Vertic.",
-    "strokeWidth": "Larg. trait"
+    "strokeWidth": "Larg. trait",
+    "rotate": "Rotation",
+    "none": "Aucun",
+    "bounce": "Rebond",
+    "blink": "Clignotement",
+    "clip": "Appliquer masque",
+    "colorPicker": {
+      "solid": "Uni",
+      "linear": "Dégradé"
+    },
+    "aiText": {
+      "aiWrite": "Écriture IA",
+      "rewrite": "Réécrire",
+      "shorten": "Raccourcir",
+      "continue": "Continuer l'écriture",
+      "proofread": "Relecture",
+      "tones": "Tons",
+      "friendly": "Amical",
+      "professional": "Professionnel",
+      "humorous": "Humoristique",
+      "formal": "Formel",
+      "customPrompt": "Prompt personnalisé",
+      "cancel": "Annuler",
+      "generate": "Générer",
+      "back": "Retour",
+      "tryAgain": "Réessayer",
+      "insert": "Insérer",
+      "promptPlaceholder": "Décrivez ce que vous voulez générer"
+    }
   },
   "workspace": {
     "noPages": "Pas de pages...",
@@ -136,6 +164,16 @@
     "createSubHeader": "Créer sous-en-tête",
     "bodyText": "Corps texte",
     "createBody": "Créer texte",
-    "icons": "Icônes"
+    "icons": "Icônes",
+    "videos": "Vidéos",
+    "animations": "Animations",
+    "clipImage": "Masquer l'image"
+  },
+  "pagesTimeline": {
+    "pages": "Pages",
+    "removePage": "Supprimer la page",
+    "addPage": "Ajouter une page",
+    "duplicatePage": "Dupliquer la page",
+    "removeAudio": "Supprimer l'audio"
   }
 }

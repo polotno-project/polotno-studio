@@ -26,6 +26,7 @@ import en from './translations/en';
 import id from './translations/id';
 import ru from './translations/ru';
 import ptBr from './translations/pt-br';
+import zhCh from './translations/zh-ch';
 
 import Topbar from './topbar/topbar';
 
@@ -100,6 +101,8 @@ const App = observer(({ store }) => {
       setTranslations(ru, { validate: true });
     } else if (project.language.startsWith('pt')) {
       setTranslations(ptBr, { validate: true });
+    } else if (project.language.startsWith('zh')) {
+      setTranslations(zhCh, { validate: true });
     } else {
       setTranslations(en, { validate: true });
     }

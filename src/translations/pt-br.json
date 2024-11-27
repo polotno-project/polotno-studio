@@ -78,7 +78,35 @@
     "spaceEvenly": "Espaçar uniformemente",
     "horizontalDistribution": "Horizontalmente",
     "verticalDistribution": "Verticalmente",
-    "strokeWidth": "Largura do traço"
+    "strokeWidth": "Largura do traço",
+    "rotate": "Rotacionar",
+    "none": "Nenhum",
+    "bounce": "Saltar",
+    "blink": "Piscar",
+    "clip": "Aplicar máscara",
+    "colorPicker": {
+      "solid": "Sólido",
+      "linear": "Linear"
+    },
+    "aiText": {
+      "aiWrite": "Escrita IA",
+      "rewrite": "Reescrever",
+      "shorten": "Encurtar",
+      "continue": "Continuar escrevendo",
+      "proofread": "Revisar",
+      "tones": "Tons",
+      "friendly": "Amigável",
+      "professional": "Profissional",
+      "humorous": "Humorístico",
+      "formal": "Formal",
+      "customPrompt": "Prompt personalizado",
+      "cancel": "Cancelar",
+      "generate": "Gerar",
+      "back": "Voltar",
+      "tryAgain": "Tentar novamente",
+      "insert": "Inserir",
+      "promptPlaceholder": "Descreva o que você quer gerar"
+    }
   },
   "workspace": {
     "noPages": "Ainda não há páginas...",
@@ -136,6 +164,16 @@
     "createSubHeader": "Criar subcabeçalho",
     "bodyText": "Texto do corpo",
     "createBody": "Criar texto do corpo",
-    "icons": "Ícones"
+    "icons": "Ícones",
+    "videos": "Vídeos",
+    "animations": "Animações",
+    "clipImage": "Mascarar imagem"
+  },
+  "pagesTimeline": {
+    "pages": "Páginas",
+    "removePage": "Remover página",
+    "addPage": "Adicionar página",
+    "duplicatePage": "Duplicar página",
+    "removeAudio": "Remover áudio"
   }
 }

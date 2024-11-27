@@ -78,7 +78,35 @@
     "spaceEvenly": "Sebar Rata",
     "horizontalDistribution": "Secara Horizontal",
     "verticalDistribution": "Secara Vertikal",
-    "strokeWidth": "Lebar Garis"
+    "strokeWidth": "Lebar Garis",
+    "rotate": "Putar",
+    "none": "Tidak Ada",
+    "bounce": "Memantul",
+    "blink": "Berkedip",
+    "clip": "Terapkan Masker",
+    "colorPicker": {
+      "solid": "Solid",
+      "linear": "Gradien"
+    },
+    "aiText": {
+      "aiWrite": "Tulis AI",
+      "rewrite": "Tulis Ulang",
+      "shorten": "Persingkat",
+      "continue": "Lanjutkan Menulis",
+      "proofread": "Periksa",
+      "tones": "Nada",
+      "friendly": "Ramah",
+      "professional": "Profesional",
+      "humorous": "Humoris",
+      "formal": "Formal",
+      "customPrompt": "Prompt Kustom",
+      "cancel": "Batal",
+      "generate": "Hasilkan",
+      "back": "Kembali",
+      "tryAgain": "Coba Lagi",
+      "insert": "Masukkan",
+      "promptPlaceholder": "Jelaskan apa yang ingin Anda hasilkan"
+    }
   },
   "workspace": {
     "noPages": "Belum ada halaman...",
@@ -136,6 +164,16 @@
     "createSubHeader": "Buat Sub Header",
     "bodyText": "Teks Tubuh",
     "createBody": "Buat Teks Tubuh",
-    "icons": "Ikon"
+    "icons": "Ikon",
+    "videos": "Video",
+    "animations": "Animasi",
+    "clipImage": "Masker Gambar"
+  },
+  "pagesTimeline": {
+    "pages": "Halaman",
+    "removePage": "Hapus Halaman",
+    "addPage": "Tambah Halaman",
+    "duplicatePage": "Duplikasi Halaman",
+    "removeAudio": "Hapus Audio"
   }
 }

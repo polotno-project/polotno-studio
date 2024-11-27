@@ -78,7 +78,35 @@
     "spaceEvenly": "Равномерно распределить",
     "horizontalDistribution": "Горизонтально",
     "verticalDistribution": "Вертикально",
-    "strokeWidth": "Ширина штриха"
+    "strokeWidth": "Ширина штриха",
+    "rotate": "Поворот",
+    "none": "Нет",
+    "bounce": "Отскок",
+    "blink": "Мигание",
+    "clip": "Применить маску",
+    "colorPicker": {
+      "solid": "Сплошной",
+      "linear": "Градиент"
+    },
+    "aiText": {
+      "aiWrite": "ИИ-текст",
+      "rewrite": "Переписать",
+      "shorten": "Сократить",
+      "continue": "Продолжить писать",
+      "proofread": "Проверить",
+      "tones": "Тональности",
+      "friendly": "Дружелюбный",
+      "professional": "Профессиональный",
+      "humorous": "Юмористический",
+      "formal": "Формальный",
+      "customPrompt": "Свой запрос",
+      "cancel": "Отмена",
+      "generate": "Создать",
+      "back": "Назад",
+      "tryAgain": "Попробовать снова",
+      "insert": "Вставить",
+      "promptPlaceholder": "Опишите, что вы хотите сгенерировать"
+    }
   },
   "workspace": {
     "noPages": "Страницы отсутствуют...",
@@ -137,6 +165,16 @@
     "bodyText": "Текст",
     "createBody": "Создать текст",
 
-    "icons": "Иконки"
+    "icons": "Иконки",
+    "videos": "Видео",
+    "animations": "Анимации",
+    "clipImage": "Маска изображения"
+  },
+  "pagesTimeline": {
+    "pages": "Страницы",
+    "removePage": "Удалить страницу",
+    "addPage": "Добавить страницу",
+    "duplicatePage": "Дублировать страницу",
+    "removeAudio": "Удалить аудио"
   }
 }

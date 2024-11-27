@@ -86,6 +86,25 @@
     "colorPicker": {
       "solid": "Solid",
       "linear": "Linear"
+    },
+    "aiText": {
+      "aiWrite": "AI write",
+      "rewrite": "Rewrite",
+      "shorten": "Shorten",
+      "continue": "Continue writing",
+      "proofread": "Proofread",
+      "tones": "Tones",
+      "friendly": "Friendly",
+      "professional": "Professional",
+      "humorous": "Humorous",
+      "formal": "Formal",
+      "customPrompt": "Custom prompt",
+      "cancel": "Cancel",
+      "generate": "Generate",
+      "back": "Back",
+      "tryAgain": "Try Again",
+      "insert": "Insert",
+      "promptPlaceholder": "Describe what you want to generate"
     }
   },
   "workspace": {
@@ -147,6 +166,14 @@
     "createSubHeader": "Create sub header",
     "bodyText": "Body text",
     "createBody": "Create body text",
-    "icons": "Icons"
+    "icons": "Icons",
+    "clipImage": "Mask image"
+  },
+  "pagesTimeline": {
+    "pages": "Pages",
+    "removePage": "Remove page",
+    "addPage": "Add page",
+    "duplicatePage": "Duplicate page",
+    "removeAudio": "Remove audio"
   }
 }

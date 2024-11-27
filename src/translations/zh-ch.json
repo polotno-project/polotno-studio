@@ -70,9 +70,9 @@
     "contentEditable": "内容可编辑",
     "styleEditable": "样式可编辑",
     "alwaysOnTop": "永远置顶",
-    "showInExport": "Show in export",
-    "ungroupElements": "Ungroup",
-    "groupElements": "Group",
+    "showInExport": "在导出时显示",
+    "ungroupElements": "取消组合",
+    "groupElements": "组合",
 
     "lineSize": "线宽",
     "fade": "渐隐",
@@ -84,8 +84,27 @@
     "verticalDistribution": "垂直分布",
     "strokeWidth": "描边宽度",
     "colorPicker": {
-      "solid": "Solid",
-      "linear": "Linear"
+      "solid": "纯色",
+      "linear": "渐变"
+    },
+    "aiText": {
+      "aiWrite": "AI写作",
+      "rewrite": "重写",
+      "shorten": "缩短",
+      "continue": "继续写作",
+      "proofread": "校对",
+      "tones": "语气",
+      "friendly": "友好",
+      "professional": "专业",
+      "humorous": "幽默",
+      "formal": "正式",
+      "customPrompt": "自定义提示",
+      "cancel": "取消",
+      "generate": "生成",
+      "back": "返回",
+      "tryAgain": "重试",
+      "insert": "插入",
+      "promptPlaceholder": "描述您想要生成的内容"
     }
   },
   "workspace": {
@@ -147,6 +166,14 @@
     "createSubHeader": "创建副标题",
     "bodyText": "正文",
     "createBody": "创建正文",
-    "icons": "图标"
+    "icons": "图标",
+    "clipImage": "图片蒙版"
+  },
+  "pagesTimeline": {
+    "pages": "页面",
+    "removePage": "删除页面",
+    "addPage": "添加页面",
+    "duplicatePage": "复制页面",
+    "removeAudio": "删除音频"
   }
 }
