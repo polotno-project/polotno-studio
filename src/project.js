@@ -120,6 +120,9 @@ class Project {
       ? await this.store._toCanvas({
           pixelRatio: maxWidth / this.store.activePage?.computedWidth,
           pageId: this.store.activePage?.id,
+          // two options for faster preview
+          quickMode: true,
+          _skipTimeout: true,
         })
       : // if there is no page, create a dummy canvas
         document.createElement('canvas');
