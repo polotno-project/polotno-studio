@@ -23,8 +23,12 @@ const DesignCard = observer(({ design, store, onDelete }) => {
 
   React.useEffect(() => {
     const load = async () => {
-      const url = await api.getPreview({ id: design.id });
-      setPreviewURL(url);
+      try {
+        const url = await api.getPreview({ id: design.id });
+        setPreviewURL(url);
+      } catch (e) {
+        console.error(e);
+      }
     };
     load();
   }, []);
@@ -43,7 +47,7 @@ const DesignCard = observer(({ design, store, onDelete }) => {
         handleSelect();
       }}
     >
-      <img src={previewURL} style={{ width: '100%' }} />
+      <img src={previewURL} style={{ width: '100%', minHeight: '100px' }} />
       <div
         style={{
           overflow: 'hidden',

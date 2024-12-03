@@ -28,7 +28,7 @@ const withTimeout =
         });
       } catch (e) {
         window.Sentry?.captureException(
-          new Error('Failed to log error to Sentry: ' + e.message),
+          new Error('Failed to log error to Sentry: ' + e.message)
         );
       }
     }, 15000);
