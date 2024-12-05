@@ -1,5 +1,5 @@
 import { nanoid } from 'nanoid';
-import localforage from 'localforage';
+import { storage } from './storage';
 
 const isSignedIn = () => {
   return window.puter?.auth?.isSignedIn();
@@ -47,7 +47,7 @@ const writeFile = withTimeout(async function writeFile(fileName, data) {
   if (isSignedIn()) {
     await window.puter.fs.write(fileName, data, { createMissingParents: true });
   } else {
-    await localforage.setItem(fileName, data);
+    await storage.setItem(fileName, data);
   }
 }, 'writeFile');
 
@@ -55,21 +55,21 @@ const readFile = withTimeout(async function readFile(fileName) {
   if (isSignedIn()) {
     return await window.puter.fs.read(fileName);
   }
-  return await localforage.getItem(fileName);
+  return await storage.getItem(fileName);
 }, 'readFile');
 
 const deleteFile = withTimeout(async function deleteFile(fileName) {
   if (isSignedIn()) {
     return await window.puter.fs.delete(fileName);
   }
-  return await localforage.removeItem(fileName);
+  return await storage.removeItem(fileName);
 }, 'deleteFile');
 
 const readKv = withTimeout(async function readKv(key) {
   if (isSignedIn()) {
     return await window.puter.kv.get(key);
   } else {
-    return await localforage.getItem(key);
+    return await storage.getItem(key);
   }
 }, 'readKv');
 
@@ -77,25 +77,25 @@ const writeKv = withTimeout(async function writeKv(key, value) {
   if (isSignedIn()) {
     return await window.puter.kv.set(key, value);
   } else {
-    return await localforage.setItem(key, value);
+    return await storage.setItem(key, value);
   }
 }, 'writeKv');
 
 export async function backupFromLocalToCloud() {
-  const localDesigns = (await localforage.getItem('designs-list')) || [];
+  const localDesigns = (await storage.getItem('designs-list')) || [];
   for (const design of localDesigns) {
-    const storeJSON = await localforage.getItem(`designs/${design.id}.json`);
-    const preview = await localforage.getItem(`designs/${design.id}.jpg`);
+    const storeJSON = await storage.getItem(`designs/${design.id}.json`);
+    const preview = await storage.getItem(`designs/${design.id}.jpg`);
     await writeFile(`designs/${design.id}.json`, storeJSON);
     await writeFile(`designs/${design.id}.jpg`, preview);
   }
   const cloudDesigns = (await window.puter.kv.get('designs-list')) || [];
   cloudDesigns.push(...localDesigns);
   await window.puter.kv.set('designs-list', cloudDesigns);
-  await localforage.removeItem('designs-list');
+  await storage.removeItem('designs-list');
   for (const design of localDesigns) {
-    await localforage.removeItem(`designs/${design.id}.json`);
-    await localforage.removeItem(`designs/${design.id}.jpg`);
+    await storage.removeItem(`designs/${design.id}.json`);
+    await storage.removeItem(`designs/${design.id}.jpg`);
   }
   return cloudDesigns.length;
 }

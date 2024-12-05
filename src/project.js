@@ -1,10 +1,8 @@
 import * as mobx from 'mobx';
 import { createContext, useContext } from 'react';
-import localforage from 'localforage';
+import { storage } from './storage';
 
 import * as api from './api';
-
-window.localforage = localforage;
 
 export const ProjectContext = createContext({});
 
@@ -67,14 +65,14 @@ class Project {
   }
 
   async firstLoad() {
-    const deprecatedDesign = await localforage.getItem('polotno-state');
+    const deprecatedDesign = await storage.getItem('polotno-state');
     if (deprecatedDesign) {
       this.store.loadJSON(deprecatedDesign);
-      await localforage.removeItem('polotno-state');
+      await storage.removeItem('polotno-state');
       await this.save();
       return;
     }
-    const lastDesignId = await localforage.getItem('polotno-last-design-id');
+    const lastDesignId = await storage.getItem('polotno-last-design-id');
     if (lastDesignId) {
       await this.loadById(lastDesignId);
     }
@@ -82,7 +80,7 @@ class Project {
 
   async loadById(id) {
     this.id = id;
-    await localforage.setItem('polotno-last-design-id', id);
+    await storage.setItem('polotno-last-design-id', id);
     this.status = 'loading';
     try {
       const { storeJSON, name } = await api.loadById({
@@ -96,7 +94,7 @@ class Project {
       console.error(e);
       this.id = '';
       this.name = 'Untitled Design';
-      await localforage.removeItem('polotno-last-design-id');
+      await storage.removeItem('polotno-last-design-id');
     }
     this.status = 'saved';
   }
@@ -138,7 +136,7 @@ class Project {
       });
       if (res.status === 'saved') {
         this.id = res.id;
-        await localforage.setItem('polotno-last-design-id', res.id);
+        await storage.setItem('polotno-last-design-id', res.id);
       }
     } catch (e) {
       console.error(e);
@@ -154,7 +152,7 @@ class Project {
   async clear() {
     this.store.clear();
     this.store.addPage();
-    await localforage.removeItem('polotno-last-design-id');
+    await storage.removeItem('polotno-last-design-id');
   }
 
   async createNewDesign() {
