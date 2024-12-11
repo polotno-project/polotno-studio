@@ -17,6 +17,7 @@ export const UserMenu = observer(() => {
   return (
     <>
       <Popover
+        data-testid="user-popup"
         content={
           <Menu style={{ width: '80px !important' }}>
             {project.cloudEnabled && (

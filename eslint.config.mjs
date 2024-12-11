@@ -58,4 +58,9 @@ export default [
       }]
     },
   },
+  ...compat.config({
+    globals: {
+      "vi": true
+    },
+  })
 ];

@@ -26,6 +26,7 @@
   "homepage": ".",
   "scripts": {
     "start": "vite",
+    "test": "vitest run",
     "build": "vite build",
     "lint": "eslint src/**/*.{jsx,js}",
     "lint:fix": "eslint src/**/*.{jsx,js} --fix",
@@ -49,6 +50,8 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^15.0.0",
     "@vitejs/plugin-react": "^4.3.3",
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^9.1.0",
@@ -61,6 +64,7 @@
     "eslint-plugin-react": "^7.37.2",
     "eslint-plugin-react-hooks": "^5.1.0",
     "husky": "^9.1.7",
-    "prettier": "^3.4.2"
+    "prettier": "^3.4.2",
+    "vitest": "^2.1.8"
   }
 }
