@@ -5,12 +5,16 @@
   "description": "Free design editor",
   "private": true,
   "dependencies": {
+    "@blueprintjs/core": "^5.16.1",
+    "@eslint/eslintrc": "^3.2.0",
+    "@eslint/js": "^9.16.0",
     "@meronex/icons": "^4.0.0",
     "@sentry/browser": "^8.38.0",
     "@sentry/tracing": "^7.114.0",
     "@sentry/vite-plugin": "^2.22.7",
     "jszip": "^3.10.1",
     "localforage": "^1.10.0",
+    "mobx-react-lite": "^4.0.7",
     "polotno": "^2.16.0",
     "qrcode": "^1.5.4",
     "react": "^18.3.1",
@@ -22,7 +26,10 @@
   "homepage": ".",
   "scripts": {
     "start": "vite",
-    "build": "vite build"
+    "build": "vite build",
+    "lint": "eslint src/**/*.{jsx,js}",
+    "lint:fix": "eslint src/**/*.{jsx,js} --fix",
+    "format": "prettier --write \"src/**/*.{js,jsx,json,css}\""
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -40,6 +47,18 @@
     ]
   },
   "devDependencies": {
-    "@vitejs/plugin-react": "^4.3.3"
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@vitejs/plugin-react": "^4.3.3",
+    "eslint": "^8.57.1",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-n": "^16.6.2",
+    "eslint-plugin-prettier": "^5.2.1",
+    "eslint-plugin-promise": "^6.6.0",
+    "eslint-plugin-react": "^7.37.2",
+    "eslint-plugin-react-hooks": "^5.1.0",
+    "prettier": "^3.4.2"
   }
 }
