@@ -29,7 +29,8 @@
     "build": "vite build",
     "lint": "eslint src/**/*.{jsx,js}",
     "lint:fix": "eslint src/**/*.{jsx,js} --fix",
-    "format": "prettier --write \"src/**/*.{js,jsx,json,css}\""
+    "format": "prettier --write \"src/**/*.{js,jsx,json,css}\"",
+    "prepare": "husky"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -59,6 +60,7 @@
     "eslint-plugin-promise": "^6.6.0",
     "eslint-plugin-react": "^7.37.2",
     "eslint-plugin-react-hooks": "^5.1.0",
+    "husky": "^9.1.7",
     "prettier": "^3.4.2"
   }
 }
