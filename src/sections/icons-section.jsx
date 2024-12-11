@@ -17,7 +17,7 @@ import { ImagesGrid } from 'polotno/side-panel/images-grid';
 
 const iconToSrc = async (id) => {
   const req = await fetch(
-    `${getAPI()}/download-nounproject?id=${id}&KEY=${getKey()}`
+    `${getAPI()}/download-nounproject?id=${id}&KEY=${getKey()}`,
   );
   const text = await req.text();
   const base64 = await svgToURL(text);
@@ -110,7 +110,7 @@ export const FlatIconPanel = observer(({ store, query }) => {
       onSelect={async (item, pos, element) => {
         if (element && element.type === 'image' && !element.locked) {
           const req = await fetch(
-            `${getAPI()}/download-flaticon?id=${item.id}&KEY=${getKey()}`
+            `${getAPI()}/download-flaticon?id=${item.id}&KEY=${getKey()}`,
           );
           const json = await req.json();
           const base64 = await svgToURL(json.svg);
@@ -129,7 +129,7 @@ export const FlatIconPanel = observer(({ store, query }) => {
             y,
           });
           const req = await fetch(
-            `${getAPI()}/download-flaticon?id=${item.id}&KEY=${getKey()}`
+            `${getAPI()}/download-flaticon?id=${item.id}&KEY=${getKey()}`,
           );
           const json = await req.json();
           const base64 = await svgToURL(json.svg);
@@ -172,7 +172,7 @@ export const IconFinderPanel = observer(({ store, query }) => {
         const { download_url } = item.vector_sizes[0].formats[0];
         if (element && element.type === 'image' && !element.locked) {
           const req = await fetch(
-            `${getAPI()}/download-iconfinder?download_url=${download_url}&KEY=${getKey()}`
+            `${getAPI()}/download-iconfinder?download_url=${download_url}&KEY=${getKey()}`,
           );
           const json = await req.json();
           const base64 = await svgToURL(json.content);
@@ -193,7 +193,7 @@ export const IconFinderPanel = observer(({ store, query }) => {
             y,
           });
           const req = await fetch(
-            `${getAPI()}/download-iconfinder?download_url=${download_url}&KEY=${getKey()}`
+            `${getAPI()}/download-iconfinder?download_url=${download_url}&KEY=${getKey()}`,
           );
           const json = await req.json();
           const base64 = await svgToURL(json.content);

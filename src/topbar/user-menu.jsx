@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite';
 import { Button, Position, Menu, MenuItem, Popover } from '@blueprintjs/core';
 import { useProject } from '../project';
 
-export const UserMenu = observer(({ store }) => {
+export const UserMenu = observer(() => {
   const project = useProject();
   const [user, setUser] = React.useState(null);
   React.useEffect(() => {

@@ -14,7 +14,7 @@ import { downloadFile } from 'polotno/utils/download';
 import * as unit from 'polotno/utils/unit';
 import { t } from 'polotno/utils/l10n';
 
-const saveAsVideo = async ({ store, pixelRatio, fps, onProgress }) => {
+const saveAsVideo = async ({ store, pixelRatio, onProgress }) => {
   const json = store.toJSON();
   const req = await fetch(
     'https://api.polotno.dev/api/renders?KEY=nFA5H9elEytDyPyvKL7T',
@@ -28,12 +28,12 @@ const saveAsVideo = async ({ store, pixelRatio, fps, onProgress }) => {
         pixelRatio,
         format: 'mp4',
       }),
-    }
+    },
   );
   const job = await req.json();
   while (true) {
     const jobReq = await fetch(
-      `https://api.polotno.dev/api/renders/${job.id}?KEY=nFA5H9elEytDyPyvKL7T`
+      `https://api.polotno.dev/api/renders/${job.id}?KEY=nFA5H9elEytDyPyvKL7T`,
     );
     const jobData = await jobReq.json();
     if (jobData.status === 'done') {
@@ -55,7 +55,7 @@ export const DownloadButton = observer(({ store }) => {
   const [fps, setFPS] = React.useState(10);
   const [type, setType] = React.useState('png');
   const [progress, setProgress] = React.useState(0);
-  const [progressStatus, setProgressStatus] = React.useState('scheduled');
+  const [_progressStatus, setProgressStatus] = React.useState('scheduled');
 
   const getName = () => {
     const texts = [];
@@ -186,11 +186,13 @@ export const DownloadButton = observer(({ store }) => {
           )}
           {type === 'json' && (
             <>
+              {' '}
               <div style={{ padding: '10px', maxWidth: '180px', opacity: 0.8 }}>
+                {' '}
                 JSON format is used for saving and loading projects. You can
-                save your project to a file and load it later via "File" {'->'}{' '}
-                "Open" menu.
-              </div>
+                save your project to a file and load it later via
+                &quot;File&quot; {'->'} &quot;Open&quot; menu.{' '}
+              </div>{' '}
             </>
           )}
           {type === 'mp4' && (
@@ -237,7 +239,7 @@ export const DownloadButton = observer(({ store }) => {
                   const url =
                     'data:text/json;base64,' +
                     window.btoa(
-                      unescape(encodeURIComponent(JSON.stringify(json)))
+                      unescape(encodeURIComponent(JSON.stringify(json))),
                     );
 
                   downloadFile(url, 'polotno.json');
@@ -287,7 +289,7 @@ export const DownloadButton = observer(({ store }) => {
                       const fileName = getName() + indexString + '.' + type;
                       const base64Data = url.replace(
                         /^data:image\/(png|jpeg);base64,/,
-                        ''
+                        '',
                       );
                       zip.file(fileName, base64Data, { base64: true });
                     }

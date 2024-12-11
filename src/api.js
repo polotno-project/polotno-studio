@@ -28,7 +28,7 @@ const withTimeout =
         });
       } catch (e) {
         window.Sentry?.captureException(
-          new Error('Failed to log error to Sentry: ' + e.message)
+          new Error('Failed to log error to Sentry: ' + e.message),
         );
       }
     }, 15000);
@@ -181,7 +181,7 @@ const getPublicSubDomain = batchCall(async () => {
   const prefix = user.username + '-pltn-pld';
   let subdomain = prefix;
   const existingDomain = sites.find(
-    (site) => site.subdomain.indexOf(prefix) >= 0
+    (site) => site.subdomain.indexOf(prefix) >= 0,
   );
 
   if (existingDomain) {

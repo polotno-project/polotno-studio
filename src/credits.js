@@ -24,13 +24,13 @@ const saveCredits = (key, credits) => {
     JSON.stringify({
       date: new Date().toDateString(),
       credits,
-    })
+    }),
   );
 };
 
 export const useCredits = (key = 'unknown', maxUsage = 10) => {
   const [credits, setCredits] = React.useState(() =>
-    loadCredits(key, maxUsage)
+    loadCredits(key, maxUsage),
   );
 
   React.useEffect(() => {

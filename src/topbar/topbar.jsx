@@ -10,7 +10,6 @@ import {
 } from '@blueprintjs/core';
 
 import FaGithub from '@meronex/icons/fa/FaGithub';
-import FaDiscord from '@meronex/icons/fa/FaDiscord';
 import FaTwitter from '@meronex/icons/fa/FaTwitter';
 import BiCodeBlock from '@meronex/icons/bi/BiCodeBlock';
 import MdcCloudAlert from '@meronex/icons/mdc/MdcCloudAlert';
@@ -45,8 +44,8 @@ const Status = observer(({ project }) => {
   const Icon = !project.cloudEnabled
     ? MdcCloudAlert
     : project.status === 'saved'
-    ? MdcCloudCheck
-    : MdcCloudSync;
+      ? MdcCloudCheck
+      : MdcCloudSync;
   return (
     <Popover
       content={
@@ -57,7 +56,7 @@ const Status = observer(({ project }) => {
           {project.cloudEnabled && project.status === 'saved' && (
             <>
               You data is saved with{' '}
-              <a href="https://puter.com" target="_blank">
+              <a href="https://puter.com" target="_blank" rel="noreferrer">
                 Puter.com
               </a>
             </>

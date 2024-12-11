@@ -1,7 +1,6 @@
 import React from 'react';
 import { InputGroup } from '@blueprintjs/core';
 import { ImagesGrid } from 'polotno/side-panel/images-grid';
-import { getVideoSize } from 'polotno/utils/video';
 import { SectionTab } from 'polotno/side-panel';
 import { useInfiniteAPI } from 'polotno/utils/use-api';
 import { t } from 'polotno/utils/l10n';
@@ -46,7 +45,7 @@ export const VideosPanel = ({ store }) => {
       />
       <p style={{ textAlign: 'center' }}>
         Videos by{' '}
-        <a href="https://www.pexels.com/" target="_blank">
+        <a href="https://www.pexels.com/" target="_blank" rel="noreferrer">
           Pexels
         </a>
       </p>

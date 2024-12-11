@@ -56,7 +56,7 @@ export const QuotesPanel = observer(({ store }) => {
       setLoading(true);
 
       const req = await fetch(
-        `${getAPI()}/get-quotes?query=${query}&keywords=${keywords}&KEY=${getKey()}`
+        `${getAPI()}/get-quotes?query=${query}&keywords=${keywords}&KEY=${getKey()}`,
       );
       if (!req.ok) {
         setLoading(false);

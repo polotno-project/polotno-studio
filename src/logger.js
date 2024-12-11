@@ -16,7 +16,7 @@ Sentry.init({
       blockAllMedia: false,
     }),
   ],
-  shouldSendCallback: function (data) {
+  shouldSendCallback: function (_data) {
     // only send 10% of errors
     var sampleRate = 100;
     return Math.random() * 100 <= sampleRate;

@@ -1,22 +1,17 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
 import { InputGroup, Button } from '@blueprintjs/core';
-import { Tab, Tabs } from '@blueprintjs/core';
 import { Clean } from '@blueprintjs/icons';
 
 import { SectionTab } from 'polotno/side-panel';
 import { getKey } from 'polotno/utils/validate-key';
 import { getImageSize } from 'polotno/utils/image';
-import { t } from 'polotno/utils/l10n';
 
 import { ImagesGrid } from 'polotno/side-panel/images-grid';
 import { useCredits } from '../credits';
-import { getCrop } from 'polotno/utils/image';
-import { useProject } from '../project';
 import { getAPI } from 'polotno/utils/api';
 
 const GenerateTab = observer(({ store }) => {
-  const project = useProject();
   const inputRef = React.useRef(null);
   const [image, setImage] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
@@ -33,7 +28,7 @@ const GenerateTab = observer(({ store }) => {
     const req = await fetch(
       `${getAPI()}/get-stable-diffusion?KEY=${getKey()}&prompt=${
         inputRef.current.value
-      }`
+      }`,
     );
     setLoading(false);
     if (!req.ok) {

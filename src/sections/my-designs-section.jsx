@@ -17,7 +17,7 @@ import FaFolder from '@meronex/icons/fa/FaFolder';
 import { useProject } from '../project';
 import * as api from '../api';
 
-const DesignCard = observer(({ design, store, onDelete }) => {
+const DesignCard = observer(({ design, onDelete }) => {
   const [loading, setLoading] = React.useState(false);
   const [previewURL, setPreviewURL] = React.useState(design.previewURL);
 
@@ -47,7 +47,11 @@ const DesignCard = observer(({ design, store, onDelete }) => {
         handleSelect();
       }}
     >
-      <img src={previewURL} style={{ width: '100%', minHeight: '100px' }} />
+      <img
+        alt="Design preview"
+        src={previewURL}
+        style={{ width: '100%', minHeight: '100px' }}
+      />
       <div
         style={{
           overflow: 'hidden',
@@ -169,7 +173,7 @@ export const MyDesignsPanel = observer(({ store }) => {
       {project.cloudEnabled && (
         <div style={{ padding: '10px', textAlign: 'center' }}>
           Cloud data saving powered by{' '}
-          <a href="https://puter.com" target="_blank">
+          <a href="https://puter.com" target="_blank" rel="noreferrer">
             Puter.com
           </a>
         </div>

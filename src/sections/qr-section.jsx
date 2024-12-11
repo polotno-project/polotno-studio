@@ -20,7 +20,7 @@ export async function getQR(text) {
       },
       (err, string) => {
         resolve(svg.svgToURL(string));
-      }
+      },
     );
   });
 }

@@ -129,10 +129,13 @@ export const UploadPanel = observer(({ store }) => {
         isLoading={isLoading}
         getCredit={(image) => (
           <div>
-            <Button icon="trash" onClick={(e) => {
-              e.stopPropagation();
-              handleDelete(image);
-            }}></Button>
+            <Button
+              icon="trash"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleDelete(image);
+              }}
+            ></Button>
           </div>
         )}
         onSelect={async (item, pos, element) => {
@@ -157,7 +160,7 @@ export const UploadPanel = observer(({ store }) => {
             element &&
             element.type === 'image' &&
             element.contentEditable &&
-            type == 'image'
+            type === 'image'
           ) {
             const crop = getCrop(element, {
               width,
