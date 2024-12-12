@@ -9,6 +9,7 @@ import {
   Spinner,
   Popover,
 } from '@blueprintjs/core';
+import { DocumentOpen, Trash, More } from '@blueprintjs/icons';
 
 import { CloudWarning } from '../cloud-warning';
 
@@ -80,21 +81,14 @@ const DesignCard = observer(({ design, store, onDelete }) => {
           content={
             <Menu>
               <MenuItem
-                icon="document-open"
+                icon={<DocumentOpen />}
                 text="Open"
                 onClick={() => {
                   handleSelect();
                 }}
               />
-              {/* <MenuItem
-                icon="duplicate"
-                text="Copy"
-                onClick={async () => {
-                  handleCopy();
-                }}
-              /> */}
               <MenuItem
-                icon="trash"
+                icon={<Trash />}
                 text="Delete"
                 onClick={() => {
                   if (window.confirm('Are you sure you want to delete it?')) {
@@ -106,7 +100,7 @@ const DesignCard = observer(({ design, store, onDelete }) => {
           }
           position={Position.BOTTOM}
         >
-          <Button icon="more" />
+          <Button icon={<More />} />
         </Popover>
       </div>
     </Card>

@@ -9,6 +9,7 @@ import {
   Popover,
   ProgressBar,
 } from '@blueprintjs/core';
+import { Import } from '@blueprintjs/icons';
 import JSZip from 'jszip';
 import { downloadFile } from 'polotno/utils/download';
 import * as unit from 'polotno/utils/unit';
@@ -310,39 +311,12 @@ export const DownloadButton = observer(({ store }) => {
           >
             Download {type.toUpperCase()}
           </Button>
-
-          {/* <MenuItem
-            icon="media"
-            text={t('toolbar.saveAsImage')}
-            onClick={async () => {
-              store.pages.forEach((page, index) => {
-                // do not add index if we have just one page
-                const indexString =
-                  store.pages.length > 1 ? '-' + (index + 1) : '';
-                store.saveAsImage({
-                  pageId: page.id,
-                  fileName: getName() + indexString + '.png',
-                });
-              });
-            }}
-          />
-          <MenuItem
-            icon="document"
-            text={t('toolbar.saveAsPDF')}
-            onClick={async () => {
-              setSaving(true);
-              await store.saveAsPDF({
-                fileName: getName() + '.pdf',
-              });
-              setSaving(false);
-            }}
-          /> */}
         </Menu>
       }
       position={Position.BOTTOM_RIGHT}
     >
       <Button
-        icon="import"
+        icon={<Import />}
         text={t('toolbar.download')}
         intent="primary"
         // loading={saving}

@@ -10,6 +10,13 @@ import {
   MenuDivider,
   Popover,
 } from '@blueprintjs/core';
+import {
+  Plus,
+  Translate,
+  InfoSign,
+  FolderOpen,
+  FloppyDisk,
+} from '@blueprintjs/icons';
 import { downloadFile } from 'polotno/utils/download';
 
 export const FileMenu = observer(({ store, project }) => {
@@ -23,7 +30,7 @@ export const FileMenu = observer(({ store, project }) => {
           <Menu>
             {/* <MenuDivider title={t('toolbar.layering')} /> */}
             <MenuItem
-              icon="plus"
+              icon={<Plus />}
               text="Create new design"
               onClick={() => {
                 project.createNewDesign();
@@ -31,16 +38,14 @@ export const FileMenu = observer(({ store, project }) => {
             />
             <MenuDivider />
             <MenuItem
-              // icon={<FaFileImport />}
-              icon="folder-open"
+              icon={<FolderOpen />}
               text="Open"
               onClick={() => {
                 document.querySelector('#load-project').click();
               }}
             />
             <MenuItem
-              // icon={<FaFileExport />}
-              icon="floppy-disk"
+              icon={<FloppyDisk />}
               text="Save as JSON"
               onClick={() => {
                 const json = store.toJSON();
@@ -56,7 +61,7 @@ export const FileMenu = observer(({ store, project }) => {
             />
 
             <MenuDivider />
-            <MenuItem text="Language" icon="translate">
+            <MenuItem text="Language" icon={<Translate />}>
               <MenuItem
                 text="English"
                 active={project.language.startsWith('en')}
@@ -95,7 +100,7 @@ export const FileMenu = observer(({ store, project }) => {
             </MenuItem>
             <MenuItem
               text="About"
-              icon="info-sign"
+              icon={<InfoSign />}
               onClick={() => {
                 toggleFaq(true);
               }}
@@ -150,7 +155,7 @@ export const FileMenu = observer(({ store, project }) => {
         }}
       />
       <Dialog
-        icon="info-sign"
+        icon={<InfoSign />}
         onClose={() => toggleFaq(false)}
         title="About Polotno Studio"
         isOpen={faqOpened}

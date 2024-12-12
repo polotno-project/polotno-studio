@@ -1,6 +1,7 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
 import { Button } from '@blueprintjs/core';
+import { Upload, Trash } from '@blueprintjs/icons';
 import {
   ImagesGrid,
   UploadSection as DefaultUploadSection,
@@ -102,7 +103,7 @@ export const UploadPanel = observer(({ store }) => {
       <div style={{ marginBottom: '20px' }}>
         <label htmlFor="input-file">
           <Button
-            icon="upload"
+            icon={<Upload />}
             style={{ width: '100%' }}
             onClick={() => {
               document.querySelector('#input-file')?.click();
@@ -129,10 +130,13 @@ export const UploadPanel = observer(({ store }) => {
         isLoading={isLoading}
         getCredit={(image) => (
           <div>
-            <Button icon="trash" onClick={(e) => {
-              e.stopPropagation();
-              handleDelete(image);
-            }}></Button>
+            <Button
+              icon={<Trash />}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleDelete(image);
+              }}
+            ></Button>
           </div>
         )}
         onSelect={async (item, pos, element) => {
