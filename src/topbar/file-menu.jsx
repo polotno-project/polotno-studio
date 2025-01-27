@@ -16,8 +16,10 @@ import {
   InfoSign,
   FolderOpen,
   FloppyDisk,
+  Import,
 } from '@blueprintjs/icons';
 import { downloadFile } from 'polotno/utils/download';
+import { svgToJson } from 'polotno/utils/from-svg';
 
 export const FileMenu = observer(({ store, project }) => {
   const inputRef = React.useRef();
@@ -42,6 +44,13 @@ export const FileMenu = observer(({ store, project }) => {
               text="Open"
               onClick={() => {
                 document.querySelector('#load-project').click();
+              }}
+            />
+            <MenuItem
+              icon={<Import />}
+              text="Import svg (experimental)"
+              onClick={() => {
+                document.querySelector('#svg-import-input').click();
               }}
             />
             <MenuItem
@@ -130,6 +139,49 @@ export const FileMenu = observer(({ store, project }) => {
             let json;
             try {
               json = JSON.parse(text);
+            } catch (e) {
+              alert('Can not load the project.');
+            }
+
+            const errors = store.validate(json);
+            if (errors.length > 0) {
+              alert('Can not load the project. See console for details.');
+              console.error(errors);
+              return;
+            }
+
+            if (json) {
+              await project.createNewDesign();
+              store.loadJSON(json);
+              project.save();
+              input.value = '';
+            }
+          };
+          reader.onerror = function () {
+            alert('Can not load the project.');
+          };
+          reader.readAsText(input.files[0]);
+        }}
+      />
+      <input
+        type="file"
+        id="svg-import-input"
+        accept=".svg"
+        ref={inputRef}
+        style={{ width: '180px', display: 'none' }}
+        onChange={(e) => {
+          var input = e.target;
+
+          if (!input.files.length) {
+            return;
+          }
+
+          var reader = new FileReader();
+          reader.onloadend = async function () {
+            var text = reader.result;
+            let json;
+            try {
+              json = await svgToJson(text);
             } catch (e) {
               alert('Can not load the project.');
             }

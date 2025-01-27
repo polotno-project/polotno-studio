@@ -145,7 +145,8 @@ export const MyDesignsPanel = observer(({ store }) => {
         fill
         intent="primary"
         onClick={async () => {
-          project.createNewDesign();
+          await project.createNewDesign();
+          loadDesigns();
         }}
       >
         Create new design
