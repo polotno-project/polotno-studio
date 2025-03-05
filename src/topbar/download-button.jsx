@@ -120,8 +120,8 @@ export const DownloadButton = observer(({ store }) => {
                 )}
                 {type !== 'pdf' && (
                   <div>
-                    {Math.round(store.width * quality)} x{' '}
-                    {Math.round(store.height * quality)} px
+                    {Math.round(store.activePage.computedWidth * quality)} x{' '}
+                    {Math.round(store.activePage.computedHeight * quality)} px
                   </div>
                 )}
                 {type === 'gif' && (
@@ -222,7 +222,7 @@ export const DownloadButton = observer(({ store }) => {
                   await store.saveAsPDF({
                     fileName: getName() + '.pdf',
                     dpi: store.dpi / pageSizeModifier,
-                    pixelRatio: 2 * quality,
+                    pixelRatio: quality * Math.sqrt(300 / 72),
                   });
                 } else if (type === 'html') {
                   await store.saveAsHTML({
