@@ -22,6 +22,7 @@ import { useProject } from '../project';
 
 import { FileMenu } from './file-menu';
 import { DownloadButton } from './download-button';
+import { PostProcessButton } from './post-process-button';
 import { UserMenu } from './user-menu';
 import { CloudWarning } from '../cloud-warning';
 
@@ -131,6 +132,7 @@ export default observer(({ store }) => {
             }
           ></AnchorButton>
           <NavbarDivider />
+          <PostProcessButton store={store} />
           <DownloadButton store={store} />
           <UserMenu store={store} project={project} />
           {/* <NavbarHeading>Polotno Studio</NavbarHeading> */}

@@ -1,7 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
 import { InputGroup, Button, HTMLSelect, ButtonGroup } from '@blueprintjs/core';
-import { Tab, Tabs } from '@blueprintjs/core';
 import { Clean, Plus } from '@blueprintjs/icons';
 
 import { SectionTab } from 'polotno/side-panel';

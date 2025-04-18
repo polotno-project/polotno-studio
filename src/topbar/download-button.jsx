@@ -72,7 +72,99 @@ export const DownloadButton = observer(({ store }) => {
     return words.join(' ').replace(/\s/g, '-').toLowerCase() || 'polotno';
   };
 
+  const handleExport = async () => {
+    setSaving(true);
+    try {
+      if (type === 'pdf') {
+        await store.saveAsPDF({
+          fileName: getName() + '.pdf',
+          dpi: store.dpi / pageSizeModifier,
+          pixelRatio: quality * Math.sqrt(300 / 72),
+        });
+      } else if (type === 'html') {
+        await store.saveAsHTML({
+          fileName: getName() + '.html',
+        });
+      } else if (type === 'svg') {
+        await store.saveAsSVG({
+          fileName: getName() + '.svg',
+        });
+      } else if (type === 'json') {
+        const json = store.toJSON();
+
+        const url =
+          'data:text/json;base64,' +
+          window.btoa(unescape(encodeURIComponent(JSON.stringify(json))));
+
+        downloadFile(url, 'polotno.json');
+      } else if (type === 'gif') {
+        await store.saveAsGIF({
+          fileName: getName() + '.gif',
+          pixelRatio: quality,
+          fps,
+        });
+      } else if (type === 'mp4') {
+        setProgressStatus('scheduled');
+        await saveAsVideo({
+          store,
+          pixelRatio: quality,
+          onProgress: (progress, status) => {
+            setProgress(progress);
+            setProgressStatus(status);
+          },
+        });
+        setProgressStatus('done');
+        setProgress(0);
+      } else {
+        if (store.pages.length < 3) {
+          store.pages.forEach((page, index) => {
+            // do not add index if we have just one page
+            const indexString = store.pages.length > 1 ? '-' + (index + 1) : '';
+            store.saveAsImage({
+              pageId: page.id,
+              pixelRatio: quality,
+              mimeType: 'image/' + type,
+              fileName: getName() + indexString + '.' + type,
+            });
+          });
+        } else {
+          const zip = new JSZip();
+          for (const page of store.pages) {
+            const index = store.pages.indexOf(page);
+            const indexString = store.pages.length > 1 ? '-' + (index + 1) : '';
+
+            const url = await store.toDataURL({
+              pageId: page.id,
+              pixelRatio: quality,
+              mimeType: 'image/' + type,
+            });
+            const fileName = getName() + indexString + '.' + type;
+            const base64Data = url.replace(
+              /^data:image\/(png|jpeg);base64,/,
+              ''
+            );
+            zip.file(fileName, base64Data, { base64: true });
+          }
+
+          const content = await zip.generateAsync({ type: 'base64' });
+          const result = 'data:application/zip;base64,' + content;
+          console.log(content);
+          downloadFile(result, getName() + '.zip');
+        }
+      }
+    } catch (e) {
+      // throw into global error handler for reporting
+      setTimeout(() => {
+        throw e;
+      });
+      alert('Something went wrong. Please try again.');
+    }
+    setSaving(false);
+  };
+
+  const isRasterFormat = type === 'jpeg' || type === 'png';
   const maxQuality = type === 'mp4' ? 1 : 300 / 72;
+
   return (
     <Popover
       content={
@@ -211,104 +303,7 @@ export const DownloadButton = observer(({ store }) => {
               )}
             </>
           )}
-          <Button
-            fill
-            intent="primary"
-            loading={saving}
-            onClick={async () => {
-              setSaving(true);
-              try {
-                if (type === 'pdf') {
-                  await store.saveAsPDF({
-                    fileName: getName() + '.pdf',
-                    dpi: store.dpi / pageSizeModifier,
-                    pixelRatio: quality * Math.sqrt(300 / 72),
-                  });
-                } else if (type === 'html') {
-                  await store.saveAsHTML({
-                    fileName: getName() + '.html',
-                  });
-                } else if (type === 'svg') {
-                  await store.saveAsSVG({
-                    fileName: getName() + '.svg',
-                  });
-                } else if (type === 'json') {
-                  const json = store.toJSON();
-
-                  const url =
-                    'data:text/json;base64,' +
-                    window.btoa(
-                      unescape(encodeURIComponent(JSON.stringify(json)))
-                    );
-
-                  downloadFile(url, 'polotno.json');
-                } else if (type === 'gif') {
-                  await store.saveAsGIF({
-                    fileName: getName() + '.gif',
-                    pixelRatio: quality,
-                    fps,
-                  });
-                } else if (type === 'mp4') {
-                  setProgressStatus('scheduled');
-                  await saveAsVideo({
-                    store,
-                    pixelRatio: quality,
-                    onProgress: (progress, status) => {
-                      setProgress(progress);
-                      setProgressStatus(status);
-                    },
-                  });
-                  setProgressStatus('done');
-                  setProgress(0);
-                } else {
-                  if (store.pages.length < 3) {
-                    store.pages.forEach((page, index) => {
-                      // do not add index if we have just one page
-                      const indexString =
-                        store.pages.length > 1 ? '-' + (index + 1) : '';
-                      store.saveAsImage({
-                        pageId: page.id,
-                        pixelRatio: quality,
-                        mimeType: 'image/' + type,
-                        fileName: getName() + indexString + '.' + type,
-                      });
-                    });
-                  } else {
-                    const zip = new JSZip();
-                    for (const page of store.pages) {
-                      const index = store.pages.indexOf(page);
-                      const indexString =
-                        store.pages.length > 1 ? '-' + (index + 1) : '';
-
-                      const url = await store.toDataURL({
-                        pageId: page.id,
-                        pixelRatio: quality,
-                        mimeType: 'image/' + type,
-                      });
-                      const fileName = getName() + indexString + '.' + type;
-                      const base64Data = url.replace(
-                        /^data:image\/(png|jpeg);base64,/,
-                        ''
-                      );
-                      zip.file(fileName, base64Data, { base64: true });
-                    }
-
-                    const content = await zip.generateAsync({ type: 'base64' });
-                    const result = 'data:application/zip;base64,' + content;
-                    console.log(content);
-                    downloadFile(result, getName() + '.zip');
-                  }
-                }
-              } catch (e) {
-                // throw into global error handler for reporting
-                setTimeout(() => {
-                  throw e;
-                });
-                alert('Something went wrong. Please try again.');
-              }
-              setSaving(false);
-            }}
-          >
+          <Button fill intent="primary" loading={saving} onClick={handleExport}>
             Download {type.toUpperCase()}
           </Button>
         </Menu>
@@ -319,7 +314,6 @@ export const DownloadButton = observer(({ store }) => {
         icon={<Import />}
         text={t('toolbar.download')}
         intent="primary"
-        // loading={saving}
         onClick={() => {
           setQuality(1);
         }}
