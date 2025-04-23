@@ -4,7 +4,6 @@ import { Button } from '@blueprintjs/core';
 import { PostProcessModal } from './postprocess';
 
 export const PostProcessButton = observer(({ store }) => {
-  return null;
   const [postProcessModalOpen, setPostProcessModalOpen] = React.useState(false);
   const [exportedImageUrl, setExportedImageUrl] = React.useState(null);
   const [quality, setQuality] = React.useState(1);

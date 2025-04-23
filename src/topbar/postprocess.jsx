@@ -19,6 +19,8 @@ export const PostProcessModal = observer(
     const promptRef = React.useRef(null);
     const [resultImage, setResultImage] = React.useState(null);
     const [loading, setLoading] = React.useState(false);
+    const [prompt, setPrompt] = React.useState('');
+    const [progress, setProgress] = React.useState(0);
     const { credits, consumeCredits, addCredits } = useCredits(
       'postProcessingCredits',
       5
@@ -71,9 +73,7 @@ export const PostProcessModal = observer(
     ];
 
     const handleExampleClick = (prompt) => {
-      if (promptRef.current) {
-        promptRef.current.value = prompt;
-      }
+      setPrompt(prompt);
     };
 
     const handleProcess = async () => {
@@ -84,14 +84,23 @@ export const PostProcessModal = observer(
 
       setLoading(true);
       setResultImage(null);
+      setProgress(0);
+
+      // Start fake progress
+      const progressInterval = setInterval(() => {
+        setProgress((prev) => {
+          if (prev >= 95) {
+            clearInterval(progressInterval);
+            return 95;
+          }
+          return prev + 1;
+        });
+      }, 500); // Update every 500ms to reach 95% in ~50 seconds
 
       try {
-        // Get the prompt from input
-        const prompt = promptRef.current.value;
-
         // Send request to the API - using replicate as provider
         const response = await fetch(
-          'http://localhost:3002/api/ai/image-to-image?KEY=' + getKey(),
+          'http://api.polotno.com/api/ai/image-to-image?KEY=' + getKey(),
           {
             method: 'POST',
             headers: {
@@ -117,11 +126,13 @@ export const PostProcessModal = observer(
 
         // Set the result image
         setResultImage(data.url);
+        setProgress(100); // Set to 100% when complete
       } catch (error) {
         console.error('Error processing image:', error);
         alert('Error processing image: ' + error.message);
       } finally {
         setLoading(false);
+        clearInterval(progressInterval);
       }
     };
 
@@ -134,8 +145,8 @@ export const PostProcessModal = observer(
       if (!resultImage) return;
 
       // Extract filename from prompt or use the original imageName
-      const fileName = promptRef.current?.value
-        ? promptRef.current.value
+      const fileName = prompt
+        ? prompt
             .substring(0, 20)
             .replace(/[^a-z0-9]/gi, '-')
             .toLowerCase()
@@ -394,7 +405,7 @@ export const PostProcessModal = observer(
                               color: '#106ba3',
                             }}
                           >
-                            Processing...
+                            Processing... {progress}%
                           </div>
                         </>
                       ) : (
@@ -465,10 +476,24 @@ export const PostProcessModal = observer(
                     handleProcess();
                   }
                 }}
-                inputRef={promptRef}
+                value={prompt}
+                onChange={(e) => setPrompt(e.target.value)}
                 fill
                 disabled={!!resultImage}
               />
+            </div>
+
+            {/* Processing time message */}
+            <div
+              style={{
+                textAlign: 'center',
+                marginBottom: '15px',
+                color: '#5c7080',
+                fontSize: '12px',
+              }}
+            >
+              Processing may take up to 30 seconds depending on the complexity
+              of your request.
             </div>
 
             {/* Credits info */}
@@ -476,26 +501,31 @@ export const PostProcessModal = observer(
               {credits > 0 ? (
                 <span>{credits} credits left</span>
               ) : (
-                <div>
-                  <Callout
-                    intent="warning"
-                    title="You're out of credits"
-                    style={{ marginBottom: '10px' }}
-                  >
-                    Purchase more credits to continue using the AI image
-                    processing.
-                  </Callout>
-                  <Button
-                    intent="success"
-                    onClick={() => setShowPayment(true)}
-                    style={{ marginTop: '5px' }}
-                  >
-                    Buy Credits
-                  </Button>
-                </div>
+                <></>
+                // <div>
+                //   <Callout
+                //     intent="warning"
+                //     title="You're out of credits"
+                //     style={{ marginBottom: '10px' }}
+                //   >
+                //     Purchase more credits to continue using the AI image
+                //     processing.
+                //   </Callout>
+                //   <Button
+                //     intent="success"
+                //     onClick={() => setShowPayment(true)}
+                //     style={{ marginTop: '5px' }}
+                //   >
+                //     Buy Credits
+                //   </Button>
+                // </div>
               )}
-              {credits > 0 && credits < 3 && (
+              {credits < 2 && (
                 <div style={{ marginTop: '10px' }}>
+                  <Callout intent="primary" style={{ marginBottom: '10px' }}>
+                    Come back tomorrow for more free credits!
+                  </Callout>
+                  {/* Temporarily hidden
                   <Button
                     small
                     intent="success"
@@ -503,6 +533,7 @@ export const PostProcessModal = observer(
                   >
                     Buy More Credits
                   </Button>
+                  */}
                 </div>
               )}
             </div>
@@ -517,10 +548,12 @@ export const PostProcessModal = observer(
                   onClick={handleProcess}
                   intent="primary"
                   loading={loading}
-                  disabled={credits <= 0}
+                  disabled={credits <= 0 || !prompt.trim()}
                   icon="flash"
                 >
-                  Enhance Now
+                  {prompt.trim()
+                    ? 'Enhance Now'
+                    : 'Add prompt or choose preset'}
                 </Button>
               ) : (
                 <>
