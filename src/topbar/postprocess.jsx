@@ -87,6 +87,7 @@ export const PostProcessModal = observer(
       setProgress(0);
 
       // Start fake progress
+      const time = 30000;
       const progressInterval = setInterval(() => {
         setProgress((prev) => {
           if (prev >= 95) {
@@ -95,7 +96,7 @@ export const PostProcessModal = observer(
           }
           return prev + 1;
         });
-      }, 500); // Update every 500ms to reach 95% in ~50 seconds
+      }, time / 100); // Update every 500ms to reach 95% in ~50 seconds
 
       try {
         // Send request to the API - using replicate as provider
