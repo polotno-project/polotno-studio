@@ -551,6 +551,7 @@ export const PostProcessModal = observer(
                   loading={loading}
                   disabled={credits <= 0 || !prompt.trim()}
                   icon="flash"
+                  className="plausible-event-name=postprocess-request"
                 >
                   {prompt.trim()
                     ? 'Enhance Now'
@@ -559,7 +560,11 @@ export const PostProcessModal = observer(
               ) : (
                 <>
                   <Button onClick={handleTryAgain}>Try Again</Button>
-                  <Button onClick={handleDownload} intent="primary">
+                  <Button
+                    onClick={handleDownload}
+                    intent="primary"
+                    className="plausible-event-name=postprocess-download"
+                  >
                     Download
                   </Button>
                 </>
