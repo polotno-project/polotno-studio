@@ -101,7 +101,7 @@ export const PostProcessModal = observer(
       try {
         // Send request to the API - using replicate as provider
         const response = await fetch(
-          'https://api.polotno.com/api/ai/image-to-image?KEY=' + getKey(),
+          'http://localhost:3002/api/ai/image-to-image?KEY=' + getKey(),
           {
             method: 'POST',
             headers: {
