@@ -31,7 +31,7 @@ const withTimeout =
           new Error('Failed to log error to Sentry: ' + e.message)
         );
       }
-    }, 15000);
+    }, 8000);
 
     try {
       const result = await fn(...args);

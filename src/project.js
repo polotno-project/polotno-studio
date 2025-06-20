@@ -83,9 +83,14 @@ class Project {
     await storage.setItem('polotno-last-design-id', id);
     this.status = 'loading';
     try {
-      const { storeJSON, name } = await api.loadById({
-        id,
-      });
+      const { storeJSON, name } = await Promise.race([
+        api.loadById({
+          id,
+        }),
+        new Promise((_, reject) =>
+          setTimeout(() => reject(new Error('Loading timeout')), 5000)
+        ),
+      ]);
       if (storeJSON) {
         this.store.loadJSON(storeJSON);
       }
