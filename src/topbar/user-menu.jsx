@@ -32,15 +32,6 @@ export const UserMenu = observer(({ store }) => {
                 }}
               />
             )}
-            {/* {project.cloudEnabled && (
-              <MenuItem
-                text="Subscription"
-                icon={'thumbs-up'}
-                onClick={() => {
-                  // toggleSubModal(true);
-                }}
-              />
-            )} */}
             {project.cloudEnabled && (
               <MenuItem
                 text="Logout"

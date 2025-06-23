@@ -5,19 +5,20 @@
   "description": "Free design editor",
   "private": true,
   "dependencies": {
+    "@blueprintjs/core": "^5.19.0",
+    "@blueprintjs/icons": "^5.22.0",
     "@meronex/icons": "^4.0.0",
-    "@sentry/browser": "^9.13.0",
+    "@sentry/browser": "^9.30.0",
     "@sentry/tracing": "^7.120.3",
-    "@sentry/vite-plugin": "^3.3.1",
+    "@sentry/vite-plugin": "^3.5.0",
     "jszip": "^3.10.1",
     "localforage": "^1.10.0",
-    "polotno": "^2.24.0",
+    "polotno": "^2.24.1",
     "qrcode": "^1.5.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-error-boundary": "^5.0.0",
-    "react-scripts": "5.0.1",
-    "vite": "^6.3.2"
+    "vite": "^6.3.5"
   },
   "homepage": ".",
   "scripts": {
@@ -40,6 +41,7 @@
     ]
   },
   "devDependencies": {
-    "@vitejs/plugin-react": "^4.4.0"
+    "@vitejs/plugin-react": "^4.5.2",
+    "vite-bundle-analyzer": "^0.22.3"
   }
 }
