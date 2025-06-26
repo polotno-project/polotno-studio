@@ -213,7 +213,7 @@ export const IconsPanel = ({ store }) => {
   const requestTimeout = React.useRef();
   const [query, setQuery] = React.useState('');
   const [delayedQuery, setDelayedQuery] = React.useState(query);
-  const [service, setService] = React.useState('iconfinder');
+  const [service, setService] = React.useState('nounproject');
 
   React.useEffect(() => {
     requestTimeout.current = setTimeout(() => {
@@ -237,7 +237,7 @@ export const IconsPanel = ({ store }) => {
           marginBottom: '20px',
         }}
       />
-      <div
+      {/* <div
         style={{
           display: 'flex',
           justifyContent: 'space-between',
@@ -262,7 +262,7 @@ export const IconsPanel = ({ store }) => {
         >
           Noun Project
         </Button>
-        {/* <Button
+        <Button
           onClick={() => {
             setService('flaticon');
           }}
@@ -277,8 +277,8 @@ export const IconsPanel = ({ store }) => {
           }
         >
           FlatIcon
-        </Button> */}
-      </div>
+        </Button>
+      </div> */}
       {service === 'flaticon' && (
         <FlatIconPanel query={delayedQuery} store={store} />
       )}
