@@ -14,6 +14,7 @@ import JSZip from 'jszip';
 import { downloadFile } from 'polotno/utils/download';
 import * as unit from 'polotno/utils/unit';
 import { t } from 'polotno/utils/l10n';
+import { jsonToPPTX } from 'polotno/utils/to-pptx';
 
 const saveAsVideo = async ({ store, pixelRatio, fps, onProgress }) => {
   const json = store.toJSON();
@@ -103,6 +104,9 @@ export const DownloadButton = observer(({ store }) => {
           pixelRatio: quality,
           fps,
         });
+      } else if (type === 'pptx') {
+        await jsonToPPTX({ json: store.toJSON() });
+        // downloadFile(pptx, 'polotno.pptx');
       } else if (type === 'mp4') {
         setProgressStatus('scheduled');
         await saveAsVideo({
@@ -185,98 +189,102 @@ export const DownloadButton = observer(({ store }) => {
             <option value="pdf">PDF</option>
             <option value="html">HTML</option>
             <option value="svg">SVG</option>
+            <option value="pptx">PPTX</option>
             <option value="json">JSON</option>
             <option value="gif">GIF</option>
             <option value="mp4">MP4 Video (Beta)</option>
           </HTMLSelect>
 
-          {type !== 'json' && type !== 'html' && type !== 'svg' && (
-            <>
-              <li className="bp5-menu-header">
-                <h6 className="bp5-heading">Quality</h6>
-              </li>
-              <div style={{ padding: '10px' }}>
-                <Slider
-                  value={quality}
-                  labelRenderer={false}
-                  onChange={(quality) => {
-                    setQuality(quality);
-                  }}
-                  stepSize={0.2}
-                  min={0.2}
-                  max={maxQuality}
-                  showTrackFill={false}
-                />
+          {type !== 'json' &&
+            type !== 'html' &&
+            type !== 'svg' &&
+            type !== 'pptx' && (
+              <>
+                <li className="bp5-menu-header">
+                  <h6 className="bp5-heading">Quality</h6>
+                </li>
+                <div style={{ padding: '10px' }}>
+                  <Slider
+                    value={quality}
+                    labelRenderer={false}
+                    onChange={(quality) => {
+                      setQuality(quality);
+                    }}
+                    stepSize={0.2}
+                    min={0.2}
+                    max={maxQuality}
+                    showTrackFill={false}
+                  />
+                  {type === 'pdf' && (
+                    <div>DPI: {Math.round(store.dpi * quality)}</div>
+                  )}
+                  {type !== 'pdf' && (
+                    <div>
+                      {Math.round(store.activePage.computedWidth * quality)} x{' '}
+                      {Math.round(store.activePage.computedHeight * quality)} px
+                    </div>
+                  )}
+                  {type === 'gif' && (
+                    <>
+                      <li className="bp5-menu-header">
+                        <h6 className="bp5-heading">FPS</h6>
+                      </li>
+                      <div style={{ padding: '10px' }}>
+                        <Slider
+                          value={fps}
+                          // labelRenderer={false}
+                          labelStepSize={5}
+                          onChange={(fps) => {
+                            setFPS(fps);
+                          }}
+                          stepSize={1}
+                          min={5}
+                          max={30}
+                          showTrackFill={false}
+                        />
+                      </div>
+                    </>
+                  )}
+                </div>
                 {type === 'pdf' && (
-                  <div>DPI: {Math.round(store.dpi * quality)}</div>
-                )}
-                {type !== 'pdf' && (
-                  <div>
-                    {Math.round(store.activePage.computedWidth * quality)} x{' '}
-                    {Math.round(store.activePage.computedHeight * quality)} px
-                  </div>
-                )}
-                {type === 'gif' && (
                   <>
                     <li className="bp5-menu-header">
-                      <h6 className="bp5-heading">FPS</h6>
+                      <h6 className="bp5-heading">Page Size</h6>
                     </li>
                     <div style={{ padding: '10px' }}>
                       <Slider
-                        value={fps}
-                        // labelRenderer={false}
-                        labelStepSize={5}
-                        onChange={(fps) => {
-                          setFPS(fps);
+                        value={pageSizeModifier}
+                        labelRenderer={false}
+                        onChange={(pageSizeModifier) => {
+                          setPageSizeModifier(pageSizeModifier);
                         }}
-                        stepSize={1}
-                        min={5}
-                        max={30}
+                        stepSize={0.2}
+                        min={0.2}
+                        max={3}
                         showTrackFill={false}
                       />
+
+                      <div>
+                        {unit.pxToUnitRounded({
+                          px: store.width * pageSizeModifier,
+                          dpi: store.dpi,
+                          precious: 0,
+                          unit: 'mm',
+                        })}{' '}
+                        x{' '}
+                        {unit.pxToUnitRounded({
+                          px: store.height * pageSizeModifier,
+                          dpi: store.dpi,
+                          precious: 0,
+                          unit: 'mm',
+                        })}{' '}
+                        mm
+                      </div>
                     </div>
                   </>
                 )}
-              </div>
-              {type === 'pdf' && (
-                <>
-                  <li className="bp5-menu-header">
-                    <h6 className="bp5-heading">Page Size</h6>
-                  </li>
-                  <div style={{ padding: '10px' }}>
-                    <Slider
-                      value={pageSizeModifier}
-                      labelRenderer={false}
-                      onChange={(pageSizeModifier) => {
-                        setPageSizeModifier(pageSizeModifier);
-                      }}
-                      stepSize={0.2}
-                      min={0.2}
-                      max={3}
-                      showTrackFill={false}
-                    />
-
-                    <div>
-                      {unit.pxToUnitRounded({
-                        px: store.width * pageSizeModifier,
-                        dpi: store.dpi,
-                        precious: 0,
-                        unit: 'mm',
-                      })}{' '}
-                      x{' '}
-                      {unit.pxToUnitRounded({
-                        px: store.height * pageSizeModifier,
-                        dpi: store.dpi,
-                        precious: 0,
-                        unit: 'mm',
-                      })}{' '}
-                      mm
-                    </div>
-                  </div>
-                </>
-              )}
-            </>
-          )}
+              </>
+            )}
           {type === 'json' && (
             <>
               <div style={{ padding: '10px', maxWidth: '180px', opacity: 0.8 }}>
@@ -286,7 +294,7 @@ export const DownloadButton = observer(({ store }) => {
               </div>
             </>
           )}
-          {type === 'mp4' && (
+          {(type === 'mp4' || type === 'pptx') && (
             <>
               <div style={{ padding: '10px', maxWidth: '180px', opacity: 0.8 }}>
                 <strong>Beta feature.</strong>{' '}
