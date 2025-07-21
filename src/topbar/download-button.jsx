@@ -8,6 +8,7 @@ import {
   Slider,
   Popover,
   ProgressBar,
+  Checkbox,
 } from '@blueprintjs/core';
 import { Import } from '@blueprintjs/icons';
 import JSZip from 'jszip';
@@ -50,6 +51,46 @@ const saveAsVideo = async ({ store, pixelRatio, fps, onProgress }) => {
   }
 };
 
+// Cloud render for vector PDF export
+const saveAsVectorPDF = async ({ store, pixelRatio, onProgress }) => {
+  const json = store.toJSON();
+  const req = await fetch(
+    'https://api.polotno.dev/api/renders?KEY=nFA5H9elEytDyPyvKL7T',
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        design: json,
+        pixelRatio,
+        format: 'pdf',
+        vector: true,
+      }),
+    }
+  );
+
+  const job = await req.json();
+
+  while (true) {
+    const jobReq = await fetch(
+      `https://api.polotno.dev/api/renders/${job.id}?KEY=nFA5H9elEytDyPyvKL7T`
+    );
+    const jobData = await jobReq.json();
+
+    if (jobData.status === 'done') {
+      downloadFile(jobData.output, 'polotno.pdf');
+      break;
+    } else if (jobData.status === 'error') {
+      throw new Error('Failed to render PDF');
+    } else {
+      onProgress(jobData.progress, jobData.status);
+    }
+
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+  }
+};
+
 export const DownloadButton = observer(({ store }) => {
   const [saving, setSaving] = React.useState(false);
   const [quality, setQuality] = React.useState(1);
@@ -58,6 +99,8 @@ export const DownloadButton = observer(({ store }) => {
   const [type, setType] = React.useState('png');
   const [progress, setProgress] = React.useState(0);
   const [progressStatus, setProgressStatus] = React.useState('scheduled');
+  // flag for vector pdf
+  const [vectorPDF, setVectorPDF] = React.useState(false);
 
   const getName = () => {
     const texts = [];
@@ -77,11 +120,25 @@ export const DownloadButton = observer(({ store }) => {
     setSaving(true);
     try {
       if (type === 'pdf') {
-        await store.saveAsPDF({
-          fileName: getName() + '.pdf',
-          dpi: store.dpi / pageSizeModifier,
-          pixelRatio: quality * Math.sqrt(300 / 72),
-        });
+        if (vectorPDF) {
+          setProgressStatus('scheduled');
+          await saveAsVectorPDF({
+            store,
+            pixelRatio: quality * Math.sqrt(300 / 72),
+            onProgress: (progress, status) => {
+              setProgress(progress);
+              setProgressStatus(status);
+            },
+          });
+          setProgressStatus('done');
+          setProgress(0);
+        } else {
+          await store.saveAsPDF({
+            fileName: getName() + '.pdf',
+            dpi: store.dpi / pageSizeModifier,
+            pixelRatio: quality * Math.sqrt(300 / 72),
+          });
+        }
       } else if (type === 'html') {
         await store.saveAsHTML({
           fileName: getName() + '.html',
@@ -181,6 +238,9 @@ export const DownloadButton = observer(({ store }) => {
             onChange={(e) => {
               setType(e.target.value);
               setQuality(1);
+              if (e.target.value !== 'pdf') {
+                setVectorPDF(false);
+              }
             }}
             value={type}
           >
@@ -294,7 +354,18 @@ export const DownloadButton = observer(({ store }) => {
               </div>
             </>
           )}
-          {(type === 'mp4' || type === 'pptx') && (
+          {type === 'pdf' && (
+            <div style={{ padding: '10px' }}>
+              <Checkbox
+                checked={vectorPDF}
+                label="Vector (Beta)"
+                onChange={(e) => setVectorPDF(e.target.checked)}
+              />
+            </div>
+          )}
+          {(type === 'mp4' ||
+            type === 'pptx' ||
+            (type === 'pdf' && vectorPDF)) && (
             <>
               <div style={{ padding: '10px', maxWidth: '180px', opacity: 0.8 }}>
                 <strong>Beta feature.</strong>{' '}
