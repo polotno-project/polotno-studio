@@ -18,10 +18,6 @@
 
     "position": "Position",
     "layering": "Layering",
-    "toForward": "To forward",
-    "up": "Up",
-    "down": "Down",
-    "toBottom": "To bottom",
     "alignLeft": "Align left",
     "alignCenter": "Align center",
     "alignRight": "Align right",
