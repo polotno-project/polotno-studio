@@ -81,7 +81,7 @@ export default observer(({ store }) => {
   const project = useProject();
 
   return (
-    <NavbarContainer className="bp5-navbar">
+    <NavbarContainer className="bp5-navbar topbar">
       <NavInner>
         <Navbar.Group align={Alignment.LEFT}>
           <FileMenu store={store} project={project} />
@@ -102,19 +102,12 @@ export default observer(({ store }) => {
           </div>
         </Navbar.Group>
         <Navbar.Group align={Alignment.RIGHT}>
-          <Status project={project} />
+          {/* <Status project={project} /> */}
 
-          <AnchorButton
-            href="https://polotno.com"
-            target="_blank"
-            minimal
-            icon={
-              <BiCodeBlock className="bp5-icon" style={{ fontSize: '20px' }} />
-            }
-          >
-            API
+          <AnchorButton href="https://polotno.com" target="_blank" minimal>
+            For developers
           </AnchorButton>
-
+          {/* 
           <AnchorButton
             minimal
             href="https://github.com/lavrton/polotno-studio"
@@ -130,7 +123,7 @@ export default observer(({ store }) => {
             icon={
               <FaTwitter className="bp5-icon" style={{ fontSize: '20px' }} />
             }
-          ></AnchorButton>
+          ></AnchorButton> */}
           <NavbarDivider />
           <PostProcessButton store={store} />
           <DownloadButton store={store} />

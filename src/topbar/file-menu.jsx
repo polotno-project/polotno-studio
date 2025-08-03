@@ -17,6 +17,7 @@ import {
   FolderOpen,
   FloppyDisk,
   Import,
+  AlignJustify,
 } from '@blueprintjs/icons';
 import { downloadFile } from 'polotno/utils/download';
 import { svgToJson } from 'polotno/utils/from-svg';
@@ -118,7 +119,7 @@ export const FileMenu = observer(({ store, project }) => {
         }
         position={Position.BOTTOM_RIGHT}
       >
-        <Button minimal text="File" />
+        <Button minimal icon={<AlignJustify />} />
       </Popover>
       <input
         type="file"

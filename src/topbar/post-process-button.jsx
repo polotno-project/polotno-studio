@@ -45,11 +45,7 @@ export const PostProcessButton = observer(({ store }) => {
 
   return (
     <>
-      <Button
-        intent="success"
-        onClick={handlePostProcess}
-        style={{ marginRight: '10px' }}
-      >
+      <Button onClick={handlePostProcess} style={{ marginRight: '10px' }}>
         Beautify
       </Button>
 

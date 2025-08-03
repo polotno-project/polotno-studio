@@ -10,7 +10,7 @@ import {
   ProgressBar,
   Checkbox,
 } from '@blueprintjs/core';
-import { Import } from '@blueprintjs/icons';
+import { Import, ChevronDown } from '@blueprintjs/icons';
 import JSZip from 'jszip';
 import { downloadFile } from 'polotno/utils/download';
 import * as unit from 'polotno/utils/unit';
@@ -390,7 +390,7 @@ export const DownloadButton = observer(({ store }) => {
       position={Position.BOTTOM_RIGHT}
     >
       <Button
-        icon={<Import />}
+        endIcon={<ChevronDown />}
         text={t('toolbar.download')}
         intent="primary"
         onClick={() => {

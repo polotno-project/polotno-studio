@@ -1,0 +1,62 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&display=swap');
+
+body {
+    font-family: 'IBM Plex Sans', sans-serif;
+}
+
+.bp5-dark .topbar .bp5-button, .bp5-dark .bp5-button.bp5-intent-primary  {
+    box-shadow: none !important;
+    padding: 9px 20px;
+    border-radius: 4px;
+}
+
+
+.bp5-navbar.bp5-dark, .bp5-dark .bp5-navbar {
+    background-color: #161616;
+    border-bottom: 1px solid #393939;
+    box-shadow: none;
+}
+
+.bp5-dark .bp5-menu {
+    background-color: #161616;
+}
+
+.bp5-dark .polotno-app-container .polotno-side-panel .fill  {
+    fill: #161616;
+}
+
+.bp5-popover.bp5-dark .bp5-popover-arrow-fill, .bp5-dark .bp5-popover .bp5-popover-arrow-fill {
+    fill: #161616;
+}
+
+.polotno-side-tabs-container {
+    border-right: 1px solid #393939;
+    min-width: 86px;
+}
+
+@media screen and (min-width: 501px) {
+    .polotno-app-container .polotno-side-tabs-container {
+        min-width: 86px;
+    }
+}
+
+.polotno-app-container .polotno-side-panel-tab {
+    height: 80px;
+    padding-top: 19px;
+}
+
+.polotno-panel-container {
+    border-right: 1px solid #393939;
+}
+
+ .bp5-dark .polotno-app-container .go3977838046:hover,  .bp5-dark .polotno-app-container .go3977838046.active {
+    background-color: #262626;
+    color: white !important;
+    border-top: 1px solid #393939;
+    border-bottom: 1px solid #393939;
+}
+
+.bp5-popover.bp5-dark, .bp5-dark .bp5-popover {
+    box-shadow: none;
+    background-color: #393939;
+}
