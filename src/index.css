@@ -17,8 +17,16 @@ body {
     box-shadow: none;
 }
 
-.bp5-dark .bp5-menu {
-    background-color: #161616;
+.bp5-popover.bp5-dark .bp5-popover-content, .bp5-dark .bp5-popover .bp5-popover-content {
+    background-color: #393939;
+    border-radius: 4px;
+    color: white;
+}
+
+body .bp5-dark .bp5-menu {
+    background-color: #393939;
+    border-radius: 4px;
+    color: white;
 }
 
 .bp5-dark .polotno-app-container .polotno-side-panel .fill  {
@@ -26,7 +34,7 @@ body {
 }
 
 .bp5-popover.bp5-dark .bp5-popover-arrow-fill, .bp5-dark .bp5-popover .bp5-popover-arrow-fill {
-    fill: #161616;
+    fill: #393939;
 }
 
 .polotno-side-tabs-container {
@@ -58,5 +66,16 @@ body {
 
 .bp5-popover.bp5-dark, .bp5-dark .bp5-popover {
     box-shadow: none;
+}
+
+.bp5-popover.bp5-dark .bp5-popover-arrow::before, .bp5-dark .bp5-popover .bp5-popover-arrow::before {
+    display: none;
+}
+
+.bp5-popover-arrow-fill {
     background-color: #393939;
+}
+
+.bp5-dark .bp5-menu-item::before, .bp5-dark .bp5-menu-item .bp5-menu-item-icon, .bp5-dark .bp5-menu-item .bp5-menu-item-selected-icon, .bp5-dark .bp5-menu-item .bp5-submenu-icon {
+    color: white;
 }
