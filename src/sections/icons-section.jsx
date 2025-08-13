@@ -40,7 +40,9 @@ export const NounprojectPanel = observer(({ store, query }) => {
   const { data, isLoading, loadMore, setQuery, hasMore } = useInfiniteAPI({
     defaultQuery: query,
     getAPI: ({ page, query }) =>
-      `${getAPI()}/get-nounproject?query=${query}&page=${page}&limit=${limit}&KEY=${getKey()}`,
+      `${getAPI()}/get-nounproject?query=${query}&page=${page}&limit=${limit}&KEY=${
+        getKey() + '-test'
+      }`,
     getSize: (res) => {
       return res.pagesNumber;
     },
@@ -218,7 +220,7 @@ export const IconsPanel = ({ store }) => {
   React.useEffect(() => {
     requestTimeout.current = setTimeout(() => {
       setDelayedQuery(query);
-    }, 500);
+    }, 800);
     return () => {
       clearTimeout(requestTimeout.current);
     };
