@@ -40,9 +40,7 @@ export const NounprojectPanel = observer(({ store, query }) => {
   const { data, isLoading, loadMore, setQuery, hasMore } = useInfiniteAPI({
     defaultQuery: query,
     getAPI: ({ page, query }) =>
-      `${getAPI()}/get-nounproject?query=${query}&page=${page}&limit=${limit}&KEY=${
-        getKey() + '-test'
-      }`,
+      `${getAPI()}/get-nounproject?query=${query}&page=${page}&limit=${limit}&KEY=${getKey()}`,
     getSize: (res) => {
       return res.pagesNumber;
     },
