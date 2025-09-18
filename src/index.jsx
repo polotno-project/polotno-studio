@@ -5,6 +5,7 @@ import { createStore } from 'polotno/model/store';
 import { unstable_setAnimationsEnabled } from 'polotno/config';
 import { createProject, ProjectContext } from './project';
 
+import '@blueprintjs/core/lib/css/blueprint.css';
 import './index.css';
 import App from './App';
 import './logger';

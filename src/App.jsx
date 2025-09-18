@@ -30,6 +30,8 @@ import zhCh from './translations/zh-ch';
 
 import Topbar from './topbar/topbar';
 
+// import '@blueprintjs/core/lib/css/blueprint.css';
+
 // load default translations
 setTranslations(en);
 
