@@ -16,11 +16,12 @@ import { downloadFile } from 'polotno/utils/download';
 import * as unit from 'polotno/utils/unit';
 import { t } from 'polotno/utils/l10n';
 import { jsonToPPTX } from 'polotno/utils/to-pptx';
+import { getKey } from 'polotno/utils/validate-key';
 
 const saveAsVideo = async ({ store, pixelRatio, fps, onProgress }) => {
   const json = store.toJSON();
   const req = await fetch(
-    'https://api.polotno.dev/api/renders?KEY=nFA5H9elEytDyPyvKL7T',
+    'https://api.polotno.dev/api/renders?KEY=' + getKey(),
     {
       method: 'POST',
       headers: {
@@ -36,7 +37,7 @@ const saveAsVideo = async ({ store, pixelRatio, fps, onProgress }) => {
   const job = await req.json();
   while (true) {
     const jobReq = await fetch(
-      `https://api.polotno.dev/api/renders/${job.id}?KEY=nFA5H9elEytDyPyvKL7T`
+      `https://api.polotno.dev/api/renders/${job.id}?KEY=` + getKey()
     );
     const jobData = await jobReq.json();
     if (jobData.status === 'done') {
@@ -55,7 +56,7 @@ const saveAsVideo = async ({ store, pixelRatio, fps, onProgress }) => {
 const saveAsVectorPDF = async ({ store, pixelRatio, onProgress }) => {
   const json = store.toJSON();
   const req = await fetch(
-    'https://api.polotno.dev/api/renders?KEY=nFA5H9elEytDyPyvKL7T',
+    'https://api.polotno.dev/api/renders?KEY=' + getKey(),
     {
       method: 'POST',
       headers: {
@@ -74,7 +75,7 @@ const saveAsVectorPDF = async ({ store, pixelRatio, onProgress }) => {
 
   while (true) {
     const jobReq = await fetch(
-      `https://api.polotno.dev/api/renders/${job.id}?KEY=nFA5H9elEytDyPyvKL7T`
+      `https://api.polotno.dev/api/renders/${job.id}?KEY=` + getKey()
     );
     const jobData = await jobReq.json();
 

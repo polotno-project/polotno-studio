@@ -1,17 +1,12 @@
 import React from 'react';
 import { InputGroup } from '@blueprintjs/core';
 import { ImagesGrid } from 'polotno/side-panel/images-grid';
-import { getVideoSize } from 'polotno/utils/video';
 import { SectionTab } from 'polotno/side-panel';
 import { useInfiniteAPI } from 'polotno/utils/use-api';
 import { t } from 'polotno/utils/l10n';
 import { Video } from '@blueprintjs/icons';
 import { selectVideo } from 'polotno/side-panel/select-video';
-
-// this is a demo key just for that project
-// (!) please don't use it in your projects
-// to create your own API key please go here: https://polotno.com/login
-const key = 'nFA5H9elEytDyPyvKL7T';
+import { getKey } from 'polotno/utils/validate-key';
 
 // use Polotno API proxy into Pexels
 // WARNING: don't use on production! Use your own proxy and Pexels API key
@@ -20,7 +15,7 @@ const API = 'https://api.polotno.com/api/pexels/videos';
 const getPexelsVideoAPI = ({ query, page }) =>
   `${API}/${
     query ? 'search' : 'popular'
-  }?query=${query}&per_page=20&page=${page}&KEY=${key}`;
+  }?query=${query}&per_page=20&page=${page}&KEY=${getKey()}`;
 
 export const VideosPanel = ({ store }) => {
   const { setQuery, loadMore, isReachingEnd, data, isLoading, error } =
