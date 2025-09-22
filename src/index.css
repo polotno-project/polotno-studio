@@ -10,6 +10,15 @@ body {
     border-radius: 4px;
 }
 
+.bp5-button {
+    background-color: #393939;
+}
+
+.bp5-dark  .bp5-button.bp5-intent-primary {
+    background-color: #1764EA;
+} 
+
+
 
 .bp5-navbar.bp5-dark, .bp5-dark .bp5-navbar {
     background-color: #161616;
