@@ -231,9 +231,7 @@ export const DownloadButton = observer(({ store }) => {
     <Popover
       content={
         <Menu>
-          <li className="bp5-menu-header">
-            <h6 className="bp5-heading">File type</h6>
-          </li>
+          <p>File type</p>
           <HTMLSelect
             fill
             onChange={(e) => {
@@ -244,6 +242,7 @@ export const DownloadButton = observer(({ store }) => {
               }
             }}
             value={type}
+            style={{}}
           >
             <option value="jpeg">JPEG</option>
             <option value="png">PNG</option>
@@ -261,9 +260,7 @@ export const DownloadButton = observer(({ store }) => {
             type !== 'svg' &&
             type !== 'pptx' && (
               <>
-                <li className="bp5-menu-header">
-                  <h6 className="bp5-heading">Quality</h6>
-                </li>
+                <p style={{ paddingTop: '10px' }}>Quality</p>
                 <div style={{ padding: '10px' }}>
                   <Slider
                     value={quality}
@@ -277,10 +274,12 @@ export const DownloadButton = observer(({ store }) => {
                     showTrackFill={false}
                   />
                   {type === 'pdf' && (
-                    <div>DPI: {Math.round(store.dpi * quality)}</div>
+                    <div style={{ paddingTop: '10px' }}>
+                      DPI: {Math.round(store.dpi * quality)}
+                    </div>
                   )}
                   {type !== 'pdf' && (
-                    <div>
+                    <div style={{ paddingTop: '10px' }}>
                       {Math.round(store.activePage.computedWidth * quality)} x{' '}
                       {Math.round(store.activePage.computedHeight * quality)} px
                     </div>

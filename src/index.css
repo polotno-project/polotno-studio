@@ -19,6 +19,17 @@ body {
 } 
 
 
+body .bp5-input[type=search] {
+    border-radius: 1px;
+    border: 1px solid #393939;
+    box-shadow: none;
+    background-color: #262626;
+    height: 36px;
+}
+
+body .bp5-input-group .bp5-icon-search {
+    margin: 10px;
+}
 
 .bp5-navbar.bp5-dark, .bp5-dark .bp5-navbar {
     background-color: #161616;
@@ -36,6 +47,20 @@ body .bp5-dark .bp5-menu {
     background-color: #393939;
     border-radius: 4px;
     color: white;
+    padding: 16px;
+}
+
+body .bp5-dark .bp5-html-select select, body .bp5-dark .bp5-select select {
+    background-color: #262626;
+    border: 1px solid #6F6F6F;
+    border-radius: 4px;
+    height: 36px;
+    font-size: 14px;
+    box-shadow: none;
+}
+
+body .bp5-dark .bp5-html-select .bp5-icon {
+    margin: 4px
 }
 
 .bp5-dark .polotno-app-container .polotno-side-panel .fill  {
