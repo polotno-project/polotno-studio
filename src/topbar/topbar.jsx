@@ -25,6 +25,8 @@ import { DownloadButton } from './download-button';
 import { PostProcessButton } from './post-process-button';
 import { UserMenu } from './user-menu';
 import { CloudWarning } from '../cloud-warning';
+import { useAuth } from '../hooks/useAuth';
+import { signOut } from '../lib/supabase';
 
 const NavbarContainer = styled('div')`
   white-space: nowrap;
@@ -79,6 +81,8 @@ const Status = observer(({ project }) => {
 
 export default observer(({ store }) => {
   const project = useProject();
+  const { user } = useAuth();
+  const [authModalOpen, setAuthModalOpen] = React.useState(false);
 
   return (
     <NavbarContainer className="bp5-navbar">
@@ -134,10 +138,30 @@ export default observer(({ store }) => {
           <NavbarDivider />
           <PostProcessButton store={store} />
           <DownloadButton store={store} />
-          <UserMenu store={store} project={project} />
+          
+          {user ? (
+            <Button
+              minimal
+              icon="user"
+              text={user.email}
+              onClick={async () => {
+                await signOut();
+              }}
+            />
+          ) : (
+            <Button
+              minimal
+              icon="log-in"
+              text="Sign In"
+              onClick={() => setAuthModalOpen(true)}
+            />
+          )}
+          
           {/* <NavbarHeading>Polotno Studio</NavbarHeading> */}
         </Navbar.Group>
       </NavInner>
+      
+      {/* Import AuthModal component here if needed */}
     </NavbarContainer>
   );
 });
