@@ -9,6 +9,14 @@ export default defineConfig({
     project: "polotno-studio"
   })],
 
+  server: {
+    host: true,
+    hmr: {
+      clientPort: 443,
+      protocol: 'wss'
+    }
+  },
+
   build: {
     sourcemap: true
   }
