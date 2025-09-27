@@ -18,6 +18,10 @@ import { IconsSection } from './sections/icons-section';
 import { ShapesSection } from './sections/shapes-section';
 import { StableDiffusionSection } from './sections/stable-diffusion-section';
 import { MyDesignsSection } from './sections/my-designs-section';
+import { AIImageSection } from './sections/ai-image-section';
+import { AIVideoSection } from './sections/ai-video-section';
+import { AuthModal } from './components/AuthModal';
+import { useAuth } from './hooks/useAuth';
 
 import { useProject } from './project';
 
@@ -43,6 +47,8 @@ DEFAULT_SECTIONS.push(QuotesSection, QrSection);
 DEFAULT_SECTIONS.unshift(MyDesignsSection);
 
 DEFAULT_SECTIONS.push(StableDiffusionSection);
+DEFAULT_SECTIONS.push(AIImageSection);
+DEFAULT_SECTIONS.push(AIVideoSection);
 // DEFAULT_SECTIONS.push(VideosSection);
 
 const isStandalone = () => {
@@ -91,6 +97,8 @@ const useHeight = () => {
 const App = observer(({ store }) => {
   const project = useProject();
   const height = useHeight();
+  const { user, loading: authLoading } = useAuth();
+  const [authModalOpen, setAuthModalOpen] = React.useState(false);
 
   React.useEffect(() => {
     if (project.language.startsWith('fr')) {
@@ -176,6 +184,14 @@ const App = observer(({ store }) => {
           </div>
         </div>
       )}
+      
+      <AuthModal
+        isOpen={authModalOpen}
+        onClose={() => setAuthModalOpen(false)}
+        onSuccess={(user) => {
+          console.log('User authenticated:', user);
+        }}
+      />
     </div>
   );
 });
