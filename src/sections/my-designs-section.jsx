@@ -14,9 +14,29 @@ import { DocumentOpen, Trash, More } from '@blueprintjs/icons';
 import { CloudWarning } from '../cloud-warning';
 
 import { SectionTab } from 'polotno/side-panel';
-import FaFolder from '@meronex/icons/fa/FaFolder';
 import { useProject } from '../project';
 import * as api from '../api';
+
+const FolderIcon = () => (
+  <svg
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <g>
+      <path
+        d="M19.5 21H4.5C4.1023 20.9996 3.72101 20.8414 3.4398 20.5602C3.15859 20.279 3.00042 19.8977 3 19.5V8.25C3.00042 7.8523 3.15859 7.47101 3.4398 7.1898C3.72101 6.90859 4.1023 6.75042 4.5 6.75H8.74988C9.07451 6.75053 9.39031 6.85573 9.6504 7.05L12.2501 9H19.5C19.8977 9.00042 20.279 9.15859 20.5602 9.4398C20.8414 9.72101 20.9996 10.1023 21 10.5V19.5C20.9996 19.8977 20.8414 20.279 20.5602 20.5602C20.279 20.8414 19.8977 20.9996 19.5 21ZM8.74988 8.25H4.49887L4.5 19.5H19.5V10.5H11.7499L8.74988 8.25Z"
+        fill="white"
+      />
+      <path
+        d="M21 6.75H13.2499L10.2499 4.5H4.5V3H10.2499C10.5745 3.00053 10.8903 3.10573 11.1504 3.3L13.7501 5.25H21V6.75Z"
+        fill="white"
+      />
+    </g>
+  </svg>
+);
 
 const DesignCard = observer(({ design, store, onDelete }) => {
   const [loading, setLoading] = React.useState(false);
@@ -212,7 +232,7 @@ export const MyDesignsSection = {
   name: 'my-designs',
   Tab: (props) => (
     <SectionTab name="My Designs" {...props}>
-      <FaFolder />
+      <FolderIcon />
     </SectionTab>
   ),
   // we need observer to update component automatically on any store changes

@@ -10,8 +10,36 @@ import { getImageSize } from 'polotno/utils/image';
 import styled from 'polotno/utils/styled';
 import { t } from 'polotno/utils/l10n';
 import { useInfiniteAPI } from 'polotno/utils/use-api';
-import FaVectorSquare from '@meronex/icons/fa/FaVectorSquare';
 import { getAPI } from 'polotno/utils/api';
+
+const IconsIcon = () => (
+  <svg
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <g>
+      <path
+        d="M3.75 12H2.25V20.25C2.25 21.0784 2.92155 21.75 3.75 21.75H9.75V20.25H3.75V12Z"
+        fill="white"
+      />
+      <path
+        d="M21 21.75H12.75C12.4849 21.75 12.2393 21.6101 12.1044 21.3817C12.0349 21.2641 12 21.1321 12 21C12 20.8757 12.0309 20.7512 12.0929 20.6386L16.2179 13.1386C16.3602 12.8798 16.6178 12.7502 16.875 12.75C17.1326 12.7498 17.3896 12.8793 17.5321 13.1386L21.6572 20.6386C21.7191 20.7512 21.75 20.8757 21.75 21C21.75 21.1321 21.7151 21.2641 21.6456 21.3817C21.5107 21.61 21.2651 21.75 21 21.75ZM14.0184 20.25H19.7317L16.8751 15.0563L14.0184 20.25Z"
+        fill="white"
+      />
+      <path
+        d="M20.25 2.25H12V3.75H20.25V14.2442H21.75V3.75C21.75 2.92162 21.0785 2.25 20.25 2.25Z"
+        fill="white"
+      />
+      <path
+        d="M8.25 2.25H3.75C2.92155 2.25 2.25 2.92162 2.25 3.75V8.25C2.25 9.07837 2.92155 9.75 3.75 9.75H8.25C9.07845 9.75 9.75 9.07837 9.75 8.25V3.75C9.75 2.92162 9.07845 2.25 8.25 2.25ZM8.25 8.25H3.75V3.75H8.25V8.25Z"
+        fill="white"
+      />
+    </g>
+  </svg>
+);
 
 import { ImagesGrid } from 'polotno/side-panel/images-grid';
 
@@ -297,7 +325,7 @@ export const IconsSection = {
   name: 'icons',
   Tab: observer((props) => (
     <SectionTab name={t('sidePanel.icons')} {...props}>
-      <FaVectorSquare />
+      <IconsIcon />
     </SectionTab>
   )),
   // we need observer to update component automatically on any store changes

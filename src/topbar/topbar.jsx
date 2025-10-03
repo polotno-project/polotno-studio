@@ -84,6 +84,35 @@ export default observer(({ store }) => {
     <NavbarContainer className="bp5-navbar topbar">
       <NavInner>
         <Navbar.Group align={Alignment.LEFT}>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px',
+              padding: '0 16px',
+            }}
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <rect width="20" height="20" fill="white" />
+            </svg>
+            <span
+              style={{
+                fontWeight: 500,
+                fontSize: '21px',
+                lineHeight: '100%',
+                letterSpacing: '0.25px',
+              }}
+            >
+              Polotno
+            </span>
+          </div>
+          <NavbarDivider />
           <FileMenu store={store} project={project} />
           <div
             style={{
