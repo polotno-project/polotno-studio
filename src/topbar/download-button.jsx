@@ -10,12 +10,12 @@ import {
   ProgressBar,
   Checkbox,
 } from '@blueprintjs/core';
-import { Import, ChevronDown } from '@blueprintjs/icons';
+import { ChevronDown } from '@blueprintjs/icons';
 import JSZip from 'jszip';
 import { downloadFile } from 'polotno/utils/download';
 import * as unit from 'polotno/utils/unit';
 import { t } from 'polotno/utils/l10n';
-import { jsonToPPTX } from 'polotno/utils/to-pptx';
+import { jsonToPPTX } from '@polotno/pptx-export';
 import { getKey } from 'polotno/utils/validate-key';
 
 const saveAsVideo = async ({ store, pixelRatio, fps, onProgress }) => {
@@ -163,7 +163,13 @@ export const DownloadButton = observer(({ store }) => {
           fps,
         });
       } else if (type === 'pptx') {
-        await jsonToPPTX({ json: store.toJSON() });
+        import('@polotno/pptx-export').then((module) => {
+          module.jsonToPPTX({
+            json: store.toJSON(),
+            output: getName() + '.pptx',
+          });
+        });
+        // await jsonToPPTX({ json: store.toJSON(), output: getName() + '.pptx' });
         // downloadFile(pptx, 'polotno.pptx');
       } else if (type === 'mp4') {
         setProgressStatus('scheduled');
