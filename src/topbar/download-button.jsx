@@ -15,7 +15,6 @@ import JSZip from 'jszip';
 import { downloadFile } from 'polotno/utils/download';
 import * as unit from 'polotno/utils/unit';
 import { t } from 'polotno/utils/l10n';
-import { jsonToPPTX } from '@polotno/pptx-export';
 import { getKey } from 'polotno/utils/validate-key';
 
 const saveAsVideo = async ({ store, pixelRatio, fps, onProgress }) => {
