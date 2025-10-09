@@ -17,6 +17,32 @@ import * as unit from 'polotno/utils/unit';
 import { t } from 'polotno/utils/l10n';
 import { getKey } from 'polotno/utils/validate-key';
 
+// Client-side video rendering
+const saveAsVideoClient = async ({
+  store,
+  fileName,
+  pixelRatio,
+  fps,
+  onProgress,
+}) => {
+  const module = await import('@polotno/video-export');
+  const blob = await module.storeToVideo({
+    store,
+    pixelRatio,
+    fps,
+    onProgress: (progress, frameTime) => {
+      // progress is 0-1, convert to 0-100
+      onProgress(progress * 100, 'rendering');
+    },
+  });
+
+  // Download the video blob
+  const url = URL.createObjectURL(blob);
+  downloadFile(url, fileName);
+  URL.revokeObjectURL(url);
+};
+
+// Cloud-side video rendering
 const saveAsVideo = async ({ store, pixelRatio, fps, onProgress }) => {
   const json = store.toJSON();
   const req = await fetch(
@@ -101,6 +127,8 @@ export const DownloadButton = observer(({ store }) => {
   const [progressStatus, setProgressStatus] = React.useState('scheduled');
   // flag for vector pdf
   const [vectorPDF, setVectorPDF] = React.useState(false);
+  // flag for client-side video rendering
+  const [clientSideVideo, setClientSideVideo] = React.useState(true);
 
   const getName = () => {
     const texts = [];
@@ -171,17 +199,34 @@ export const DownloadButton = observer(({ store }) => {
         // await jsonToPPTX({ json: store.toJSON(), output: getName() + '.pptx' });
         // downloadFile(pptx, 'polotno.pptx');
       } else if (type === 'mp4') {
-        setProgressStatus('scheduled');
-        await saveAsVideo({
-          store,
-          pixelRatio: quality,
-          onProgress: (progress, status) => {
-            setProgress(progress);
-            setProgressStatus(status);
-          },
-        });
-        setProgressStatus('done');
-        setProgress(0);
+        if (clientSideVideo) {
+          setProgressStatus('rendering');
+          await saveAsVideoClient({
+            store,
+            fileName: getName() + '.mp4',
+            pixelRatio: quality,
+            fps: 30,
+            onProgress: (progress, status) => {
+              setProgress(progress);
+              setProgressStatus(status);
+            },
+          });
+          setProgressStatus('done');
+          setProgress(0);
+        } else {
+          setProgressStatus('scheduled');
+          await saveAsVideo({
+            store,
+            pixelRatio: quality,
+            fps: 30,
+            onProgress: (progress, status) => {
+              setProgress(progress);
+              setProgressStatus(status);
+            },
+          });
+          setProgressStatus('done');
+          setProgress(0);
+        }
       } else {
         if (store.pages.length < 3) {
           store.pages.forEach((page, index) => {
@@ -257,7 +302,7 @@ export const DownloadButton = observer(({ store }) => {
             <option value="pptx">PPTX</option>
             <option value="json">JSON</option>
             <option value="gif">GIF</option>
-            <option value="mp4">MP4 Video (Beta)</option>
+            <option value="mp4">MP4 Video</option>
           </HTMLSelect>
 
           {type !== 'json' &&
@@ -368,17 +413,20 @@ export const DownloadButton = observer(({ store }) => {
               />
             </div>
           )}
+          {type === 'mp4' && (
+            <div style={{ padding: '10px' }}>
+              <Checkbox
+                checked={clientSideVideo}
+                label="Client-side rendering"
+                onChange={(e) => setClientSideVideo(e.target.checked)}
+              />
+            </div>
+          )}
           {(type === 'mp4' ||
             type === 'pptx' ||
             (type === 'pdf' && vectorPDF)) && (
             <>
-              <div style={{ padding: '10px', maxWidth: '180px', opacity: 0.8 }}>
-                <strong>Beta feature.</strong>{' '}
-                <a href="mailto:anton@polotno.com">
-                  Let us know what you think!
-                </a>
-              </div>
-              {saving && (
+              {saving && (type === 'mp4' || (type === 'pdf' && vectorPDF)) && (
                 <div
                   style={{ padding: '10px', maxWidth: '180px', opacity: 0.8 }}
                 >

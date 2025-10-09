@@ -9,6 +9,7 @@
     "@blueprintjs/icons": "^5.22.0",
     "@meronex/icons": "^4.0.0",
     "@polotno/pptx-export": "^0.0.1",
+    "@polotno/video-export": "^0.0.1",
     "@sentry/browser": "^9.30.0",
     "@sentry/tracing": "^7.120.3",
     "@sentry/vite-plugin": "^3.5.0",
