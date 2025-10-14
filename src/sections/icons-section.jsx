@@ -67,6 +67,7 @@ export const NounprojectPanel = observer(({ store, query }) => {
   // load data
   const { data, isLoading, loadMore, setQuery, hasMore } = useInfiniteAPI({
     defaultQuery: query,
+    timeout: 10000,
     getAPI: ({ page, query }) =>
       `${getAPI()}/get-nounproject?query=${query}&page=${page}&limit=${limit}&KEY=${getKey()}`,
     getSize: (res) => {
