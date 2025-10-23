@@ -1,0 +1,19 @@
+[[redirects]]
+  from = "/studio/assets/*"
+  to = "/studio/assets/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/studio"
+  to = "/studio/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/studio/*"
+  to = "/studio/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/"
+  to = "/studio/index.html"
+  status = 200
