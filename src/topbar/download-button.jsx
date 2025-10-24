@@ -160,21 +160,29 @@ export const DownloadButton = observer(({ store }) => {
           });
           setProgressStatus('done');
           setProgress(0);
+          // Track vector PDF export
+          window.plausible?.('export-vector-pdf');
         } else {
           await store.saveAsPDF({
             fileName: getName() + '.pdf',
             dpi: store.dpi / pageSizeModifier,
             pixelRatio: quality * Math.sqrt(300 / 72),
           });
+          // Track flat PDF export
+          window.plausible?.('export-flat-pdf');
         }
       } else if (type === 'html') {
         await store.saveAsHTML({
           fileName: getName() + '.html',
         });
+        // Track HTML export
+        window.plausible?.('export-html');
       } else if (type === 'svg') {
         await store.saveAsSVG({
           fileName: getName() + '.svg',
         });
+        // Track SVG export
+        window.plausible?.('export-svg');
       } else if (type === 'json') {
         const json = store.toJSON();
 
@@ -183,12 +191,16 @@ export const DownloadButton = observer(({ store }) => {
           window.btoa(unescape(encodeURIComponent(JSON.stringify(json))));
 
         downloadFile(url, 'polotno.json');
+        // Track JSON export
+        window.plausible?.('export-json');
       } else if (type === 'gif') {
         await store.saveAsGIF({
           fileName: getName() + '.gif',
           pixelRatio: quality,
           fps,
         });
+        // Track GIF export
+        window.plausible?.('export-gif');
       } else if (type === 'pptx') {
         import('@polotno/pptx-export').then((module) => {
           module.jsonToPPTX({
@@ -196,6 +208,8 @@ export const DownloadButton = observer(({ store }) => {
             output: getName() + '.pptx',
           });
         });
+        // Track PPTX export
+        window.plausible?.('export-pptx');
         // await jsonToPPTX({ json: store.toJSON(), output: getName() + '.pptx' });
         // downloadFile(pptx, 'polotno.pptx');
       } else if (type === 'mp4') {
@@ -227,6 +241,8 @@ export const DownloadButton = observer(({ store }) => {
           setProgressStatus('done');
           setProgress(0);
         }
+        // Track MP4 export
+        window.plausible?.('export-mp4');
       } else {
         if (store.pages.length < 3) {
           store.pages.forEach((page, index) => {
@@ -263,8 +279,12 @@ export const DownloadButton = observer(({ store }) => {
           console.log(content);
           downloadFile(result, getName() + '.zip');
         }
+        // Track image exports (jpeg/png)
+        window.plausible?.(`export-${type}`);
       }
     } catch (e) {
+      // Track export failure
+      window.plausible?.('export-failed');
       // throw into global error handler for reporting
       setTimeout(() => {
         throw e;
