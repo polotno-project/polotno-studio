@@ -353,6 +353,24 @@ const App = observer(({ store }) => {
     project.firstLoad();
   }, []);
 
+  React.useEffect(() => {
+    const path = window.location.pathname;
+    if (path.endsWith('/sign-in') || path.endsWith('/sign-up')) {
+      project
+        .signIn()
+        .then(() => {
+          // Clean up the URL only after successful sign-in
+          // Remove /sign-in or /sign-up from the path
+          const cleanPath = path.replace(/\/(sign-in|sign-up)$/, '') || '/';
+          window.history.replaceState({}, '', cleanPath);
+        })
+        .catch((err) => {
+          // Keep the URL if sign-in failed or was canceled
+          console.error('Sign-in failed:', err);
+        });
+    }
+  }, []);
+
   const handleDrop = (ev) => {
     // Prevent default behavior (Prevent file from being opened)
     ev.preventDefault();
