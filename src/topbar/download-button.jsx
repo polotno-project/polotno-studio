@@ -424,6 +424,28 @@ export const DownloadButton = observer(({ store }) => {
               </div>
             </>
           )}
+          {type === 'html' && (
+            <>
+              <div style={{ padding: '10px', maxWidth: '180px', opacity: 0.8 }}>
+                HTML format is used for embedding your design in web pages.
+              </div>
+            </>
+          )}
+          {type === 'svg' && (
+            <>
+              <div style={{ padding: '10px', maxWidth: '180px', opacity: 0.8 }}>
+                SVG is a vector graphic format that can be scaled without
+                quality loss.
+              </div>
+            </>
+          )}
+          {type === 'pptx' && (
+            <>
+              <div style={{ padding: '10px', maxWidth: '180px', opacity: 0.8 }}>
+                PPTX format is for PowerPoint presentations.
+              </div>
+            </>
+          )}
           {type === 'pdf' && (
             <div style={{ padding: '10px' }}>
               <Checkbox
