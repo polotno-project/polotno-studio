@@ -13,6 +13,14 @@ export default defineConfig({
     // analyzer(),
   ],
 
+  server: {
+    host: true,
+    hmr: {
+      clientPort: 443,
+      protocol: 'wss'
+    }
+  },
+
   build: {
     outDir: 'dist/studio',
     sourcemap: true,
