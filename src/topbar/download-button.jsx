@@ -9,6 +9,7 @@ import {
   Popover,
   ProgressBar,
   Checkbox,
+  Tooltip,
 } from '@blueprintjs/core';
 import { ChevronDown } from '@blueprintjs/icons';
 import JSZip from 'jszip';
@@ -78,8 +79,30 @@ const saveAsVideo = async ({ store, pixelRatio, fps, onProgress }) => {
 };
 
 // Cloud render for vector PDF export
-const saveAsVectorPDF = async ({ store, pixelRatio, onProgress }) => {
+const saveAsVectorPDF = async ({
+  store,
+  pixelRatio,
+  onProgress,
+  colorProfile = 'RGB',
+}) => {
   const json = store.toJSON();
+
+  const renderOptions = {
+    design: json,
+    pixelRatio,
+    format: 'pdf',
+    vector: true,
+  };
+
+  // Add CMYK color profile if selected
+  if (colorProfile === 'CMYK') {
+    renderOptions.color = {
+      space: 'CMYK',
+    };
+    // Add PDF/X-1a for vector + CMYK
+    renderOptions.pdfx1a = true;
+  }
+
   const req = await fetch(
     'https://api.polotno.dev/api/renders?KEY=' + getKey(),
     {
@@ -87,12 +110,66 @@ const saveAsVectorPDF = async ({ store, pixelRatio, onProgress }) => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        design: json,
-        pixelRatio,
-        format: 'pdf',
-        vector: true,
-      }),
+      body: JSON.stringify(renderOptions),
+    }
+  );
+
+  const job = await req.json();
+
+  while (true) {
+    const jobReq = await fetch(
+      `https://api.polotno.dev/api/renders/${job.id}?KEY=` + getKey()
+    );
+    const jobData = await jobReq.json();
+
+    if (jobData.status === 'done') {
+      downloadFile(jobData.output, 'polotno.pdf');
+      break;
+    } else if (jobData.status === 'error') {
+      throw new Error('Failed to render PDF');
+    } else {
+      onProgress(jobData.progress, jobData.status);
+    }
+
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+  }
+};
+
+// Cloud render for CMYK flattened PDF export
+const saveAsCMYKPDF = async ({
+  store,
+  pixelRatio,
+  onProgress,
+  includeBleed = false,
+  cropMarkSize = 0,
+}) => {
+  const json = store.toJSON();
+
+  const renderOptions = {
+    design: json,
+    pixelRatio,
+    format: 'pdf',
+    color: {
+      space: 'CMYK',
+    },
+  };
+
+  if (includeBleed) {
+    renderOptions.includeBleed = true;
+  }
+
+  if (cropMarkSize > 0) {
+    renderOptions.cropMarkSize = cropMarkSize;
+  }
+
+  const req = await fetch(
+    'https://api.polotno.dev/api/renders?KEY=' + getKey(),
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(renderOptions),
     }
   );
 
@@ -125,10 +202,12 @@ export const DownloadButton = observer(({ store }) => {
   const [type, setType] = React.useState('png');
   const [progress, setProgress] = React.useState(0);
   const [progressStatus, setProgressStatus] = React.useState('scheduled');
-  // flag for vector pdf
-  const [vectorPDF, setVectorPDF] = React.useState(false);
   // flag for client-side video rendering
   const [clientSideVideo, setClientSideVideo] = React.useState(true);
+  // PDF export options
+  const [flattenPDF, setFlattenPDF] = React.useState(true);
+  const [cropMarksAndBleed, setCropMarksAndBleed] = React.useState(false);
+  const [colorProfile, setColorProfile] = React.useState('RGB');
 
   const getName = () => {
     const texts = [];
@@ -148,11 +227,13 @@ export const DownloadButton = observer(({ store }) => {
     setSaving(true);
     try {
       if (type === 'pdf') {
-        if (vectorPDF) {
+        // Vector PDF (non-flattened)
+        if (!flattenPDF) {
           setProgressStatus('scheduled');
           await saveAsVectorPDF({
             store,
             pixelRatio: quality * Math.sqrt(300 / 72),
+            colorProfile,
             onProgress: (progress, status) => {
               setProgress(progress);
               setProgressStatus(status);
@@ -162,12 +243,39 @@ export const DownloadButton = observer(({ store }) => {
           setProgress(0);
           // Track vector PDF export
           window.plausible?.('export-vector-pdf');
-        } else {
-          await store.saveAsPDF({
+        }
+        // Flatten PDF with CMYK (always cloud render)
+        else if (flattenPDF && colorProfile === 'CMYK') {
+          setProgressStatus('scheduled');
+          await saveAsCMYKPDF({
+            store,
+            pixelRatio: quality * Math.sqrt(300 / 72),
+            includeBleed: cropMarksAndBleed,
+            cropMarkSize: cropMarksAndBleed ? 20 : 0,
+            onProgress: (progress, status) => {
+              setProgress(progress);
+              setProgressStatus(status);
+            },
+          });
+          setProgressStatus('done');
+          setProgress(0);
+          // Track CMYK PDF export
+          window.plausible?.('export-vector-pdf');
+        }
+        // Flatten PDF with RGB (local export)
+        else if (flattenPDF) {
+          const exportOptions = {
             fileName: getName() + '.pdf',
             dpi: store.dpi / pageSizeModifier,
             pixelRatio: quality * Math.sqrt(300 / 72),
-          });
+          };
+
+          if (cropMarksAndBleed) {
+            exportOptions.includeBleed = true;
+            exportOptions.cropMarkSize = 20;
+          }
+
+          await store.saveAsPDF(exportOptions);
           // Track flat PDF export
           window.plausible?.('export-flat-pdf');
         }
@@ -300,16 +408,13 @@ export const DownloadButton = observer(({ store }) => {
   return (
     <Popover
       content={
-        <Menu>
+        <Menu style={{ minWidth: '280px' }}>
           <p>File type</p>
           <HTMLSelect
             fill
             onChange={(e) => {
               setType(e.target.value);
               setQuality(1);
-              if (e.target.value !== 'pdf') {
-                setVectorPDF(false);
-              }
             }}
             value={type}
             style={{}}
@@ -325,13 +430,47 @@ export const DownloadButton = observer(({ store }) => {
             <option value="mp4">MP4 Video</option>
           </HTMLSelect>
 
+          {type === 'pdf' && (
+            <div style={{ paddingTop: '10px' }}>
+              <Tooltip
+                content="Flattening merges all design elements into a single image layer, ensuring consistent printing results. May increase file size."
+                position="bottom"
+              >
+                <Checkbox
+                  checked={flattenPDF}
+                  label="Flatten PDF"
+                  onChange={(e) => setFlattenPDF(e.target.checked)}
+                />
+              </Tooltip>
+              {flattenPDF && (
+                <Checkbox
+                  checked={cropMarksAndBleed}
+                  label="Crop marks and bleed"
+                  onChange={(e) => setCropMarksAndBleed(e.target.checked)}
+                />
+              )}
+              <div style={{ marginTop: '10px' }}>
+                <p style={{ marginBottom: '5px' }}>Color Profile</p>
+                <HTMLSelect
+                  fill
+                  value={colorProfile}
+                  onChange={(e) => setColorProfile(e.target.value)}
+                >
+                  <option value="RGB">RGB</option>
+                  <option value="CMYK">CMYK</option>
+                </HTMLSelect>
+              </div>
+            </div>
+          )}
+
           {type !== 'json' &&
             type !== 'html' &&
             type !== 'svg' &&
-            type !== 'pptx' && (
+            type !== 'pptx' &&
+            (type !== 'pdf' || flattenPDF) && (
               <>
                 <p style={{ paddingTop: '10px' }}>Quality</p>
-                <div style={{ padding: '10px' }}>
+                <div style={{ padding: '0 10px' }}>
                   <Slider
                     value={quality}
                     labelRenderer={false}
@@ -376,7 +515,7 @@ export const DownloadButton = observer(({ store }) => {
                     </>
                   )}
                 </div>
-                {type === 'pdf' && (
+                {type === 'pdf' && flattenPDF && (
                   <>
                     <li className="bp5-menu-header">
                       <h6 className="bp5-heading">Page Size</h6>
@@ -446,15 +585,6 @@ export const DownloadButton = observer(({ store }) => {
               </div>
             </>
           )}
-          {type === 'pdf' && (
-            <div style={{ padding: '10px' }}>
-              <Checkbox
-                checked={vectorPDF}
-                label="Vector (Beta)"
-                onChange={(e) => setVectorPDF(e.target.checked)}
-              />
-            </div>
-          )}
           {type === 'mp4' && (
             <div style={{ padding: '10px' }}>
               <Checkbox
@@ -466,18 +596,28 @@ export const DownloadButton = observer(({ store }) => {
           )}
           {(type === 'mp4' ||
             type === 'pptx' ||
-            (type === 'pdf' && vectorPDF)) && (
+            (type === 'pdf' && !flattenPDF) ||
+            (type === 'pdf' && colorProfile === 'CMYK')) && (
             <>
-              {saving && (type === 'mp4' || (type === 'pdf' && vectorPDF)) && (
-                <div
-                  style={{ padding: '10px', maxWidth: '180px', opacity: 0.8 }}
-                >
-                  <ProgressBar value={Math.max(3, progress) / 100} />
-                </div>
-              )}
+              {saving &&
+                (type === 'mp4' ||
+                  (type === 'pdf' && !flattenPDF) ||
+                  (type === 'pdf' && colorProfile === 'CMYK')) && (
+                  <div
+                    style={{ padding: '10px', maxWidth: '180px', opacity: 0.8 }}
+                  >
+                    <ProgressBar value={Math.max(3, progress) / 100} />
+                  </div>
+                )}
             </>
           )}
-          <Button fill intent="primary" loading={saving} onClick={handleExport}>
+          <Button
+            fill
+            intent="primary"
+            loading={saving}
+            onClick={handleExport}
+            style={{ marginTop: '10px' }}
+          >
             Download {type.toUpperCase()}
           </Button>
         </Menu>
