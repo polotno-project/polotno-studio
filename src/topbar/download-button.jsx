@@ -47,7 +47,7 @@ const saveAsVideoClient = async ({
 const saveAsVideo = async ({ store, pixelRatio, fps, onProgress }) => {
   const json = store.toJSON();
   const req = await fetch(
-    'https://api.polotno.dev/api/renders?KEY=' + getKey(),
+    'https://api.polotno.com/api/renders?KEY=' + getKey(),
     {
       method: 'POST',
       headers: {
@@ -63,7 +63,7 @@ const saveAsVideo = async ({ store, pixelRatio, fps, onProgress }) => {
   const job = await req.json();
   while (true) {
     const jobReq = await fetch(
-      `https://api.polotno.dev/api/renders/${job.id}?KEY=` + getKey()
+      `https://api.polotno.com/api/renders/${job.id}?KEY=` + getKey()
     );
     const jobData = await jobReq.json();
     if (jobData.status === 'done') {
@@ -104,7 +104,7 @@ const saveAsVectorPDF = async ({
   }
 
   const req = await fetch(
-    'https://api.polotno.dev/api/renders?KEY=' + getKey(),
+    'https://api.polotno.com/api/renders?KEY=' + getKey(),
     {
       method: 'POST',
       headers: {
@@ -118,7 +118,7 @@ const saveAsVectorPDF = async ({
 
   while (true) {
     const jobReq = await fetch(
-      `https://api.polotno.dev/api/renders/${job.id}?KEY=` + getKey()
+      `https://api.polotno.com/api/renders/${job.id}?KEY=` + getKey()
     );
     const jobData = await jobReq.json();
 
@@ -163,7 +163,7 @@ const saveAsCMYKPDF = async ({
   }
 
   const req = await fetch(
-    'https://api.polotno.dev/api/renders?KEY=' + getKey(),
+    'https://api.polotno.com/api/renders?KEY=' + getKey(),
     {
       method: 'POST',
       headers: {
@@ -177,7 +177,7 @@ const saveAsCMYKPDF = async ({
 
   while (true) {
     const jobReq = await fetch(
-      `https://api.polotno.dev/api/renders/${job.id}?KEY=` + getKey()
+      `https://api.polotno.com/api/renders/${job.id}?KEY=` + getKey()
     );
     const jobData = await jobReq.json();
 
