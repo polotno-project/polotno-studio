@@ -15,7 +15,7 @@
     "@sentry/vite-plugin": "^3.5.0",
     "jszip": "^3.10.1",
     "localforage": "^1.10.0",
-    "polotno": "^2.31.1",
+    "polotno": "^2.31.2",
     "qrcode": "^1.5.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
