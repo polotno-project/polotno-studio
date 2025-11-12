@@ -13,7 +13,11 @@ import {
 } from 'polotno/side-panel';
 import { Workspace } from 'polotno/canvas/workspace';
 import { PagesTimeline } from 'polotno/pages-timeline';
-import { setTranslations } from 'polotno/config';
+import {
+  setTranslations,
+  setAiTextEnabled,
+  setRemoveBackgroundEnabled,
+} from 'polotno/config';
 
 import { loadFile } from './file';
 
@@ -34,6 +38,9 @@ import ptBr from './translations/pt-br';
 import zhCh from './translations/zh-ch';
 
 import Topbar from './topbar/topbar';
+
+setAiTextEnabled(true);
+setRemoveBackgroundEnabled(true);
 
 // import '@blueprintjs/core/lib/css/blueprint.css';
 
