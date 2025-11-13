@@ -20,6 +20,9 @@ function getType(file) {
   if (type.indexOf('svg') >= 0) {
     return 'svg';
   }
+  if (type.indexOf('gif') >= 0) {
+    return 'gif';
+  }
   if (type.indexOf('image') >= 0) {
     return 'image';
   }
@@ -118,6 +121,7 @@ export const UploadPanel = observer(({ store }) => {
             id="input-file"
             style={{ display: 'none' }}
             onChange={handleFileInput}
+            accept="image/*,video/*"
             multiple
           />
         </label>
@@ -161,7 +165,21 @@ export const UploadPanel = observer(({ store }) => {
             element &&
             element.type === 'image' &&
             element.contentEditable &&
-            type == 'image'
+            type === 'image'
+          ) {
+            const crop = getCrop(element, {
+              width,
+              height,
+            });
+            element.set({ src: image, ...crop });
+            return;
+          }
+
+          if (
+            element &&
+            element.type === 'gif' &&
+            element.contentEditable &&
+            type === 'gif'
           ) {
             const crop = getCrop(element, {
               width,
