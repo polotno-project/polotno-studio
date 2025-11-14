@@ -17,6 +17,7 @@ import {
   setTranslations,
   setAiTextEnabled,
   setRemoveBackgroundEnabled,
+  setRichTextEnabled,
 } from 'polotno/config';
 
 import { loadFile } from './file';
@@ -41,6 +42,12 @@ import Topbar from './topbar/topbar';
 
 setAiTextEnabled(true);
 setRemoveBackgroundEnabled(true);
+
+// Check for richText query parameter
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.get('richTextEnabled') === 'true') {
+  setRichTextEnabled(true);
+}
 
 // import '@blueprintjs/core/lib/css/blueprint.css';
 
