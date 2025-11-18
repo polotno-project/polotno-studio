@@ -6,6 +6,8 @@ import {
   AnchorButton,
   NavbarDivider,
   EditableText,
+  Button,
+  Tooltip,
 } from '@blueprintjs/core';
 
 import styled from 'polotno/utils/styled';
@@ -15,6 +17,8 @@ import { useProject } from '../project';
 import { FileMenu } from './file-menu';
 import { DownloadButton } from './download-button';
 import { UserMenu } from './user-menu';
+import { UndoRedoControls } from '../components/UndoRedoControls';
+import { KeyboardShortcuts } from '../components/KeyboardShortcuts';
 
 const NavbarContainer = styled('div')`
   white-space: nowrap;
@@ -34,6 +38,7 @@ const NavInner = styled('div')`
 
 export default observer(({ store }) => {
   const project = useProject();
+  const [showShortcuts, setShowShortcuts] = React.useState(false);
 
   return (
     <NavbarContainer className="bp5-navbar topbar">
@@ -86,7 +91,17 @@ export default observer(({ store }) => {
           </div>
         </Navbar.Group>
         <Navbar.Group align={Alignment.RIGHT}>
-          {/* <Status project={project} /> */}
+          <UndoRedoControls store={store} />
+          <NavbarDivider />
+
+          <Tooltip content="Keyboard Shortcuts" position="bottom">
+            <Button
+              minimal
+              icon="key-tab"
+              onClick={() => setShowShortcuts(true)}
+              aria-label="View keyboard shortcuts"
+            />
+          </Tooltip>
 
           <AnchorButton href="https://polotno.com" target="_blank" minimal>
             For developers
@@ -114,6 +129,11 @@ export default observer(({ store }) => {
           {/* <NavbarHeading>Polotno Studio</NavbarHeading> */}
         </Navbar.Group>
       </NavInner>
+
+      <KeyboardShortcuts
+        isOpen={showShortcuts}
+        onClose={() => setShowShortcuts(false)}
+      />
     </NavbarContainer>
   );
 });

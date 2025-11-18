@@ -64,6 +64,7 @@ class Polotno_Studio {
         require_once POLOTNO_STUDIO_PLUGIN_DIR . 'includes/class-woocommerce.php';
         require_once POLOTNO_STUDIO_PLUGIN_DIR . 'includes/class-admin.php';
         require_once POLOTNO_STUDIO_PLUGIN_DIR . 'includes/class-shortcodes.php';
+        require_once POLOTNO_STUDIO_PLUGIN_DIR . 'includes/class-gutenberg.php';
     }
 
     /**
@@ -80,6 +81,7 @@ class Polotno_Studio {
         Polotno_Studio_WooCommerce::get_instance();
         Polotno_Studio_Admin::get_instance();
         Polotno_Studio_Shortcodes::get_instance();
+        Polotno_Studio_Gutenberg::get_instance();
     }
 
     /**

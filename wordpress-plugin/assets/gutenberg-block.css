@@ -1,0 +1,7 @@
+.polotno-studio-block {
+    min-height: 200px;
+}
+
+.polotno-studio-block svg path {
+    stroke: currentColor;
+}

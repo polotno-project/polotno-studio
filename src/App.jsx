@@ -17,6 +17,7 @@ import { setTranslations } from 'polotno/config';
 import { loadFile } from './file';
 
 import { ShapesSection } from './sections/shapes-section';
+import { MyLibrarySection } from './sections/my-library-section';
 
 import { useProject } from './project';
 
@@ -214,6 +215,9 @@ setTranslations(en);
 
 // replace elements section with just shapes
 DEFAULT_SECTIONS.splice(3, 1, ShapesSection);
+
+// add my library section for logged-in users
+DEFAULT_SECTIONS.unshift(MyLibrarySection);
 
 DEFAULT_SECTIONS.find((section) => section.name === 'text').Tab = (props) => (
   <SectionTab name="Text" {...props}>

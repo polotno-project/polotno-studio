@@ -3,6 +3,7 @@ import { createContext, useContext } from 'react';
 import { storage } from './storage';
 
 import * as api from './api';
+import { showSuccess, showError } from './notifications';
 
 export const ProjectContext = createContext({});
 
@@ -135,9 +136,11 @@ class Project {
       if (res.status === 'saved') {
         this.id = res.id;
         await storage.setItem('polotno-last-design-id', res.id);
+        showSuccess('Design saved successfully');
       }
     } catch (e) {
       console.error(e);
+      showError('Failed to save design. Please try again.');
     }
     this.status = 'saved';
   }

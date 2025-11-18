@@ -1,5 +1,6 @@
 import { nanoid } from 'nanoid';
 import { storage } from './storage';
+import { showError, showSuccess } from './notifications';
 
 // WordPress REST API base URL - can be configured via environment variable
 const WP_API_BASE = import.meta.env.VITE_WP_API_URL || '/wp-json/polotno-studio/v1';
@@ -21,24 +22,51 @@ const isSignedIn = () => {
 
 // Helper to make authenticated API requests to WordPress
 const apiRequest = async (endpoint, options = {}) => {
-  const url = `${WP_API_BASE}${endpoint}`;
-  const headers = {
-    'Content-Type': 'application/json',
-    'X-WP-Nonce': getWPNonce(),
-    ...options.headers,
-  };
+  try {
+    const url = `${WP_API_BASE}${endpoint}`;
+    const headers = {
+      'Content-Type': 'application/json',
+      'X-WP-Nonce': getWPNonce(),
+      ...options.headers,
+    };
 
-  const response = await fetch(url, {
-    ...options,
-    headers,
-    credentials: 'same-origin',
-  });
+    const response = await fetch(url, {
+      ...options,
+      headers,
+      credentials: 'same-origin',
+    });
 
-  if (!response.ok) {
-    throw new Error(`API request failed: ${response.statusText}`);
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      const errorMessage = errorData.message || response.statusText || 'Request failed';
+
+      // Show user-friendly error
+      if (response.status === 401) {
+        showError('Please log in to continue', 'Authentication Required');
+      } else if (response.status === 403) {
+        showError('You don\'t have permission to perform this action', 'Permission Denied');
+      } else if (response.status === 404) {
+        showError('The requested resource was not found', 'Not Found');
+      } else if (response.status >= 500) {
+        showError('Server error. Please try again later', 'Server Error');
+      } else {
+        showError(errorMessage, 'Error');
+      }
+
+      throw new Error(errorMessage);
+    }
+
+    return response.json();
+  } catch (error) {
+    // Network error or other exception
+    if (error.message === 'Failed to fetch') {
+      showError('Unable to connect to server. Please check your internet connection', 'Connection Error');
+    } else if (!error.message.includes('Authentication') && !error.message.includes('Permission')) {
+      // Only show generic errors if we haven't already shown a specific one
+      console.error('API Error:', error);
+    }
+    throw error;
   }
-
-  return response.json();
 };
 
 // File operations - now using WordPress REST API
