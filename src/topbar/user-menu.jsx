@@ -7,39 +7,48 @@ import { useProject } from '../project';
 
 export const UserMenu = observer(({ store }) => {
   const project = useProject();
-  const [user, setUser] = React.useState(null);
-  React.useEffect(() => {
-    if (project.cloudEnabled) {
-      window.puter.auth.getUser().then((user) => {
-        setUser(user);
-      });
-    }
-  }, [project.cloudEnabled]);
+  const user = project.currentUser;
+  const isSignedIn = project.isSignedIn;
+
+  const handleLogin = () => {
+    // Redirect to WordPress login page
+    const loginUrl = window.polotnoStudio?.loginUrl || '/wp-login.php';
+    const returnUrl = encodeURIComponent(window.location.href);
+    window.location.href = `${loginUrl}?redirect_to=${returnUrl}`;
+  };
+
+  const handleLogout = () => {
+    // Redirect to WordPress logout page
+    const logoutUrl = window.polotnoStudio?.logoutUrl || '/wp-login.php?action=logout';
+    const returnUrl = encodeURIComponent(window.location.href);
+    window.location.href = `${logoutUrl}&redirect_to=${returnUrl}`;
+  };
+
   return (
     <>
       <Popover
         content={
-          <Menu style={{ width: '80px !important' }}>
-            {project.cloudEnabled && (
-              <div style={{ padding: '5px' }}>Logged as {user?.username}</div>
+          <Menu style={{ width: '180px !important' }}>
+            {isSignedIn && user && (
+              <div style={{ padding: '10px', borderBottom: '1px solid #394b59' }}>
+                <strong>{user.displayName || user.username}</strong>
+                {user.email && (
+                  <div style={{ fontSize: '12px', opacity: 0.7 }}>{user.email}</div>
+                )}
+              </div>
             )}
-            {!project.cloudEnabled && (
+            {!isSignedIn && (
               <MenuItem
                 text="Login"
                 icon={<LogIn />}
-                onClick={() => {
-                  project.signIn();
-                }}
+                onClick={handleLogin}
               />
             )}
-            {project.cloudEnabled && (
+            {isSignedIn && (
               <MenuItem
                 text="Logout"
                 icon={<LogOut />}
-                onClick={() => {
-                  window.puter.auth.signOut();
-                  // logout({ returnTo: window.location.origin, localOnly: true });
-                }}
+                onClick={handleLogout}
               />
             )}
           </Menu>

@@ -7,8 +7,10 @@ import { createProject, ProjectContext } from './project';
 
 import '@blueprintjs/core/lib/css/blueprint.css';
 import './index.css';
+import './flatsome-compat.css';
 import App from './App';
 import './logger';
+import './flatsome-compat.js';
 import { ErrorBoundary } from 'react-error-boundary';
 
 if (window.location.host !== 'studio.polotno.com') {
@@ -25,7 +27,10 @@ But feel free to use this repository as a reference for your own project and to 
 
 unstable_setAnimationsEnabled(true);
 
-const store = createStore({ key: 'nFA5H9elEytDyPyvKL7T' });
+// Get Polotno API key from environment variable or window object
+const POLOTNO_API_KEY = import.meta.env.VITE_POLOTNO_API_KEY || window.polotnoStudio?.apiKey || 'nFA5H9elEytDyPyvKL7T';
+
+const store = createStore({ key: POLOTNO_API_KEY });
 window.store = store;
 store.addPage();
 

@@ -9,7 +9,6 @@ import {
   SidePanel,
   DEFAULT_SECTIONS,
   SectionTab,
-  VideosSection,
 } from 'polotno/side-panel';
 import { Workspace } from 'polotno/canvas/workspace';
 import { PagesTimeline } from 'polotno/pages-timeline';
@@ -17,12 +16,7 @@ import { setTranslations } from 'polotno/config';
 
 import { loadFile } from './file';
 
-import { QrSection } from './sections/qr-section';
-import { QuotesSection } from './sections/quotes-section';
-import { IconsSection } from './sections/icons-section';
 import { ShapesSection } from './sections/shapes-section';
-import { StableDiffusionSection } from './sections/stable-diffusion-section';
-import { MyDesignsSection } from './sections/my-designs-section';
 
 import { useProject } from './project';
 
@@ -220,15 +214,6 @@ setTranslations(en);
 
 // replace elements section with just shapes
 DEFAULT_SECTIONS.splice(3, 1, ShapesSection);
-// add icons
-DEFAULT_SECTIONS.splice(3, 0, IconsSection);
-// add two more sections
-DEFAULT_SECTIONS.push(QuotesSection, QrSection);
-// DEFAULT_SECTIONS.unshift(UploadSection);
-DEFAULT_SECTIONS.unshift(MyDesignsSection);
-
-DEFAULT_SECTIONS.push(StableDiffusionSection);
-// DEFAULT_SECTIONS.push(VideosSection);
 
 DEFAULT_SECTIONS.find((section) => section.name === 'text').Tab = (props) => (
   <SectionTab name="Text" {...props}>
@@ -275,16 +260,6 @@ DEFAULT_SECTIONS.find((section) => section.name === 'size').Tab = (props) => (
     <SizeIcon />
   </SectionTab>
 );
-
-const UpdatedVideoSection = {
-  ...VideosSection,
-  Tab: (props) => (
-    <SectionTab name="Videos" {...props}>
-      <VideosIcon />
-    </SectionTab>
-  ),
-};
-DEFAULT_SECTIONS.splice(7, 0, UpdatedVideoSection);
 
 const isStandalone = () => {
   return (

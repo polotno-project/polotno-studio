@@ -1,105 +1,109 @@
 import { nanoid } from 'nanoid';
 import { storage } from './storage';
 
-const isSignedIn = () => {
-  return window.puter?.auth?.isSignedIn();
+// WordPress REST API base URL - can be configured via environment variable
+const WP_API_BASE = import.meta.env.VITE_WP_API_URL || '/wp-json/polotno-studio/v1';
+
+// Helper to get WordPress nonce for authenticated requests
+const getWPNonce = () => {
+  return window.polotnoStudio?.nonce || '';
 };
 
-const withTimeout =
-  (fn, name) =>
-  async (...args) => {
-    const startTime = Date.now();
-    const timeoutId = setTimeout(async () => {
-      // Log timeout error with Sentry
-      const error = new Error('API call timeout');
-      try {
-        const req = await fetch('https://api.puter.com/version');
-        const version = await req.json();
+// Helper to get current user info from WordPress
+const getCurrentUser = () => {
+  return window.polotnoStudio?.currentUser || null;
+};
 
-        window.Sentry?.captureException(error, {
-          extra: {
-            function: name,
-            arguments: args,
-            elapsedTime: Date.now() - startTime,
-            user: await window.puter?.auth?.getUser(),
-            version,
-            size: JSON.stringify(args).length,
-          },
-        });
-      } catch (e) {
-        window.Sentry?.captureException(
-          new Error('Failed to log error to Sentry: ' + e.message)
-        );
-      }
-    }, 8000);
+// Check if user is logged in to WordPress
+const isSignedIn = () => {
+  return !!getCurrentUser();
+};
 
-    try {
-      const result = await fn(...args);
-      clearTimeout(timeoutId);
-      return result;
-    } catch (error) {
-      clearTimeout(timeoutId);
-      throw error;
-    }
+// Helper to make authenticated API requests to WordPress
+const apiRequest = async (endpoint, options = {}) => {
+  const url = `${WP_API_BASE}${endpoint}`;
+  const headers = {
+    'Content-Type': 'application/json',
+    'X-WP-Nonce': getWPNonce(),
+    ...options.headers,
   };
 
-const writeFile = withTimeout(async function writeFile(fileName, data) {
+  const response = await fetch(url, {
+    ...options,
+    headers,
+    credentials: 'same-origin',
+  });
+
+  if (!response.ok) {
+    throw new Error(`API request failed: ${response.statusText}`);
+  }
+
+  return response.json();
+};
+
+// File operations - now using WordPress REST API
+const writeFile = async function writeFile(fileName, data) {
   if (isSignedIn()) {
-    await window.puter.fs.write(fileName, data, { createMissingParents: true });
+    // Upload to WordPress media library or custom storage
+    const formData = new FormData();
+    if (data instanceof Blob) {
+      formData.append('file', data, fileName);
+    } else {
+      formData.append('file', new Blob([data]), fileName);
+    }
+    formData.append('path', fileName);
+
+    return await apiRequest('/files', {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'X-WP-Nonce': getWPNonce(),
+      },
+    });
   } else {
     await storage.setItem(fileName, data);
   }
-}, 'writeFile');
+};
 
-const readFile = withTimeout(async function readFile(fileName) {
+const readFile = async function readFile(fileName) {
   if (isSignedIn()) {
-    return await window.puter.fs.read(fileName);
+    const response = await apiRequest(`/files?path=${encodeURIComponent(fileName)}`);
+    return response.data;
   }
   return await storage.getItem(fileName);
-}, 'readFile');
+};
 
-const deleteFile = withTimeout(async function deleteFile(fileName) {
+const deleteFile = async function deleteFile(fileName) {
   if (isSignedIn()) {
-    return await window.puter.fs.delete(fileName);
+    return await apiRequest(`/files?path=${encodeURIComponent(fileName)}`, {
+      method: 'DELETE',
+    });
   }
   return await storage.removeItem(fileName);
-}, 'deleteFile');
+};
 
-const readKv = withTimeout(async function readKv(key) {
+// Key-value storage operations
+const readKv = async function readKv(key) {
   if (isSignedIn()) {
-    return await window.puter.kv.get(key);
+    const response = await apiRequest(`/kv/${encodeURIComponent(key)}`);
+    return response.data;
   } else {
     return await storage.getItem(key);
   }
-}, 'readKv');
+};
 
-const writeKv = withTimeout(async function writeKv(key, value) {
+const writeKv = async function writeKv(key, value) {
   if (isSignedIn()) {
-    return await window.puter.kv.set(key, value);
+    return await apiRequest(`/kv/${encodeURIComponent(key)}`, {
+      method: 'POST',
+      body: JSON.stringify({ value }),
+    });
   } else {
     return await storage.setItem(key, value);
   }
-}, 'writeKv');
+};
 
-export async function backupFromLocalToCloud() {
-  const localDesigns = (await storage.getItem('designs-list')) || [];
-  for (const design of localDesigns) {
-    const storeJSON = await storage.getItem(`designs/${design.id}.json`);
-    const preview = await storage.getItem(`designs/${design.id}.jpg`);
-    await writeFile(`designs/${design.id}.json`, storeJSON);
-    await writeFile(`designs/${design.id}.jpg`, preview);
-  }
-  const cloudDesigns = (await window.puter.kv.get('designs-list')) || [];
-  cloudDesigns.push(...localDesigns);
-  await window.puter.kv.set('designs-list', cloudDesigns);
-  await storage.removeItem('designs-list');
-  for (const design of localDesigns) {
-    await storage.removeItem(`designs/${design.id}.json`);
-    await storage.removeItem(`designs/${design.id}.jpg`);
-  }
-  return cloudDesigns.length;
-}
-
+// Design management functions
 export async function listDesigns() {
   return (await readKv('designs-list')) || [];
 }
@@ -116,6 +120,7 @@ export async function loadById({ id }) {
   let storeJSON = await readFile(`designs/${id}.json`);
   const list = await listDesigns();
   const design = list.find((design) => design.id === id);
+
   // if it is blob, convert to JSON
   if (storeJSON instanceof Blob) {
     storeJSON = JSON.parse(await storeJSON.text());
@@ -156,58 +161,7 @@ export const getPreview = async ({ id }) => {
   return URL.createObjectURL(preview);
 };
 
-const batchCall = (asyncFunction) => {
-  let cachedPromise = null;
-  return async (...args) => {
-    if (!cachedPromise) {
-      cachedPromise = asyncFunction(...args).catch((error) => {
-        // Reset cachedPromise on error to allow retry
-        cachedPromise = null;
-        throw error;
-      });
-    }
-    return cachedPromise;
-  };
-};
-
-let subDomainCache = null;
-const getPublicSubDomain = batchCall(async () => {
-  if (subDomainCache) {
-    return subDomainCache;
-  }
-  // fist we need to validate domain
-  const sites = await window.puter.hosting.list();
-  const user = await window.puter.auth.getUser();
-  const prefix = user.username + '-pltn-pld';
-  let subdomain = prefix;
-  const existingDomain = sites.find(
-    (site) => site.subdomain.indexOf(prefix) >= 0
-  );
-
-  if (existingDomain) {
-    subDomainCache = existingDomain.subdomain;
-    return existingDomain.subdomain;
-  }
-  let attempt = 1;
-  while (attempt < 10) {
-    const postfix = attempt > 1 ? `-${attempt}` : '';
-    subdomain = `${prefix}${postfix}`;
-    try {
-      await window.puter.fs.mkdir('uploads', { createMissingParents: true });
-      await window.puter.hosting.create(subdomain, 'uploads');
-      break;
-    } catch (error) {
-      attempt++;
-      continue;
-    }
-  }
-  if (attempt >= 10) {
-    throw new Error('Failed to create subdomain');
-  }
-  subDomainCache = subdomain;
-  return subdomain;
-});
-
+// Asset management functions
 export const listAssets = async () => {
   const list = (await readKv('assets-list')) || [];
   for (const asset of list) {
@@ -218,9 +172,10 @@ export const listAssets = async () => {
 };
 
 export const getAssetSrc = async ({ id }) => {
-  if (window.puter.auth.isSignedIn()) {
-    const subdomain = await getPublicSubDomain();
-    return `https://${subdomain}.puter.site/${id}`;
+  if (isSignedIn()) {
+    // Get asset URL from WordPress
+    const response = await apiRequest(`/assets/${encodeURIComponent(id)}`);
+    return response.url;
   } else {
     const file = await readFile(`uploads/${id}`);
     return URL.createObjectURL(file);
@@ -228,12 +183,11 @@ export const getAssetSrc = async ({ id }) => {
 };
 
 export const getAssetPreviewSrc = async ({ id }) => {
-  if (window.puter.auth.isSignedIn()) {
-    const subdomain = await getPublicSubDomain();
-    return `https://${subdomain}.puter.site/${id}-preview`;
+  if (isSignedIn()) {
+    const response = await apiRequest(`/assets/${encodeURIComponent(id)}/preview`);
+    return response.url;
   } else {
     const file = await readFile(`uploads/${id}-preview`);
-    console.log('file', file);
     return URL.createObjectURL(file);
   }
 };
@@ -256,3 +210,5 @@ export const deleteAsset = async ({ id }) => {
   const newList = list.filter((asset) => asset.id !== id);
   await writeKv('assets-list', newList);
 };
+
+export { isSignedIn, getCurrentUser };

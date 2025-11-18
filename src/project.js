@@ -27,7 +27,6 @@ class Project {
   name = '';
   user = {};
   skipSaving = false;
-  cloudEnabled = false;
   status = 'saved'; // or 'has-changes' or 'saving' or 'loading'
   language = getFromStorage('polotno-language') || navigator.language || 'en';
   designsLength = 0;
@@ -39,12 +38,6 @@ class Project {
     store.on('change', () => {
       this.requestSave();
     });
-
-    setInterval(() => {
-      mobx.runInAction(() => {
-        this.cloudEnabled = window.puter?.auth?.isSignedIn();
-      });
-    }, 100);
   }
 
   setLanguage(lang) {
@@ -169,9 +162,13 @@ class Project {
     console.log('saving done');
   }
 
-  async signIn() {
-    await window.puter.auth.signIn();
-    this.designsLength = await api.backupFromLocalToCloud();
+  // WordPress authentication integration
+  get isSignedIn() {
+    return api.isSignedIn();
+  }
+
+  get currentUser() {
+    return api.getCurrentUser();
   }
 }
 

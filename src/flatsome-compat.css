@@ -1,0 +1,217 @@
+/**
+ * Flatsome Theme Compatibility Styles
+ *
+ * This file ensures Polotno Studio integrates seamlessly with the Flatsome theme
+ * by overriding conflicting styles and adapting to Flatsome's design system.
+ */
+
+/* Reset Flatsome's global box-sizing that might conflict */
+.polotno-app-container *,
+.polotno-app-container *::before,
+.polotno-app-container *::after {
+  box-sizing: border-box;
+}
+
+/* Ensure editor fills the container properly in Flatsome layouts */
+.flatsome-polotno-wrapper {
+  width: 100%;
+  min-height: 600px;
+  background-color: #2f343c;
+  position: relative;
+}
+
+/* Full-screen mode for editor in Flatsome */
+.flatsome-polotno-wrapper.fullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+  min-height: 100vh;
+}
+
+/* Override Flatsome's button styles that might conflict */
+.polotno-app-container .bp5-button {
+  font-family: inherit;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+/* Ensure proper z-index layering with Flatsome elements */
+.polotno-app-container {
+  z-index: 1;
+  position: relative;
+}
+
+/* Fix for Flatsome's sticky header if editor is below it */
+body.flatsome-with-polotno .header-wrapper.stuck {
+  z-index: 100;
+}
+
+.flatsome-polotno-wrapper .polotno-app-container {
+  z-index: 1;
+}
+
+/* Ensure popups and modals appear above Flatsome elements */
+.bp5-overlay,
+.bp5-popover,
+.bp5-dialog {
+  z-index: 10000 !important;
+}
+
+/* Responsive adjustments for Flatsome mobile breakpoints */
+@media (max-width: 849px) {
+  .flatsome-polotno-wrapper {
+    min-height: 500px;
+  }
+
+  /* Adjust topbar for mobile in Flatsome */
+  .polotno-app-container .bp5-navbar {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+  }
+}
+
+/* Fix for Flatsome's button hover effects */
+.polotno-app-container .bp5-button:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+/* Ensure text inputs work properly with Flatsome */
+.polotno-app-container input[type="text"],
+.polotno-app-container input[type="number"],
+.polotno-app-container textarea {
+  font-family: inherit;
+  border-radius: 3px;
+}
+
+/* Fix sidebar width in Flatsome containers */
+.flatsome-polotno-wrapper .polotno-side-panel {
+  min-width: 280px;
+}
+
+/* Product customizer specific styles */
+.woocommerce-product-design-editor {
+  margin: 20px 0;
+  padding: 0;
+}
+
+.woocommerce-product-design-editor .flatsome-polotno-wrapper {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+/* Integration with Flatsome's product gallery */
+.product-gallery-polotno-trigger {
+  cursor: pointer;
+  padding: 10px;
+  text-align: center;
+  background-color: var(--primary-color, #446084);
+  color: white;
+  border-radius: 4px;
+  margin: 10px 0;
+  transition: all 0.3s ease;
+}
+
+.product-gallery-polotno-trigger:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
+/* Flatsome quick view modal integration */
+.flatsome-quick-view .flatsome-polotno-wrapper {
+  max-height: 70vh;
+}
+
+/* Cart item design preview in Flatsome */
+.cart-item-design-preview {
+  max-width: 80px;
+  height: auto;
+  border-radius: 3px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Fix for Flatsome's lightbox if used with design previews */
+.flatsome-polotno-preview-lightbox {
+  z-index: 9999;
+}
+
+/* Ensure proper spacing in Flatsome product page layout */
+.product-main .flatsome-polotno-wrapper {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+/* Fix for Flatsome's accordion if used with design options */
+.accordion-item .flatsome-polotno-wrapper {
+  margin: 15px 0;
+}
+
+/* Loading state styling for Flatsome */
+.flatsome-polotno-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  background-color: #2f343c;
+}
+
+.flatsome-polotno-loading::after {
+  content: "";
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(255, 255, 255, 0.1);
+  border-top-color: var(--primary-color, #446084);
+  border-radius: 50%;
+  animation: flatsome-spin 0.8s linear infinite;
+}
+
+@keyframes flatsome-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Ensure Blueprint.js dark theme works in Flatsome */
+.flatsome-polotno-wrapper .bp5-dark {
+  background-color: #2f343c;
+  color: #f5f8fa;
+}
+
+/* Fix for Flatsome's UX Builder if editing with Polotno */
+.ux-builder-active .flatsome-polotno-wrapper {
+  pointer-events: none;
+}
+
+.ux-builder-active .flatsome-polotno-wrapper::after {
+  content: "Design editor disabled in UX Builder mode";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 20px;
+  border-radius: 4px;
+  z-index: 10;
+}
+
+/* My Account page integration */
+.woocommerce-account .flatsome-polotno-wrapper {
+  margin: 20px 0;
+}
+
+/* Ensure proper rendering in Flatsome tabs */
+.flatsome-tabs .flatsome-polotno-wrapper {
+  display: block;
+  width: 100%;
+}
+
+/* Fix for Flatsome's sticky add to cart button */
+body.has-sticky-add-to-cart .flatsome-polotno-wrapper {
+  margin-bottom: 80px;
+}
