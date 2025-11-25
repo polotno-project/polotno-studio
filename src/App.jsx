@@ -27,6 +27,7 @@ import { QuotesSection } from './sections/quotes-section';
 import { IconsSection } from './sections/icons-section';
 import { ShapesSection } from './sections/shapes-section';
 import { StableDiffusionSection } from './sections/stable-diffusion-section';
+import { AIEditSection } from './sections/ai-edit-section';
 import { MyDesignsSection } from './sections/my-designs-section';
 
 import { useProject } from './project';
@@ -242,6 +243,7 @@ DEFAULT_SECTIONS.push(QuotesSection, QrSection);
 DEFAULT_SECTIONS.unshift(MyDesignsSection);
 
 DEFAULT_SECTIONS.push(StableDiffusionSection);
+DEFAULT_SECTIONS.push(AIEditSection);
 // DEFAULT_SECTIONS.push(VideosSection);
 
 DEFAULT_SECTIONS.find((section) => section.name === 'text').Tab = (props) => (
