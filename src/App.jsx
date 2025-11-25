@@ -243,7 +243,7 @@ DEFAULT_SECTIONS.push(QuotesSection, QrSection);
 DEFAULT_SECTIONS.unshift(MyDesignsSection);
 
 DEFAULT_SECTIONS.push(StableDiffusionSection);
-DEFAULT_SECTIONS.push(AIEditSection);
+// DEFAULT_SECTIONS.push(AIEditSection);
 // DEFAULT_SECTIONS.push(VideosSection);
 
 DEFAULT_SECTIONS.find((section) => section.name === 'text').Tab = (props) => (
